@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: 'Deploy to gh-pages'
 on:
   push:	
     branches:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to GitHub Pages
+    name: 'push public to gh-pages'
     runs-on: ubuntu-latest    
     steps:
     - uses: actions/checkout@main
@@ -21,3 +21,4 @@ jobs:
         BRANCH: gh-pages
         FOLDER: public
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        

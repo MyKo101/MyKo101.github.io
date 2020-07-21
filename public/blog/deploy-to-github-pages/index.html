@@ -67,7 +67,7 @@
       "datePublished": "2020-07-20 00:00:00 \u002b0000 UTC",
       "dateModified" : "2020-07-20 00:00:00 \u002b0000 UTC",
       "url" : "\/blog\/deploy-to-github-pages\/",
-      "wordCount" : "2097",
+      "wordCount" : "2096",
       "keywords" : ["Blog"]
     }
   
@@ -170,7 +170,7 @@ fatal: Branch rename failed</code></pre>
 <div id="the-yaml" class="section level2">
 <h2>The YAML</h2>
 <p>The YAML file that we create will look like this:</p>
-<pre><code>name: Deploy to GitHub Pages
+<pre><code>name: &#39;Deploy to gh-pages&#39;
 on:
   push: 
     branches:
@@ -181,7 +181,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to GitHub Pages
+    name: &#39;push docs to gh-pages&#39;
     runs-on: ubuntu-latest    
     steps:
     - uses: actions/checkout@main
@@ -202,7 +202,7 @@ jobs:
 <div id="the-actions" class="section level3">
 <h3>The Actions</h3>
 <p>The <code>jobs:</code> part contains the actual actions that occurs. You can have many Actions and jobs within he same file, but here we only have one job, which consists of two tasks. <code>deploy:</code> is just the formal name for the job that we’re running. If we want more jobs to run, we can give them different names and place them at the same hierarchical starting point as <code>deploy:</code> (i.e. with two spaces in front). Different jobs will run in parallel, each individual job will run in order.</p>
-<p>We then give a bit of information about the job, first it’s name <code>Deploy to GitHub Pages</code> (more like a title), followed by what operating system we want GitHub Actions to use to implement it. Finally, we have the <code>steps:</code>, which is where we put the list of tasks that need to be run (in order).</p>
+<p>We then give a bit of information about the job, first it’s name <code>'push docs to gh-pages'</code> (more like a title), followed by what operating system we want GitHub Actions to use to implement it. Finally, we have the <code>steps:</code>, which is where we put the list of tasks that need to be run (in order).</p>
 <p>This Action only has two steps and they are both <code>uses:</code> steps, which basically means we’re going to be using Actions that are properly defined elsewhere. We could write an action directly here in quotes and supply the name of what application we want it to be run in (at a Command Line level), but we don’t have to since these Actions are defined for us. Each task starts with a <code>-</code> followed by the information for that task.</p>
 <div id="checkout" class="section level4">
 <h4>Checkout</h4>
