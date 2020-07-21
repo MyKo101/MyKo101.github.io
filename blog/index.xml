@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blogs on MyKo101</title>
+    <link>/blog/</link>
+    <description>Recent content in Blogs on MyKo101</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Michael Barrowman � {2020}</copyright>
+    <lastBuildDate>Mon, 20 Jul 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Deploy to GitHub Pages</title>
+      <link>/blog/deploy-to-github-pages/</link>
+      <pubDate>Mon, 20 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/deploy-to-github-pages/</guid>
+      <description>Within git, the default branch is usually named master, however in recent times, the negative connotations of that word are coming to the forefront of a lot of people’s minds, and so they are wishing to diverge away from that kind of terminology. The simplest change that we can make is to default to the HEAD branch of a repo, which will point towards whatever the actual default branch is for a the repo, whether that is master, main or Captain.</description>
+    </item>
+    
+  </channel>
+</rss>
