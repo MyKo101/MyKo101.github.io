@@ -67,7 +67,7 @@
       "datePublished": "2020-07-20 00:00:00 \u002b0000 UTC",
       "dateModified" : "2020-07-20 00:00:00 \u002b0000 UTC",
       "url" : "\/blog\/deploy-to-github-pages\/",
-      "wordCount" : "2063",
+      "wordCount" : "2097",
       "keywords" : ["Blog"]
     }
   
@@ -176,7 +176,7 @@ on:
     branches:
       - main
     paths:  
-      - docs
+      - &#39;docs/**&#39;
       
 
 jobs:
@@ -197,7 +197,7 @@ jobs:
 <p>What does this fie do? I don’t think it’s too important to go into great details here, there is plenty of <a href="https://docs.github.com/en/actions">reading to be done</a> on GitHub Actions. So, just a quick look at the important bits, in case you want to change something. Apart from the <code>name:</code> line, it’s split into two parts, the <code>on:</code> and the <code>jobs:</code> parts. Note that in YAML files, whitespace is important, and gives structure: <code>push:</code> is a child of <code>on:</code> and <code>jobs:</code> is the parent of <code>deploy:</code>, but <code>on:</code> and <code>jobs:</code> are siblings.</p>
 <div id="the-triggers" class="section level3">
 <h3>The Triggers</h3>
-<p>The <code>on:</code> part contains information on what events will trigger the event. Here, we’re telling GitHub that when we push our repo to the <code>main</code> branch, if something has changed in the <code>docs</code> folder (or path). This means that any pushes that happen to other branches will be ignored, and any pushes that don’t change our <code>docs</code> folder, will also be ignored. This is useful because we’re building our <code>gh-pages</code> branch based solely on what’s in <code>docs</code>. If something changes elsewhere in the repo, it doesn’t matter (unless of course, those changes cause effects in the <code>docs</code> folder, which will still cause the trigger). It also doesn’t matter what happens on other branches (such as a <code>devel</code> branch) because we’re not wanting to build our GitHub pages from them.</p>
+<p>The <code>on:</code> part contains information on what events will trigger the event. Here, we’re telling GitHub that when we push our repo to the <code>main</code> branch, if something has changed in the <code>docs</code> folder (or path). This means that any pushes that happen to other branches will be ignored, and any pushes that don’t change our <code>docs</code> folder will also be ignored. The syntax for <code>paths:</code> actually allows you to check for changes to anything that matches this string, so by using <code>'docs/**'</code>, we match anything that starts with <code>'docs/'</code>, i.e. anything within the <code>docs</code> folder. This is useful because we’re building our <code>gh-pages</code> branch based solely on what’s in <code>docs</code>. If something changes elsewhere in the repo, it doesn’t matter (unless of course, those changes cause effects in the <code>docs</code> folder, which will still cause the trigger). It also doesn’t matter what happens on other branches (such as a <code>development</code> branch) because we’re not wanting to build our GitHub pages from them.</p>
 </div>
 <div id="the-actions" class="section level3">
 <h3>The Actions</h3>

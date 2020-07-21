@@ -92,7 +92,7 @@ on:
     branches:
       - main
     paths:	
-      - docs
+      - 'docs/**'
       
 
 jobs:
@@ -116,7 +116,7 @@ What does this fie do? I don't think it's too important to go into great details
 
 ### The Triggers
 
-The `on:` part contains information on what events will trigger the event. Here, we're telling GitHub that when we push our repo to the `main` branch, if something has changed in the `docs` folder (or path). This means that any pushes that happen to other branches will be ignored, and any pushes that don't change our `docs` folder, will also be ignored. This is useful because we're building our `gh-pages` branch based solely on what's in `docs`. If something changes elsewhere in the repo, it doesn't matter (unless of course, those changes cause effects in the `docs` folder, which will still cause the trigger). It also doesn't matter what happens on other branches (such as a `devel` branch) because we're not wanting to build our GitHub pages from them.
+The `on:` part contains information on what events will trigger the event. Here, we're telling GitHub that when we push our repo to the `main` branch, if something has changed in the `docs` folder (or path). This means that any pushes that happen to other branches will be ignored, and any pushes that don't change our `docs` folder will also be ignored. The syntax for `paths:` actually allows you to check for changes to anything that matches this string, so by using `'docs/**'`, we match anything that starts with `'docs/'`, i.e. anything within the `docs` folder. This is useful because we're building our `gh-pages` branch based solely on what's in `docs`. If something changes elsewhere in the repo, it doesn't matter (unless of course, those changes cause effects in the `docs` folder, which will still cause the trigger). It also doesn't matter what happens on other branches (such as a `development` branch) because we're not wanting to build our GitHub pages from them.
 
 ### The Actions
 
