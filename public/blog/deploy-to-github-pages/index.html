@@ -67,7 +67,7 @@
       "datePublished": "2020-07-20 00:00:00 \u002b0000 UTC",
       "dateModified" : "2020-07-20 00:00:00 \u002b0000 UTC",
       "url" : "\/blog\/deploy-to-github-pages\/",
-      "wordCount" : "2031",
+      "wordCount" : "2063",
       "keywords" : ["Blog"]
     }
   
@@ -154,7 +154,10 @@
 fatal: Branch rename failed</code></pre>
 <p>This means you don’t have a branch checked out, and so you’ll have to create a new branch, but when doing so, you can name it whatever you want</p>
 <pre><code>git checkout -b main</code></pre>
-<p>After you’ve done this locally, you’ll have to <code>git push</code> your repo up to GitHub again, and then you’ll have to change GitHub’s default branch to your new one in the Settings as above.</p>
+<p>After you’ve done this locally, you’ll have to <code>git push</code> your repo up to GitHub again. However, you’ll probably get an error telling you to run the following instead</p>
+<pre><code>git push --set-upstream origin main</code></pre>
+<p>This will just ensure your new <code>main</code> branch is upstream of the previous <code>master</code> branch.</p>
+<p>Then you’ll have to change GitHub’s default branch to your new one in the Settings as above.</p>
 </div>
 </div>
 <div id="github-workflows" class="section level2">

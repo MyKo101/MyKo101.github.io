@@ -62,7 +62,13 @@ This means you don't have a branch checked out, and so you'll have to create a n
 git checkout -b main
 ```
 
-After you've done this locally, you'll have to `git push` your repo up to GitHub again, and then you'll have to change GitHub's default branch to your new one in the Settings as above.
+After you've done this locally, you'll have to `git push` your repo up to GitHub again. However, you'll probably get an error telling you to run the following instead
+```
+git push --set-upstream origin main
+```
+This will just ensure your new `main` branch is upstream of the previous `master` branch.
+
+Then you'll have to change GitHub's default branch to your new one in the Settings as above.
 
 ## GitHub Workflows
 
