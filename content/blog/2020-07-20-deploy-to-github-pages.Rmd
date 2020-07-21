@@ -13,15 +13,16 @@ math: no
 Within `git`, the default branch is usually named `master`, however in recent times, the negative connotations of that word are coming to the forefront of a lot of people's minds, and so they are wishing to diverge away from that kind of terminology. The simplest change that we can make is to default to the `HEAD` branch of a repo, which will point towards whatever the actual default branch is for a the repo, whether that is `master`, `main` or `Captain`.
 
 Unfortunately, this change can be slow, and although resources like GitHub have expressed interest in switching away from the default `master`, some things are still hardcoded. One of which is the limitations of GitHub Pages deployment. Users can currently choose from one of three options:
+
 * Build website from the `master` branch
 * Build website from the `docs` folder in the `master` branch
 * Build website from the `gh-pages` branch
 
-The use of `master` here is hardcoded, and many users currently choose to use the `docs` folder in the `master` branch as the location to store their website. Depending on workflows, the other two options might not be possible, or would require huge restructuring of your workflow if you wish to switch from `master`.
+The use of `master` here is hardcoded, and many users currently choose to use the `docs` folder in the `master` branch as the location to store their website. Depending on workflows, the other two options might not be possible, or would require huge restructuring of your workflow if you wish to switch from `master`. For User pages (repos that are `<username>.github.io`), they can only be built from the `master` branch; hopefully this will change soon (see [here](#User-repos)).
 
 For example, this blog is written using `blogdown`, a package for `R`, which helps to create blogs. In doing so, it creates a static site in a subdirectory called `public` (by default). You do your work in the parent folder, it generates content in this subfolder. If you wish to use GitHub Pages to publish your site, the [recommendations](https://bookdown.org/yihui/blogdown/github-pages.html) by [yihui](https://yihui.org/), the package autho, are to set up your `git` directory inside this subdirectory. This has the limitation of meaning the content of your parent folder is not backed up to GitHub, and is only stored locally.
 
-However, thanks to GitHub user [`s0`](https://github.com/s0) and their GitHub Action, it's possible to keep your work inside the `doc` folder on your `default` branch (whatever it's name may be) and have that folder automatically pushed to the `gh-branch`.
+However, thanks to GitHub user [`s0`](https://github.com/s0) and their GitHub Action, it's possible to keep your work inside the `doc` folder on your `default` branch (whatever it's name may be) and have that folder automatically pushed to the `gh-pages`.
 
 For those who don't know, GitHub Actions allows automation when certain events (triggers) occur within your repo. You can try to write your own complicated commands, or use those created by other users within a relatively simple skeleton. We're going to use one of these simple skeletons to utilise `s0`'s work, thus allowing us to use the `main` branch, rather than the `master` branch on our repo. In order to use GitHub Actions, we need to add a [`.yaml`](https://en.wikipedia.org/wiki/YAML) file (stands for YAML Ain't Markup Language) within our repo.
 
@@ -155,4 +156,13 @@ You don't need to worry about `REPO` and `GITHUB_TOKEN`, these just mean that th
 ## Check it works
 
 Finally, once we've done all this, we can `git push` to the `main` branch of our repo on GitHub and it should build our website (provided we have the GitHub pages set to use `gh-pages`). To check whether this has worked, simply load up your GitHub Page. You can also have a look at the run through of the Action in the Actions tab in your repo home. This gives you the output of the Command Line of every step of your Action (although remember there are only two).
+
+## User repos
+
+By default, User repos are expected to be self-contained and their GitHub Pages site can only be built from the `master` branch. This means that you are expected to have an `index.html` file in your home directory. However, this can limit the ways in which your site can be built. To fix this, we can use the workflow as above, but instead of pushing the subdirectory to the `gh-pages` branch, we push it to the `master` branch, whilst still using our `main` branch as our default. The only change we need to do, is to replace the `BRANCH: gh-pages` line in the YAML file with `BRANCH: master` (make sure you keep the whitespace before it).
+
+
+
+
+
 

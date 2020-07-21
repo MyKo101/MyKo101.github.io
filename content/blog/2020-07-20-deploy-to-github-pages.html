@@ -14,13 +14,15 @@ math: no
 
 
 <p>Within <code>git</code>, the default branch is usually named <code>master</code>, however in recent times, the negative connotations of that word are coming to the forefront of a lot of people’s minds, and so they are wishing to diverge away from that kind of terminology. The simplest change that we can make is to default to the <code>HEAD</code> branch of a repo, which will point towards whatever the actual default branch is for a the repo, whether that is <code>master</code>, <code>main</code> or <code>Captain</code>.</p>
-<p>Unfortunately, this change can be slow, and although resources like GitHub have expressed interest in switching away from the default <code>master</code>, some things are still hardcoded. One of which is the limitations of GitHub Pages deployment. Users can currently choose from one of three options:
-* Build website from the <code>master</code> branch
-* Build website from the <code>docs</code> folder in the <code>master</code> branch
-* Build website from the <code>gh-pages</code> branch</p>
-<p>The use of <code>master</code> here is hardcoded, and many users currently choose to use the <code>docs</code> folder in the <code>master</code> branch as the location to store their website. Depending on workflows, the other two options might not be possible, or would require huge restructuring of your workflow if you wish to switch from <code>master</code>.</p>
+<p>Unfortunately, this change can be slow, and although resources like GitHub have expressed interest in switching away from the default <code>master</code>, some things are still hardcoded. One of which is the limitations of GitHub Pages deployment. Users can currently choose from one of three options:</p>
+<ul>
+<li>Build website from the <code>master</code> branch</li>
+<li>Build website from the <code>docs</code> folder in the <code>master</code> branch</li>
+<li>Build website from the <code>gh-pages</code> branch</li>
+</ul>
+<p>The use of <code>master</code> here is hardcoded, and many users currently choose to use the <code>docs</code> folder in the <code>master</code> branch as the location to store their website. Depending on workflows, the other two options might not be possible, or would require huge restructuring of your workflow if you wish to switch from <code>master</code>. For User pages (repos that are <code>&lt;username&gt;.github.io</code>), they can only be built from the <code>master</code> branch; hopefully this will change soon (see <a href="#User-repos">here</a>).</p>
 <p>For example, this blog is written using <code>blogdown</code>, a package for <code>R</code>, which helps to create blogs. In doing so, it creates a static site in a subdirectory called <code>public</code> (by default). You do your work in the parent folder, it generates content in this subfolder. If you wish to use GitHub Pages to publish your site, the <a href="https://bookdown.org/yihui/blogdown/github-pages.html">recommendations</a> by <a href="https://yihui.org/">yihui</a>, the package autho, are to set up your <code>git</code> directory inside this subdirectory. This has the limitation of meaning the content of your parent folder is not backed up to GitHub, and is only stored locally.</p>
-<p>However, thanks to GitHub user <a href="https://github.com/s0"><code>s0</code></a> and their GitHub Action, it’s possible to keep your work inside the <code>doc</code> folder on your <code>default</code> branch (whatever it’s name may be) and have that folder automatically pushed to the <code>gh-branch</code>.</p>
+<p>However, thanks to GitHub user <a href="https://github.com/s0"><code>s0</code></a> and their GitHub Action, it’s possible to keep your work inside the <code>doc</code> folder on your <code>default</code> branch (whatever it’s name may be) and have that folder automatically pushed to the <code>gh-pages</code>.</p>
 <p>For those who don’t know, GitHub Actions allows automation when certain events (triggers) occur within your repo. You can try to write your own complicated commands, or use those created by other users within a relatively simple skeleton. We’re going to use one of these simple skeletons to utilise <code>s0</code>’s work, thus allowing us to use the <code>main</code> branch, rather than the <code>master</code> branch on our repo. In order to use GitHub Actions, we need to add a <a href="https://en.wikipedia.org/wiki/YAML"><code>.yaml</code></a> file (stands for YAML Ain’t Markup Language) within our repo.</p>
 <div id="rename-the-branch" class="section level2">
 <h2>Rename the branch</h2>
@@ -118,4 +120,8 @@ jobs:
 <div id="check-it-works" class="section level2">
 <h2>Check it works</h2>
 <p>Finally, once we’ve done all this, we can <code>git push</code> to the <code>main</code> branch of our repo on GitHub and it should build our website (provided we have the GitHub pages set to use <code>gh-pages</code>). To check whether this has worked, simply load up your GitHub Page. You can also have a look at the run through of the Action in the Actions tab in your repo home. This gives you the output of the Command Line of every step of your Action (although remember there are only two).</p>
+</div>
+<div id="user-repos" class="section level2">
+<h2>User repos</h2>
+<p>By default, User repos are expected to be self-contained and their GitHub Pages site can only be built from the <code>master</code> branch. This means that you are expected to have an <code>index.html</code> file in your home directory. However, this can limit the ways in which your site can be built. To fix this, we can use the workflow as above, but instead of pushing the subdirectory to the <code>gh-pages</code> branch, we push it to the <code>master</code> branch, whilst still using our <code>main</code> branch as our default. The only change we need to do, is to replace the <code>BRANCH: gh-pages</code> line in the YAML file with <code>BRANCH: master</code> (make sure you keep the whitespace before it).</p>
 </div>
