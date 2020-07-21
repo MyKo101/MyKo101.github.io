@@ -7,7 +7,7 @@ theme = "hugo-theme-codex"
 title = "MyKo101"
 languageCode = "en-us"
 baseURL = "https://michaelbarrowman.co.uk"
-copyright = "Â© {2020}"
+copyright = "Michael Barrowman © {2020}"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 # Add your Disqus shortname here.
@@ -24,8 +24,9 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
   # Links to your social accounts, comment/uncomment as needed. Icons will be displayed for those specified.
   twitter = "https://twitter.com/MyKo101ab"
-  github = "https://github.com/MyKo101"
   email = "mailto:myko101ab@gmail.com"
+  github = "https://github.com/MyKo101"
+  orcid = "https://orcid.org/0000-0003-0718-4482"
   # facebook = "https://facebook.com/<your handle>"
   # gitlab = "https://gitlab.com/<your handle>"
   # instagram = "https://instagram.com/<your handle>"
@@ -35,7 +36,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   # Titles for your icons (shown as tooltips), and also their display order.
   # Currently, these icons are supported: 
   #   "Twitter", "GitHub", "Email", "Facebook", "GitLab", "Instagram", "LinkedIn", "YouTube"
-  iconTitles = ["Twitter", "GitHub", "Email"]
+  iconTitles = ["Twitter", "GitHub", "Orcid", "Email"]
 
   # Metadata for Twitter cards, defaults to params.twitter
   twitterSite = "@MyKo101ab"
@@ -65,5 +66,11 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   name = "blog"
   title = "Blog"
   url = "/blog"
+
+[[menu.main]]
+  identifier = "CV"
+  name = "CV"
+  title = "CV"
+  url = "/CV"
 
 

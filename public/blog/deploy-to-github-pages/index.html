@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <title>Deploy to GitHub Pages | MyKo101</title>
+
+  <meta charset="UTF-8">
+  <meta name="language" content="en">
+  <meta name="description" content="Automatic GitHub Pages">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  
+  
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Deploy to GitHub Pages" />
+  <meta name="twitter:description" content="Automatic GitHub Pages"/>
+  <meta name="twitter:site" content="@MyKo101ab" />
+  <meta name="twitter:creator" content="https://twitter.com/MyKo101ab" />
+  
+
+  <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
+
+  
+  
+    
+ 
+  
+  
+  
+  
+  
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/post.min.679ea46872c2b319c5ae942c601a7330924fd57451c89d621d6cb129c870c2a8.css" integrity="sha256-Z56kaHLCsxnFrpQsYBpzMJJP1XRRyJ1iHWyxKchwwqg="/>
+  
+    
+    <link type="text/css" rel="stylesheet" href="/css/custom.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css" integrity="sha256-47DEQpj8HBSa&#43;/TImW&#43;5JCeuQeRkm5NMpJWZG3hSuFU="/>
+  
+  
+   
+   
+    
+
+<script type="application/ld+json">
+  
+    {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "\/"
+      },
+      "articleSection" : "blog",
+      "name" : "Deploy to GitHub Pages",
+      "headline" : "Deploy to GitHub Pages",
+      "description" : "Automatic GitHub Pages",
+      "inLanguage" : "en-US",
+      "author" : "",
+      "creator" : "",
+      "publisher": "",
+      "accountablePerson" : "",
+      "copyrightHolder" : "",
+      "copyrightYear" : "2020",
+      "datePublished": "2020-07-20 00:00:00 \u002b0000 UTC",
+      "dateModified" : "2020-07-20 00:00:00 \u002b0000 UTC",
+      "url" : "\/blog\/deploy-to-github-pages\/",
+      "wordCount" : "2031",
+      "keywords" : ["Blog"]
+    }
+  
+  </script>
+</head>
+
+<body>
+  <div class="burger__container">
+  <div class="burger" aria-controls="navigation" aria-label="Menu">
+    <div class="burger__meat burger__meat--1"></div>
+    <div class="burger__meat burger__meat--2"></div>
+    <div class="burger__meat burger__meat--3"></div>
+  </div>
+</div>
+ 
+
+  <nav class="nav" id="navigation">
+  <ul class="nav__list">
+    
+    
+      <li>
+        <a  href="/">about</a>
+      </li>
+    
+      <li>
+        <a  class="active"
+         href="/blog">blog</a>
+      </li>
+    
+      <li>
+        <a  href="/cv">CV</a>
+      </li>
+    
+  </ul>
+</nav>
+
+
+  <main>
+    
+    
+
+    <div class="flex-wrapper">
+      <div class="post__container">
+        <div class="post">
+          <header class="post__header">
+            <h1 id="post__title">Deploy to GitHub Pages</h1>
+            <time datetime="2020-07-20 00:00:00 &#43;0000 UTC" class="post__date"
+            >Jul 20 2020</time>
+          </header>
+          <article class="post__content">
+              
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p>Within <code>git</code>, the default branch is usually named <code>master</code>, however in recent times, the negative connotations of that word are coming to the forefront of a lot of people’s minds, and so they are wishing to diverge away from that kind of terminology. The simplest change that we can make is to default to the <code>HEAD</code> branch of a repo, which will point towards whatever the actual default branch is for a the repo, whether that is <code>master</code>, <code>main</code> or <code>Captain</code>.</p>
+<p>Unfortunately, this change can be slow, and although resources like GitHub have expressed interest in switching away from the default <code>master</code>, some things are still hardcoded. One of which is the limitations of GitHub Pages deployment. Users can currently choose from one of three options:
+* Build website from the <code>master</code> branch
+* Build website from the <code>docs</code> folder in the <code>master</code> branch
+* Build website from the <code>gh-pages</code> branch</p>
+<p>The use of <code>master</code> here is hardcoded, and many users currently choose to use the <code>docs</code> folder in the <code>master</code> branch as the location to store their website. Depending on workflows, the other two options might not be possible, or would require huge restructuring of your workflow if you wish to switch from <code>master</code>.</p>
+<p>For example, this blog is written using <code>blogdown</code>, a package for <code>R</code>, which helps to create blogs. In doing so, it creates a static site in a subdirectory called <code>public</code> (by default). You do your work in the parent folder, it generates content in this subfolder. If you wish to use GitHub Pages to publish your site, the <a href="https://bookdown.org/yihui/blogdown/github-pages.html">recommendations</a> by <a href="https://yihui.org/">yihui</a>, the package autho, are to set up your <code>git</code> directory inside this subdirectory. This has the limitation of meaning the content of your parent folder is not backed up to GitHub, and is only stored locally.</p>
+<p>However, thanks to GitHub user <a href="https://github.com/s0"><code>s0</code></a> and their GitHub Action, it’s possible to keep your work inside the <code>doc</code> folder on your <code>default</code> branch (whatever it’s name may be) and have that folder automatically pushed to the <code>gh-branch</code>.</p>
+<p>For those who don’t know, GitHub Actions allows automation when certain events (triggers) occur within your repo. You can try to write your own complicated commands, or use those created by other users within a relatively simple skeleton. We’re going to use one of these simple skeletons to utilise <code>s0</code>’s work, thus allowing us to use the <code>main</code> branch, rather than the <code>master</code> branch on our repo. In order to use GitHub Actions, we need to add a <a href="https://en.wikipedia.org/wiki/YAML"><code>.yaml</code></a> file (stands for YAML Ain’t Markup Language) within our repo.</p>
+<div id="rename-the-branch" class="section level2">
+<h2>Rename the branch</h2>
+<p>The first step in this process would be to actually change the name of our <code>master</code> branch to <code>main</code> (or whatever you choose).</p>
+<div id="directly-on-github" class="section level3">
+<h3>Directly on GitHub</h3>
+<p>GitHub doesn’t directly support renaming of branches (as far as I know). So, what we need to do is to create a new branch for our repository by clicking on the branches button on our repo Code page.</p>
+<p><img src="../../img/2020-07/master-branch-button.png" width="50" /></p>
+<p>And then type in the name of the new branch (e.g. <code>main</code>). If this branch doesn’t exist, you’ll be given the option to <code>Create branch: main from 'master'</code>. Click on Settings then Branches and you can change your default branch to the new <code>main</code> branch.</p>
+<p>You can then delete your <code>master</code> branch, although it might be worth holding on to it for a little while, in case anybody downstream from you is using it, or as a back-up in case something goes wrong!</p>
+</div>
+<div id="git-bash" class="section level3">
+<h3>Git Bash</h3>
+<p>If you have a local copy of your repo, you can run the following in command line to rename it:</p>
+<pre><code>git branch -m master main</code></pre>
+<p>If you want to rename the current branch, you can simplify this to be:</p>
+<pre><code>git branch -m main</code></pre>
+<p>Note you will have to use <code>-M</code> instead of <code>-m</code> if you are renaming a branch and only changing captalisation, e.g. from <code>main</code> to <code>Main</code>.</p>
+<p>A common error when running this command is the following (or something to this effect):</p>
+<pre><code>error: refname refs/heads/HEAD not found
+fatal: Branch rename failed</code></pre>
+<p>This means you don’t have a branch checked out, and so you’ll have to create a new branch, but when doing so, you can name it whatever you want</p>
+<pre><code>git checkout -b main</code></pre>
+<p>After you’ve done this locally, you’ll have to <code>git push</code> your repo up to GitHub again, and then you’ll have to change GitHub’s default branch to your new one in the Settings as above.</p>
+</div>
+</div>
+<div id="github-workflows" class="section level2">
+<h2>GitHub Workflows</h2>
+<p>GitHub Action files are stored in a special directory in your repo, the <code>.github/workflow</code> directory. All we have to do is create a file in this directory, name it something useful and give it the <code>.yaml</code> extension. Sounds simple, and for most people it is. The only limitation is that sometimes, we can’t create folders with the <code>.</code> at the start (particularly on Windows). Or at least, we can’t create them in the usual Right Click &gt; New &gt; Folder method in Windows Explorer. The simple way is to use Command Line to do it.</p>
+<pre><code>mkdir .github</code></pre>
+<p>The <code>mkdir</code> command makes directories. It’s as simple as that.</p>
+<p>Alternatively, you can create this directly on GitHub in the usual manner. Just remember that you will have to <code>git pull</code> any changes you make this way.</p>
+</div>
+<div id="the-yaml" class="section level2">
+<h2>The YAML</h2>
+<p>The YAML file that we create will look like this:</p>
+<pre><code>name: Deploy to GitHub Pages
+on:
+  push: 
+    branches:
+      - main
+    paths:  
+      - docs
+      
+
+jobs:
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest    
+    steps:
+    - uses: actions/checkout@main
+
+    - name: Deploy
+      uses: s0/git-publish-subdir-action@develop
+      env:
+        REPO: self
+        BRANCH: gh-pages
+        FOLDER: docs
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}</code></pre>
+<p>Feel free to copy the above directly. If you’re using RStudio to manage your repo, you can create a New Text File, save it with the extension <code>.yaml</code> and RStudio will conveniently colour code the file. Otherwise, you can do it in notepad (just make sure the extension sticks)</p>
+<p>What does this fie do? I don’t think it’s too important to go into great details here, there is plenty of <a href="https://docs.github.com/en/actions">reading to be done</a> on GitHub Actions. So, just a quick look at the important bits, in case you want to change something. Apart from the <code>name:</code> line, it’s split into two parts, the <code>on:</code> and the <code>jobs:</code> parts. Note that in YAML files, whitespace is important, and gives structure: <code>push:</code> is a child of <code>on:</code> and <code>jobs:</code> is the parent of <code>deploy:</code>, but <code>on:</code> and <code>jobs:</code> are siblings.</p>
+<div id="the-triggers" class="section level3">
+<h3>The Triggers</h3>
+<p>The <code>on:</code> part contains information on what events will trigger the event. Here, we’re telling GitHub that when we push our repo to the <code>main</code> branch, if something has changed in the <code>docs</code> folder (or path). This means that any pushes that happen to other branches will be ignored, and any pushes that don’t change our <code>docs</code> folder, will also be ignored. This is useful because we’re building our <code>gh-pages</code> branch based solely on what’s in <code>docs</code>. If something changes elsewhere in the repo, it doesn’t matter (unless of course, those changes cause effects in the <code>docs</code> folder, which will still cause the trigger). It also doesn’t matter what happens on other branches (such as a <code>devel</code> branch) because we’re not wanting to build our GitHub pages from them.</p>
+</div>
+<div id="the-actions" class="section level3">
+<h3>The Actions</h3>
+<p>The <code>jobs:</code> part contains the actual actions that occurs. You can have many Actions and jobs within he same file, but here we only have one job, which consists of two tasks. <code>deploy:</code> is just the formal name for the job that we’re running. If we want more jobs to run, we can give them different names and place them at the same hierarchical starting point as <code>deploy:</code> (i.e. with two spaces in front). Different jobs will run in parallel, each individual job will run in order.</p>
+<p>We then give a bit of information about the job, first it’s name <code>Deploy to GitHub Pages</code> (more like a title), followed by what operating system we want GitHub Actions to use to implement it. Finally, we have the <code>steps:</code>, which is where we put the list of tasks that need to be run (in order).</p>
+<p>This Action only has two steps and they are both <code>uses:</code> steps, which basically means we’re going to be using Actions that are properly defined elsewhere. We could write an action directly here in quotes and supply the name of what application we want it to be run in (at a Command Line level), but we don’t have to since these Actions are defined for us. Each task starts with a <code>-</code> followed by the information for that task.</p>
+<div id="checkout" class="section level4">
+<h4>Checkout</h4>
+<p>The first task is simple <code>- uses: actions/checkout@master</code>. You may recognise the format of this as it comes up a lot within GitHub, it is <code>&lt;user&gt;/&lt;repo&gt;@&lt;branch&gt;</code>. This is because all Actions created by other users, are actually repos. So what we’re doing here is saying we want to <code>use</code> the Action defined within the <code>main</code> branch of the <code>checkout</code> repo made by the user <code>actions</code> and we can actually view that repo <a href="https://github.com/actions/checkout">here</a>, or since it is an Action, we can view it on the Actions Marketplace <a href="https://github.com/marketplace/actions/checkout">here</a>.</p>
+<p>This Action essentially runs a <code>git checkout</code> command on your repo so that it’s files can be accessed by your workflow. Actions that change your repo in some way will typically start with this. They will usually also end with something that <code>commits</code> and <code>pushes</code> the results back onto your repo. We don’t need to do this part because it is covered by the second task</p>
+</div>
+<div id="deploy" class="section level4">
+<h4>Deploy</h4>
+<p>Task number two is where the magic happens. There’s a lot more here than in the first task</p>
+<pre><code>- name: Deploy
+  uses: s0/git-publish-subdir-action@develop
+  env:
+    REPO: self
+    BRANCH: gh-pages
+    FOLDER: docs
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}</code></pre>
+<p>We have three children within this task, <code>name:</code>, <code>uses:</code> and <code>env:</code> and <code>env:</code> even has some children of it’s own. Firstly, we’re giving this task a name, <code>Deploy</code>; this isn’t necessary, but it looks a little neater and makes it clearer what this task is doing (useful if you’re running a lot of tasks in a single job).</p>
+<p>The next child is the same as previously, <code>uses: s0/git-publish-subdir-action@develop</code>. We’re going to run the action on the <code>develop</code> branch of the <code>git-publish-subdir-action</code> repo by the user <code>s0</code>. Once again, you can view this repo <a href="https://github.com/s0/git-publish-subdir-action">here</a> or as an Action on the Marketplace <a href="https://github.com/marketplace/actions/push-git-subdirectory-as-branch">here</a>. This is main part of what we’re doing. This Action does the actual copying of the subdirectory and pushes it to a new branch.</p>
+<p>The last child is <code>env:</code> and this is where you might have to change things depending on your use-case. This has four children, which are actually variables. Just like in most programming, we work within an environment that contains variables, well here we’re going to define some for the <code>git-publish-subdir-action</code> to use.</p>
+<p>You don’t need to worry about <code>REPO</code> and <code>GITHUB_TOKEN</code>, these just mean that the action is going to run on the current repo (<code>REPO: self</code>) and provides authentication that it’s really us doing the changes (by generating a <code>GITHUB_TOKEN</code> to use as an auth token). The other two variables are important, it’s telling the Action what directory we want to copy, which by default (if you’re been running your GitHub Pages using the <code>master/docs</code> form) is currently set to be <code>docs</code>, but this can be any other folder (or sub-folder) in your repo, e.g <code>public/home</code>, <code>my-gh-pages-site</code> or <code>"My Homepage"</code> (don’t forget the quotes). Then finally, the name of the branch we want to put it on. If you’re looking here with the intention of using a GitHub Page, then this will have to be <code>gh-pages</code>, but can be any name you want your new branch to be.</p>
+</div>
+</div>
+</div>
+<div id="check-it-works" class="section level2">
+<h2>Check it works</h2>
+<p>Finally, once we’ve done all this, we can <code>git push</code> to the <code>main</code> branch of our repo on GitHub and it should build our website (provided we have the GitHub pages set to use <code>gh-pages</code>). To check whether this has worked, simply load up your GitHub Page. You can also have a look at the run through of the Action in the Actions tab in your repo home. This gives you the output of the Command Line of every step of your Action (although remember there are only two).</p>
+</div>
+
+
+              
+          </article>
+          
+
+ <div class="pagination">
+  
+
+  
+</div>
+
+          
+          <footer class="post__footer">
+            
+
+
+<div class="social-icons">
+  
+     
+    
+      <a class="social-icons__link" title="Twitter"
+         href="https://twitter.com/MyKo101ab"
+         target="_blank" rel="noopener">
+        <div class="social-icons__icon" style="background-image: url('/svg/twitter.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a class="social-icons__link" title="GitHub"
+         href="https://github.com/MyKo101"
+         target="_blank" rel="noopener">
+        <div class="social-icons__icon" style="background-image: url('/svg/github.svg')"></div>
+      </a>
+    
+  
+     
+    
+      <a class="social-icons__link" title="Email"
+         href="mailto:myko101ab@gmail.com"
+         target="_blank" rel="noopener">
+        <div class="social-icons__icon" style="background-image: url('/svg/email.svg')"></div>
+      </a>
+    
+  
+     
+    
+  
+     
+    
+  
+     
+    
+  
+     
+    
+  
+     
+    
+     
+</div>
+
+            <p>Michael Barrowman � {2020}</p>
+          </footer>
+          </div>
+      </div>
+      
+    </div>
+    
+
+  </main>
+
+   
+
+  
+  <script src="/js/index.min.49e4d8a384357d9b445b87371863419937ede9fa77737522ffb633073aebfa44.js" integrity="sha256-SeTYo4Q1fZtEW4c3GGNBmTft6fp3c3Ui/7YzBzrr&#43;kQ=" crossorigin="anonymous"></script>
+  
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/components/prism-core.min.js"></script>
+
+  
+  <script src="https://unpkg.com/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js"
+    data-autoloader-path="https://unpkg.com/prismjs@1.20.0/components/"></script>
+
+  
+
+
+</body>
+
+</html>
