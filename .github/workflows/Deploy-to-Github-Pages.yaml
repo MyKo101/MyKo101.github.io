@@ -6,10 +6,9 @@ on:
     paths:	
       - 'public/**''
       
-
 jobs:
   deploy:
-    name: 'push public to gh-pages'
+    name: Push public to gh-pages
     runs-on: ubuntu-latest    
     steps:
     - uses: actions/checkout@main
