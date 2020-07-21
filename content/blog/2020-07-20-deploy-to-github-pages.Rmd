@@ -94,7 +94,6 @@ on:
     paths:	
       - 'docs/**'
       
-
 jobs:
   deploy:
     name: Push docs to gh-pages
