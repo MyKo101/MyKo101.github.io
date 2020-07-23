@@ -209,6 +209,44 @@
 
 
 
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-173403317-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'UA-173403317-1', {});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
   
 
 
@@ -218,8 +256,8 @@
   
 
   <link rel="manifest" href="/index.webmanifest">
-  <link rel="icon" type="image/png" href="/images/icon_hu4d6c8a1670ae2dd8430a36f082aa4997_23882_32x32_fill_lanczos_center_2.png">
-  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu4d6c8a1670ae2dd8430a36f082aa4997_23882_192x192_fill_lanczos_center_2.png">
+  <link rel="icon" type="image/png" href="/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_192x192_fill_lanczos_center_2.png">
 
   <link rel="canonical" href="/post/deploy-to-github-pages/">
 
@@ -242,8 +280,8 @@
   <meta property="og:site_name" content="MyKo101">
   <meta property="og:url" content="/post/deploy-to-github-pages/">
   <meta property="og:title" content="Deploy to GitHub Pages | MyKo101">
-  <meta property="og:description" content="Within git, the default branch is usually named master, however in recent times, the negative connotations of that word are coming to the forefront of a lot of people&rsquo;s minds, and so they are wishing to diverge away from that kind of terminology."><meta property="og:image" content="/images/icon_hu4d6c8a1670ae2dd8430a36f082aa4997_23882_512x512_fill_lanczos_center_2.png">
-  <meta property="twitter:image" content="/images/icon_hu4d6c8a1670ae2dd8430a36f082aa4997_23882_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
+  <meta property="og:description" content="Within git, the default branch is usually named master, however in recent times, the negative connotations of that word are coming to the forefront of a lot of people&rsquo;s minds, and so they are wishing to diverge away from that kind of terminology."><meta property="og:image" content="/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png">
+  <meta property="twitter:image" content="/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
   
     
       <meta property="article:published_time" content="2020-07-22T00:00:00&#43;00:00">
@@ -289,7 +327,7 @@
     "name": "MyKo101",
     "logo": {
       "@type": "ImageObject",
-      "url": "/images/icon_hu4d6c8a1670ae2dd8430a36f082aa4997_23882_192x192_fill_lanczos_center_2.png"
+      "url": "/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_192x192_fill_lanczos_center_2.png"
     }
   },
   "description": "Within git, the default branch is usually named master, however in recent times, the negative connotations of that word are coming to the forefront of a lot of people\u0026rsquo;s minds, and so they are wishing to diverge away from that kind of terminology."
@@ -672,7 +710,7 @@
 <a href="https://bookdown.org/yihui/blogdown/github-pages.html" target="_blank" rel="noopener">recommendations</a> by 
 <a href="https://yihui.org/" target="_blank" rel="noopener">yihui</a>, the package autho, are to set up your <code>git</code> directory inside this subdirectory. This has the limitation of meaning the content of your parent folder is not backed up to GitHub, and is only stored locally.</p>
 <p>However, thanks to GitHub user 
-<a href="https://github.com/s0" target="_blank" rel="noopener"><code>s0</code></a> and their GitHub Action, it&rsquo;s possible to keep your work inside the <code>doc</code> folder on your <code>default</code> branch (whatever it&rsquo;s name may be) and have that folder automatically pushed to the <code>gh-pages</code>.</p>
+<a href="https://github.com/s0" target="_blank" rel="noopener"><code>s0</code></a> and their GitHub Action, it&rsquo;s possible to keep your work inside the <code>doc</code> folder on your <code>default</code> branch (whatever it&rsquo;s name may be) and have that folder automatically pushed to the <code>gh-pages</code> branch.</p>
 <p>For those who don&rsquo;t know, GitHub Actions allows automation when certain events (triggers) occur within your repo. You can try to write your own complicated commands, or use those created by other users within a relatively simple skeleton. We&rsquo;re going to use one of these simple skeletons to utilise <code>s0</code>'s work, thus allowing us to use the <code>main</code> branch, rather than the <code>master</code> branch on our repo. In order to use GitHub Actions, we need to add a 
 <a href="https://en.wikipedia.org/wiki/YAML" target="_blank" rel="noopener"><code>.yaml</code></a> file (stands for YAML Ain&rsquo;t Markup Language) within our repo.</p>
 <h2 id="rename-the-branch">Rename the branch</h2>
@@ -732,11 +770,11 @@ jobs:
         FOLDER: docs
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 </code></pre>
-<p>Feel free to copy the above directly. If you&rsquo;re using RStudio to manage your repo, you can create a New Text File, save it with the extension <code>.yaml</code> and RStudio will conveniently colour code the file. Otherwise, you can do it in notepad (just make sure the extension sticks)</p>
-<p>What does this fie do? I don&rsquo;t think it&rsquo;s too important to go into great details here, there is plenty of 
+<p>Feel free to copy the above directly. If you&rsquo;re using RStudio to manage your repo, you can create a New Text File, save it with the extension <code>.yaml</code> and RStudio will conveniently colour code the file. Otherwise, you can do it in notepad (just make sure the extension sticks).</p>
+<p>What does this file do? I don&rsquo;t think it&rsquo;s too important to go into great details here, there is plenty of 
 <a href="https://docs.github.com/en/actions" target="_blank" rel="noopener">reading to be done</a> on GitHub Actions. So, just a quick look at the important bits, in case you want to change something. Apart from the <code>name:</code> line, it&rsquo;s split into two parts, the <code>on:</code> and the <code>jobs:</code> parts. Note that in YAML files, whitespace is important, and gives structure: <code>push:</code> is a child of <code>on:</code> and <code>jobs:</code> is the parent of <code>deploy:</code>, but <code>on:</code> and <code>jobs:</code> are siblings.</p>
 <h3 id="the-triggers">The Triggers</h3>
-<p>The <code>on:</code> part contains information on what events will trigger the event. Here, we&rsquo;re telling GitHub that when we push our repo to the <code>main</code> branch, if something has changed in the <code>docs</code> folder (or path). This means that any pushes that happen to other branches will be ignored, and any pushes that don&rsquo;t change our <code>docs</code> folder will also be ignored. The syntax for <code>paths:</code> actually allows you to check for changes to anything that matches this string, so by using <code>'docs/**'</code>, we match anything that starts with <code>'docs/'</code>, i.e. anything within the <code>docs</code> folder. This is useful because we&rsquo;re building our <code>gh-pages</code> branch based solely on what&rsquo;s in <code>docs</code>. If something changes elsewhere in the repo, it doesn&rsquo;t matter (unless of course, those changes cause effects in the <code>docs</code> folder, which will still cause the trigger). It also doesn&rsquo;t matter what happens on other branches (such as a <code>development</code> branch) because we&rsquo;re not wanting to build our GitHub pages from them.</p>
+<p>The <code>on:</code> part contains information on what events will trigger the event. Here, we&rsquo;re telling GitHub that we want this Action to run when we push our repo to the <code>main</code> branch, only if something has changed in the <code>docs</code> folder (or path). This means that any pushes that happen to other branches will be ignored, and any pushes that don&rsquo;t change our <code>docs</code> folder will also be ignored. The syntax for <code>paths:</code> actually allows you to check for changes to anything that matches this string, so by using <code>'docs/**'</code>, we match anything that starts with <code>'docs/'</code>, i.e. anything within the <code>docs</code> folder. This is useful because we&rsquo;re building our <code>gh-pages</code> branch based solely on what&rsquo;s in <code>docs</code>. If something changes elsewhere in the repo, it doesn&rsquo;t matter (even if you are accessing data in your repo, but outside of your site because those changes will still be pushed to your repo, just don&rsquo;t need to trigger a site rebuild). It also doesn&rsquo;t matter what happens on other branches (such as a <code>development</code> branch) because we&rsquo;re not wanting to build our GitHub pages from them.</p>
 <h3 id="the-actions">The Actions</h3>
 <p>The <code>jobs:</code> part contains the actual actions that occurs. You can have many Actions and jobs within he same file, but here we only have one job, which consists of two tasks. <code>deploy:</code> is just the formal name for the job that we&rsquo;re running. If we want more jobs to run, we can give them different names and place them at the same hierarchical starting point as <code>deploy:</code> (i.e. with two spaces in front). Different jobs will run in parallel, each individual job will run in order.</p>
 <p>We then give a bit of information about the job, first it&rsquo;s name <code>Push docs to gh-pages</code> (more like a title), followed by what operating system we want GitHub Actions to use to implement it. Finally, we have the <code>steps:</code>, which is where we put the list of tasks that need to be run (in order).</p>
@@ -761,11 +799,13 @@ jobs:
 <a href="https://github.com/s0/git-publish-subdir-action" target="_blank" rel="noopener">here</a> or as an Action on the Marketplace 
 <a href="https://github.com/marketplace/actions/push-git-subdirectory-as-branch" target="_blank" rel="noopener">here</a>. This is main part of what we&rsquo;re doing. This Action does the actual copying of the subdirectory and pushes it to a new branch.</p>
 <p>The last child is <code>env:</code> and this is where you might have to change things depending on your use-case. This has four children, which are actually variables. Just like in most programming, we work within an environment that contains variables, well here we&rsquo;re going to define some for the <code>git-publish-subdir-action</code> to use.</p>
-<p>You don&rsquo;t need to worry about <code>REPO</code> and <code>GITHUB_TOKEN</code>, these just mean that the action is going to run on the current repo (<code>REPO: self</code>) and provides authentication that it&rsquo;s really us doing the changes (by generating a <code>GITHUB_TOKEN</code> to use as an auth token). The other two variables are important, it&rsquo;s telling the Action what directory we want to copy, which by default (if you&rsquo;re been running your GitHub Pages using the <code>master/docs</code> form) is currently set to be <code>docs</code>, but this can be any other folder (or sub-folder) in your repo, e.g <code>public/home</code>, <code>my-gh-pages-site</code> or <code>&quot;My Homepage&quot;</code> (don&rsquo;t forget the quotes). Then finally, the name of the branch we want to put it on. If you&rsquo;re looking here with the intention of using a GitHub Page, then this will have to be <code>gh-pages</code>, but can be any name you want your new branch to be.</p>
+<p>You don&rsquo;t need to worry about <code>REPO</code> and <code>GITHUB_TOKEN</code>, these just mean that the action is going to run on the current repo (<code>REPO: self</code>) and provides authentication that it&rsquo;s really us doing the changes (by generating a <code>GITHUB_TOKEN</code> to use as an auth token). The other two variables are important, it&rsquo;s telling the Action what directory we want to copy, which by default (if you&rsquo;re been running your GitHub Pages using the <code>master/docs</code> form) is currently set to be <code>docs</code>, but this can be any other folder (or sub-folder) in your repo, e.g <code>public/home</code>, <code>my-gh-pages-site</code> or <code>&quot;My Homepage&quot;</code> (don&rsquo;t forget the quotes). Then finally, the name of the branch we want to put it on. If you&rsquo;re looking here with the intention of using a GitHub Page, then this will have to be <code>gh-pages</code> (unless using a 
+<a href="#User-repos">User account</a>), but can be any name you want your new branch to be.</p>
 <h2 id="check-it-works">Check it works</h2>
 <p>Finally, once we&rsquo;ve done all this, we can <code>git push</code> to the <code>main</code> branch of our repo on GitHub and it should build our website (provided we have the GitHub pages set to use <code>gh-pages</code>). To check whether this has worked, simply load up your GitHub Page. You can also have a look at the run through of the Action in the Actions tab in your repo home. This gives you the output of the Command Line of every step of your Action (although remember there are only two).</p>
 <h2 id="user-repos">User repos</h2>
-<p>By default, User repos are expected to be self-contained and their GitHub Pages site can only be built from the <code>master</code> branch. This means that you are expected to have an <code>index.html</code> file in your home directory. However, this can limit the ways in which your site can be built. To fix this, we can use the workflow as above, but instead of pushing the subdirectory to the <code>gh-pages</code> branch, we push it to the <code>master</code> branch, whilst still using our <code>main</code> branch as our default. The only change we need to do, is to replace the <code>BRANCH: gh-pages</code> line in the YAML file with <code>BRANCH: master</code> (make sure you keep the whitespace before it).</p>
+<p>User repos are named like <code>&lt;username&gt;.github.io</code> and can only be built from the <code>master</code> branch. This is because User repos are expected to be self-contained and their GitHub Pages site can only be built from the <code>master</code> branch. This means that you are expected to have an <code>index.html</code> file in your home directory. However, this can limit the ways in which your site can be built. To fix this, we can use the workflow as above, but instead of pushing the subdirectory to the <code>gh-pages</code> branch, we push it to the <code>master</code> branch, whilst still using our <code>main</code> branch as our default. The only change we need to do, is to replace the <code>BRANCH: gh-pages</code> line in the YAML file with <code>BRANCH: master</code> (make sure you keep the whitespace before it).</p>
+<p>If you are using a custom domain, there seems to be a slight issue that when you update your User page (and essentially re-build your <code>master</code> branch), GitHub forgets your custom domain URL. The current solution is that once this Action is complete, you have to go to Settings and re-instigate your Custom Domain.</p>
 
     </div>
 
