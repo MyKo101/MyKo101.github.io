@@ -209,6 +209,44 @@
 
 
 
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-173403317-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'UA-173403317-1', {});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
   
 
 
@@ -218,8 +256,8 @@
   
 
   <link rel="manifest" href="/index.webmanifest">
-  <link rel="icon" type="image/png" href="/images/icon_hu4d6c8a1670ae2dd8430a36f082aa4997_23882_32x32_fill_lanczos_center_2.png">
-  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu4d6c8a1670ae2dd8430a36f082aa4997_23882_192x192_fill_lanczos_center_2.png">
+  <link rel="icon" type="image/png" href="/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_192x192_fill_lanczos_center_2.png">
 
   <link rel="canonical" href="/publication/pate-2018a/">
 
@@ -290,7 +328,7 @@
     "name": "MyKo101",
     "logo": {
       "@type": "ImageObject",
-      "url": "/images/icon_hu4d6c8a1670ae2dd8430a36f082aa4997_23882_192x192_fill_lanczos_center_2.png"
+      "url": "/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_192x192_fill_lanczos_center_2.png"
     }
   },
   "description": "Traditional phase IIIb randomised trials may not reflect routine clinical practice. The Salford Lung Study in chronic       obstructive pulmonary disease (SLS COPD) allowed broad inclusion criteria and followed patients in routine practice. We assessed whether SLS COPD approximated the England COPD population and evidence for a Hawthorne effect. This observational cohort study compared patients with COPD in the usual care arm of SLS COPD (2012-2014) with matched non-trial patients with COPD in England from the Clinical Practice Research Datalink database. Generalisability was explored with baseline demographics, clinical and treatment variables; outcomes included COPD exacerbations in adjusted models and pretrial versus peritrial comparisons. Trial participants were younger (mean, 66.7 vs 71.1 years), more deprived (most deprived quintile, 51.5% vs 21.4%), more current smokers (47.5% vs 32.1%), with more severe Global initiative for chronic Obstructive Lung Disease stages but less comorbidity than non-trial patients. There were no material differences in other characteristics. Acute COPD exacerbation rates were high in the trial population (98.37th percentile). The trial population was similar to the non-trial COPD population. We observed some evidence of a Hawthorne effect, with more exacerbations recorded in trial patients; however, the largest effect was observed through behavioural changes in patients and general practitioner coding practices."
