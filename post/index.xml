@@ -1,24 +1,130 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on MyKo101</title>
+    <title>Posts | MyKo101</title>
     <link>/post/</link>
-    <description>Recent content in Posts on MyKo101</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <copyright>© {2020}</copyright>
-    <lastBuildDate>Mon, 20 Jul 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
-    
+      <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <description>Posts</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2020</copyright><lastBuildDate>Wed, 22 Jul 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/images/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_2.png</url>
+      <title>Posts</title>
+      <link>/post/</link>
+    </image>
     
     <item>
       <title>Deploy to GitHub Pages</title>
       <link>/post/deploy-to-github-pages/</link>
-      <pubDate>Mon, 20 Jul 2020 00:00:00 +0000</pubDate>
-      
+      <pubDate>Wed, 22 Jul 2020 00:00:00 +0000</pubDate>
       <guid>/post/deploy-to-github-pages/</guid>
-      <description>Within git, the default branch is usually named master, however in recent times, the negative connotations of that word are coming to the forefront of a lot of people&amp;rsquo;s minds, and so they are wishing to diverge away from that kind of terminology. The simplest change that we can make is to default to the HEAD branch of a repo, which will point towards whatever the actual default branch is for a the repo, whether that is master, main or Captain.</description>
+      <description>&lt;p&gt;Within &lt;code&gt;git&lt;/code&gt;, the default branch is usually named &lt;code&gt;master&lt;/code&gt;, however in recent times, the negative connotations of that word are coming to the forefront of a lot of people&amp;rsquo;s minds, and so they are wishing to diverge away from that kind of terminology. The simplest change that we can make is to default to the &lt;code&gt;HEAD&lt;/code&gt; branch of a repo, which will point towards whatever the actual default branch is for a the repo, whether that is &lt;code&gt;master&lt;/code&gt;, &lt;code&gt;main&lt;/code&gt; or &lt;code&gt;Captain&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Unfortunately, this change can be slow, and although resources like GitHub have expressed interest in switching away from the default &lt;code&gt;master&lt;/code&gt;, some things are still hardcoded. One of which is the limitations of GitHub Pages deployment. Users can currently choose from one of three options:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Build website from the &lt;code&gt;master&lt;/code&gt; branch&lt;/li&gt;
+&lt;li&gt;Build website from the &lt;code&gt;docs&lt;/code&gt; folder in the &lt;code&gt;master&lt;/code&gt; branch&lt;/li&gt;
+&lt;li&gt;Build website from the &lt;code&gt;gh-pages&lt;/code&gt; branch&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The use of &lt;code&gt;master&lt;/code&gt; here is hardcoded, and many users currently choose to use the &lt;code&gt;docs&lt;/code&gt; folder in the &lt;code&gt;master&lt;/code&gt; branch as the location to store their website. Depending on workflows, the other two options might not be possible, or would require huge restructuring of your workflow if you wish to switch from &lt;code&gt;master&lt;/code&gt;. For User pages (repos that are &lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;), they can only be built from the &lt;code&gt;master&lt;/code&gt; branch; hopefully this will change soon (see 
+&lt;a href=&#34;#User-repos&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;For example, this blog is written using &lt;code&gt;blogdown&lt;/code&gt;, a package for &lt;code&gt;R&lt;/code&gt;, which helps to create blogs. In doing so, it creates a static site in a subdirectory called &lt;code&gt;public&lt;/code&gt; (by default). You do your work in the parent folder, it generates content in this subfolder. If you wish to use GitHub Pages to publish your site, the 
+&lt;a href=&#34;https://bookdown.org/yihui/blogdown/github-pages.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;recommendations&lt;/a&gt; by 
+&lt;a href=&#34;https://yihui.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;yihui&lt;/a&gt;, the package autho, are to set up your &lt;code&gt;git&lt;/code&gt; directory inside this subdirectory. This has the limitation of meaning the content of your parent folder is not backed up to GitHub, and is only stored locally.&lt;/p&gt;
+&lt;p&gt;However, thanks to GitHub user 
+&lt;a href=&#34;https://github.com/s0&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;s0&lt;/code&gt;&lt;/a&gt; and their GitHub Action, it&amp;rsquo;s possible to keep your work inside the &lt;code&gt;doc&lt;/code&gt; folder on your &lt;code&gt;default&lt;/code&gt; branch (whatever it&amp;rsquo;s name may be) and have that folder automatically pushed to the &lt;code&gt;gh-pages&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;For those who don&amp;rsquo;t know, GitHub Actions allows automation when certain events (triggers) occur within your repo. You can try to write your own complicated commands, or use those created by other users within a relatively simple skeleton. We&amp;rsquo;re going to use one of these simple skeletons to utilise &lt;code&gt;s0&lt;/code&gt;&#39;s work, thus allowing us to use the &lt;code&gt;main&lt;/code&gt; branch, rather than the &lt;code&gt;master&lt;/code&gt; branch on our repo. In order to use GitHub Actions, we need to add a 
+&lt;a href=&#34;https://en.wikipedia.org/wiki/YAML&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;.yaml&lt;/code&gt;&lt;/a&gt; file (stands for YAML Ain&amp;rsquo;t Markup Language) within our repo.&lt;/p&gt;
+&lt;h2 id=&#34;rename-the-branch&#34;&gt;Rename the branch&lt;/h2&gt;
+&lt;p&gt;The first step in this process would be to actually change the name of our &lt;code&gt;master&lt;/code&gt; branch to &lt;code&gt;main&lt;/code&gt; (or whatever you choose).&lt;/p&gt;
+&lt;h3 id=&#34;directly-on-github&#34;&gt;Directly on GitHub&lt;/h3&gt;
+&lt;p&gt;GitHub doesn&amp;rsquo;t directly support renaming of branches (as far as I know). So, what we need to do is to create a new branch for our repository by clicking on the branches button at the top left of our repo Code page (probably says &lt;code&gt;master&lt;/code&gt; right now).&lt;/p&gt;
+&lt;p&gt;And then type in the name of the new branch (e.g. &lt;code&gt;main&lt;/code&gt;). If this branch doesn&amp;rsquo;t exist, you&amp;rsquo;ll be given the option to &lt;code&gt;Create branch: main from &#39;master&#39;&lt;/code&gt;. Click on Settings then Branches and you can change your default branch to the new &lt;code&gt;main&lt;/code&gt; branch.&lt;/p&gt;
+&lt;p&gt;You can then delete your &lt;code&gt;master&lt;/code&gt; branch, although it might be worth holding on to it for a little while, in case anybody downstream from you is using it, or as a back-up in case something goes wrong!&lt;/p&gt;
+&lt;h3 id=&#34;git-bash&#34;&gt;Git Bash&lt;/h3&gt;
+&lt;p&gt;If you have a local copy of your repo, you can run the following in command line to rename it:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git branch -m master main
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you want to rename the current branch, you can simplify this to be:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git branch -m main
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note you will have to use &lt;code&gt;-M&lt;/code&gt; instead of &lt;code&gt;-m&lt;/code&gt; if you are renaming a branch and only changing captalisation, e.g. from &lt;code&gt;main&lt;/code&gt; to &lt;code&gt;Main&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;A common error when running this command is the following (or something to this effect):&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;error: refname refs/heads/HEAD not found
+fatal: Branch rename failed
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This means you don&amp;rsquo;t have a branch checked out, and so you&amp;rsquo;ll have to create a new branch, but when doing so, you can name it whatever you want&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git checkout -b main
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;After you&amp;rsquo;ve done this locally, you&amp;rsquo;ll have to &lt;code&gt;git push&lt;/code&gt; your repo up to GitHub again. However, you&amp;rsquo;ll probably get an error telling you to run the following instead&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git push --set-upstream origin main
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This will just ensure your new &lt;code&gt;main&lt;/code&gt; branch is upstream of the previous &lt;code&gt;master&lt;/code&gt; branch.&lt;/p&gt;
+&lt;p&gt;Then you&amp;rsquo;ll have to change GitHub&amp;rsquo;s default branch to your new one in the Settings as above.&lt;/p&gt;
+&lt;h2 id=&#34;github-workflows&#34;&gt;GitHub Workflows&lt;/h2&gt;
+&lt;p&gt;GitHub Action files are stored in a special directory in your repo, the &lt;code&gt;.github/workflow&lt;/code&gt; directory. All we have to do is create a file in this directory, name it something useful and give it the &lt;code&gt;.yaml&lt;/code&gt; extension. Sounds simple, and for most people it is. The only limitation is that sometimes, we can&amp;rsquo;t create folders with the &lt;code&gt;.&lt;/code&gt; at the start (particularly on Windows). Or at least, we can&amp;rsquo;t create them in the usual Right Click &amp;gt; New &amp;gt; Folder method in Windows Explorer. The simple way is to use Command Line to do it.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mkdir .github
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;mkdir&lt;/code&gt; command makes directories. It&amp;rsquo;s as simple as that.&lt;/p&gt;
+&lt;p&gt;Alternatively, you can create this directly on GitHub in the usual manner. Just remember that you will have to &lt;code&gt;git pull&lt;/code&gt; any changes you make this way.&lt;/p&gt;
+&lt;h2 id=&#34;the-yaml&#34;&gt;The YAML&lt;/h2&gt;
+&lt;p&gt;The YAML file that we create will look like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;name: &#39;Deploy to gh-pages&#39;
+on:
+  push:	
+    branches:
+      - main
+    paths:	
+      - &#39;docs/**&#39;
+      
+jobs:
+  deploy:
+    name: Push docs to gh-pages
+    runs-on: ubuntu-latest    
+    steps:
+    - uses: actions/checkout@main
+
+    - name: Deploy
+      uses: s0/git-publish-subdir-action@develop
+      env:
+        REPO: self
+        BRANCH: gh-pages
+        FOLDER: docs
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Feel free to copy the above directly. If you&amp;rsquo;re using RStudio to manage your repo, you can create a New Text File, save it with the extension &lt;code&gt;.yaml&lt;/code&gt; and RStudio will conveniently colour code the file. Otherwise, you can do it in notepad (just make sure the extension sticks)&lt;/p&gt;
+&lt;p&gt;What does this fie do? I don&amp;rsquo;t think it&amp;rsquo;s too important to go into great details here, there is plenty of 
+&lt;a href=&#34;https://docs.github.com/en/actions&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;reading to be done&lt;/a&gt; on GitHub Actions. So, just a quick look at the important bits, in case you want to change something. Apart from the &lt;code&gt;name:&lt;/code&gt; line, it&amp;rsquo;s split into two parts, the &lt;code&gt;on:&lt;/code&gt; and the &lt;code&gt;jobs:&lt;/code&gt; parts. Note that in YAML files, whitespace is important, and gives structure: &lt;code&gt;push:&lt;/code&gt; is a child of &lt;code&gt;on:&lt;/code&gt; and &lt;code&gt;jobs:&lt;/code&gt; is the parent of &lt;code&gt;deploy:&lt;/code&gt;, but &lt;code&gt;on:&lt;/code&gt; and &lt;code&gt;jobs:&lt;/code&gt; are siblings.&lt;/p&gt;
+&lt;h3 id=&#34;the-triggers&#34;&gt;The Triggers&lt;/h3&gt;
+&lt;p&gt;The &lt;code&gt;on:&lt;/code&gt; part contains information on what events will trigger the event. Here, we&amp;rsquo;re telling GitHub that when we push our repo to the &lt;code&gt;main&lt;/code&gt; branch, if something has changed in the &lt;code&gt;docs&lt;/code&gt; folder (or path). This means that any pushes that happen to other branches will be ignored, and any pushes that don&amp;rsquo;t change our &lt;code&gt;docs&lt;/code&gt; folder will also be ignored. The syntax for &lt;code&gt;paths:&lt;/code&gt; actually allows you to check for changes to anything that matches this string, so by using &lt;code&gt;&#39;docs/**&#39;&lt;/code&gt;, we match anything that starts with &lt;code&gt;&#39;docs/&#39;&lt;/code&gt;, i.e. anything within the &lt;code&gt;docs&lt;/code&gt; folder. This is useful because we&amp;rsquo;re building our &lt;code&gt;gh-pages&lt;/code&gt; branch based solely on what&amp;rsquo;s in &lt;code&gt;docs&lt;/code&gt;. If something changes elsewhere in the repo, it doesn&amp;rsquo;t matter (unless of course, those changes cause effects in the &lt;code&gt;docs&lt;/code&gt; folder, which will still cause the trigger). It also doesn&amp;rsquo;t matter what happens on other branches (such as a &lt;code&gt;development&lt;/code&gt; branch) because we&amp;rsquo;re not wanting to build our GitHub pages from them.&lt;/p&gt;
+&lt;h3 id=&#34;the-actions&#34;&gt;The Actions&lt;/h3&gt;
+&lt;p&gt;The &lt;code&gt;jobs:&lt;/code&gt; part contains the actual actions that occurs. You can have many Actions and jobs within he same file, but here we only have one job, which consists of two tasks. &lt;code&gt;deploy:&lt;/code&gt; is just the formal name for the job that we&amp;rsquo;re running. If we want more jobs to run, we can give them different names and place them at the same hierarchical starting point as &lt;code&gt;deploy:&lt;/code&gt; (i.e. with two spaces in front). Different jobs will run in parallel, each individual job will run in order.&lt;/p&gt;
+&lt;p&gt;We then give a bit of information about the job, first it&amp;rsquo;s name &lt;code&gt;Push docs to gh-pages&lt;/code&gt; (more like a title), followed by what operating system we want GitHub Actions to use to implement it. Finally, we have the &lt;code&gt;steps:&lt;/code&gt;, which is where we put the list of tasks that need to be run (in order).&lt;/p&gt;
+&lt;p&gt;This Action only has two steps and they are both &lt;code&gt;uses:&lt;/code&gt; steps, which basically means we&amp;rsquo;re going to be using Actions that are properly defined elsewhere. We could write an action directly here in quotes and supply the name of what application we want it to be run in (at a Command Line level), but we don&amp;rsquo;t have to since these Actions are defined for us. Each task starts with a &lt;code&gt;-&lt;/code&gt; followed by the information for that task.&lt;/p&gt;
+&lt;h4 id=&#34;checkout&#34;&gt;Checkout&lt;/h4&gt;
+&lt;p&gt;The first task is simple &lt;code&gt;- uses: actions/checkout@master&lt;/code&gt;. You may recognise the format of this as it comes up a lot within GitHub, it is &lt;code&gt;&amp;lt;user&amp;gt;/&amp;lt;repo&amp;gt;@&amp;lt;branch&amp;gt;&lt;/code&gt;. This is because all Actions created by other users, are actually repos. So what we&amp;rsquo;re doing here is saying we want to &lt;code&gt;use&lt;/code&gt; the Action defined within the &lt;code&gt;main&lt;/code&gt; branch of the &lt;code&gt;checkout&lt;/code&gt; repo made by the user &lt;code&gt;actions&lt;/code&gt; and we can actually view that repo 
+&lt;a href=&#34;https://github.com/actions/checkout&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;, or since it is an Action, we can view it on the Actions Marketplace 
+&lt;a href=&#34;https://github.com/marketplace/actions/checkout&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This Action essentially runs a &lt;code&gt;git checkout&lt;/code&gt; command on your repo so that it&amp;rsquo;s files can be accessed by your workflow. Actions that change your repo in some way will typically start with this. They will usually also end with something that &lt;code&gt;commits&lt;/code&gt; and &lt;code&gt;pushes&lt;/code&gt; the results back onto your repo. We don&amp;rsquo;t need to do this part because it is covered by the second task&lt;/p&gt;
+&lt;h4 id=&#34;deploy&#34;&gt;Deploy&lt;/h4&gt;
+&lt;p&gt;Task number two is where the magic happens. There&amp;rsquo;s a lot more here than in the first task&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;- name: Deploy
+  uses: s0/git-publish-subdir-action@develop
+  env:
+    REPO: self
+    BRANCH: gh-pages
+    FOLDER: docs
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We have three children within this task, &lt;code&gt;name:&lt;/code&gt;, &lt;code&gt;uses:&lt;/code&gt; and &lt;code&gt;env:&lt;/code&gt; and &lt;code&gt;env:&lt;/code&gt; even has some children of it&amp;rsquo;s own. Firstly, we&amp;rsquo;re giving this task a name, &lt;code&gt;Deploy&lt;/code&gt;; this isn&amp;rsquo;t necessary, but it looks a little neater and makes it clearer what this task is doing (useful if you&amp;rsquo;re running a lot of tasks in a single job).&lt;/p&gt;
+&lt;p&gt;The next child is the same as previously, &lt;code&gt;uses: s0/git-publish-subdir-action@develop&lt;/code&gt;. We&amp;rsquo;re going to run the action on the &lt;code&gt;develop&lt;/code&gt; branch of the &lt;code&gt;git-publish-subdir-action&lt;/code&gt; repo by the user &lt;code&gt;s0&lt;/code&gt;. Once again, you can view this repo 
+&lt;a href=&#34;https://github.com/s0/git-publish-subdir-action&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt; or as an Action on the Marketplace 
+&lt;a href=&#34;https://github.com/marketplace/actions/push-git-subdirectory-as-branch&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;. This is main part of what we&amp;rsquo;re doing. This Action does the actual copying of the subdirectory and pushes it to a new branch.&lt;/p&gt;
+&lt;p&gt;The last child is &lt;code&gt;env:&lt;/code&gt; and this is where you might have to change things depending on your use-case. This has four children, which are actually variables. Just like in most programming, we work within an environment that contains variables, well here we&amp;rsquo;re going to define some for the &lt;code&gt;git-publish-subdir-action&lt;/code&gt; to use.&lt;/p&gt;
+&lt;p&gt;You don&amp;rsquo;t need to worry about &lt;code&gt;REPO&lt;/code&gt; and &lt;code&gt;GITHUB_TOKEN&lt;/code&gt;, these just mean that the action is going to run on the current repo (&lt;code&gt;REPO: self&lt;/code&gt;) and provides authentication that it&amp;rsquo;s really us doing the changes (by generating a &lt;code&gt;GITHUB_TOKEN&lt;/code&gt; to use as an auth token). The other two variables are important, it&amp;rsquo;s telling the Action what directory we want to copy, which by default (if you&amp;rsquo;re been running your GitHub Pages using the &lt;code&gt;master/docs&lt;/code&gt; form) is currently set to be &lt;code&gt;docs&lt;/code&gt;, but this can be any other folder (or sub-folder) in your repo, e.g &lt;code&gt;public/home&lt;/code&gt;, &lt;code&gt;my-gh-pages-site&lt;/code&gt; or &lt;code&gt;&amp;quot;My Homepage&amp;quot;&lt;/code&gt; (don&amp;rsquo;t forget the quotes). Then finally, the name of the branch we want to put it on. If you&amp;rsquo;re looking here with the intention of using a GitHub Page, then this will have to be &lt;code&gt;gh-pages&lt;/code&gt;, but can be any name you want your new branch to be.&lt;/p&gt;
+&lt;h2 id=&#34;check-it-works&#34;&gt;Check it works&lt;/h2&gt;
+&lt;p&gt;Finally, once we&amp;rsquo;ve done all this, we can &lt;code&gt;git push&lt;/code&gt; to the &lt;code&gt;main&lt;/code&gt; branch of our repo on GitHub and it should build our website (provided we have the GitHub pages set to use &lt;code&gt;gh-pages&lt;/code&gt;). To check whether this has worked, simply load up your GitHub Page. You can also have a look at the run through of the Action in the Actions tab in your repo home. This gives you the output of the Command Line of every step of your Action (although remember there are only two).&lt;/p&gt;
+&lt;h2 id=&#34;user-repos&#34;&gt;User repos&lt;/h2&gt;
+&lt;p&gt;By default, User repos are expected to be self-contained and their GitHub Pages site can only be built from the &lt;code&gt;master&lt;/code&gt; branch. This means that you are expected to have an &lt;code&gt;index.html&lt;/code&gt; file in your home directory. However, this can limit the ways in which your site can be built. To fix this, we can use the workflow as above, but instead of pushing the subdirectory to the &lt;code&gt;gh-pages&lt;/code&gt; branch, we push it to the &lt;code&gt;master&lt;/code&gt; branch, whilst still using our &lt;code&gt;main&lt;/code&gt; branch as our default. The only change we need to do, is to replace the &lt;code&gt;BRANCH: gh-pages&lt;/code&gt; line in the YAML file with &lt;code&gt;BRANCH: master&lt;/code&gt; (make sure you keep the whitespace before it).&lt;/p&gt;
+</description>
     </item>
     
   </channel>

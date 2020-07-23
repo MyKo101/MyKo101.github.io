@@ -3,18 +3,143 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/package/mpipe/</loc>
+    <lastmod>2020-06-22T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/package/mutils/</loc>
+    <lastmod>2020-07-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/package/typos/</loc>
+    <lastmod>2020-06-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/deploy-to-github-pages/</loc>
+    <lastmod>2020-07-22T11:04:02+01:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/</loc>
-    <lastmod>2020-07-20T00:00:00+00:00</lastmod>
+    <lastmod>2020-07-22T11:04:02+01:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/</loc>
-    <lastmod>2020-07-20T00:00:00+00:00</lastmod>
+    <loc>/post/</loc>
+    <lastmod>2020-07-22T11:04:02+01:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/deploy-to-github-pages/</loc>
-    <lastmod>2020-07-20T00:00:00+00:00</lastmod>
+    <loc>/package/</loc>
+    <lastmod>2020-07-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tag/r-package/</loc>
+    <lastmod>2020-07-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2020-07-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/publication-type/2/</loc>
+    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/authors/</loc>
+    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/author/glen-philip-martin/</loc>
+    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/publication/barrowman-2019a/</loc>
+    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/author/mark-lambie/</loc>
+    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/author/matthew-sperrin/</loc>
+    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/author/michael-barrowman/</loc>
+    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/author/niels-peek/</loc>
+    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/publication_types/</loc>
+    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/publication/</loc>
+    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/author/alexander-pate/</loc>
+    <lastmod>2018-10-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/author/david-webb/</loc>
+    <lastmod>2018-10-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/author/jeanne-m-pimenta/</loc>
+    <lastmod>2018-10-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/author/kourtney-j-davies/</loc>
+    <lastmod>2018-10-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/author/rachael-williams/</loc>
+    <lastmod>2018-10-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/publication/pate-2018a/</loc>
+    <lastmod>2018-10-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/author/tjeerd-van-staa/</loc>
+    <lastmod>2018-10-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/privacy/</loc>
+    <lastmod>2018-06-28T00:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/terms/</loc>
+    <lastmod>2018-06-28T00:00:00+01:00</lastmod>
   </url>
   
   <url>
@@ -22,7 +147,7 @@
   </url>
   
   <url>
-    <loc>/tags/</loc>
+    <loc>/experience/</loc>
   </url>
   
 </urlset>
