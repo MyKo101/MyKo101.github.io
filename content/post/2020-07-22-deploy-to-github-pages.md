@@ -166,8 +166,11 @@ Finally, once we've done all this, we can `git push` to the `main` branch of our
 
 User repos are named like `<username>.github.io` and can only be built from the `master` branch. This is because User repos are expected to be self-contained and their GitHub Pages site can only be built from the `master` branch. This means that you are expected to have an `index.html` file in your home directory. However, this can limit the ways in which your site can be built. To fix this, we can use the workflow as above, but instead of pushing the subdirectory to the `gh-pages` branch, we push it to the `master` branch, whilst still using our `main` branch as our default. The only change we need to do, is to replace the `BRANCH: gh-pages` line in the YAML file with `BRANCH: master` (make sure you keep the whitespace before it).
 
-If you are using a custom domain, there seems to be a slight issue that when you update your User page (and essentially re-build your `master` branch), GitHub forgets your custom domain URL. The current solution is that once this Action is complete, you have to go to Settings and re-instigate your Custom Domain.
-
+If you are using a Custom Domain, there is one last thing that you'll need to consider. When you add a Custom Domain, GitHub stores this as the `CNAME` file in your home directory. The Action above destroys the `master` branch before rebuilding it from scratch. This includes deleting that `CNAME` file and, since it isn't in the subdirectory of your `main` branch, it doesn't get put back in. The solution? Just put it in there yourself. This simply means adding a file to your `docs` directory called `CNAME` (no file extension) and have it's only contents be your url. Since new files without extensions can, again, be tricky. At Command Line:
+```
+echo -n [YOUR_URL_HERE] > docs/CNAME
+```
+(The use of `-n` here means that a newline isn't added to the end of the line)
 
 
 
