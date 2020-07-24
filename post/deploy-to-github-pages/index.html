@@ -661,7 +661,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    11 min read
+    12 min read
   </span>
   
 
@@ -805,7 +805,10 @@ jobs:
 <p>Finally, once we&rsquo;ve done all this, we can <code>git push</code> to the <code>main</code> branch of our repo on GitHub and it should build our website (provided we have the GitHub pages set to use <code>gh-pages</code>). To check whether this has worked, simply load up your GitHub Page. You can also have a look at the run through of the Action in the Actions tab in your repo home. This gives you the output of the Command Line of every step of your Action (although remember there are only two).</p>
 <h2 id="user-repos">User repos</h2>
 <p>User repos are named like <code>&lt;username&gt;.github.io</code> and can only be built from the <code>master</code> branch. This is because User repos are expected to be self-contained and their GitHub Pages site can only be built from the <code>master</code> branch. This means that you are expected to have an <code>index.html</code> file in your home directory. However, this can limit the ways in which your site can be built. To fix this, we can use the workflow as above, but instead of pushing the subdirectory to the <code>gh-pages</code> branch, we push it to the <code>master</code> branch, whilst still using our <code>main</code> branch as our default. The only change we need to do, is to replace the <code>BRANCH: gh-pages</code> line in the YAML file with <code>BRANCH: master</code> (make sure you keep the whitespace before it).</p>
-<p>If you are using a custom domain, there seems to be a slight issue that when you update your User page (and essentially re-build your <code>master</code> branch), GitHub forgets your custom domain URL. The current solution is that once this Action is complete, you have to go to Settings and re-instigate your Custom Domain.</p>
+<p>If you are using a Custom Domain, there is one last thing that you&rsquo;ll need to consider. When you add a Custom Domain, GitHub stores this as the <code>CNAME</code> file in your home directory. The Action above destroys the <code>master</code> branch before rebuilding it from scratch. This includes deleting that <code>CNAME</code> file and, since it isn&rsquo;t in the subdirectory of your <code>main</code> branch, it doesn&rsquo;t get put back in. The solution? Just put it in there yourself. This simply means adding a file to your <code>docs</code> directory called <code>CNAME</code> (no file extension) and have it&rsquo;s only contents be your url. Since new files without extensions can, again, be tricky. At Command Line:</p>
+<pre><code>echo -n [YOUR_URL_HERE] &gt; docs/CNAME
+</code></pre>
+<p>(The use of <code>-n</code> here means that a newline isn&rsquo;t added to the end of the line)</p>
 
     </div>
 
@@ -829,7 +832,7 @@ jobs:
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=/post/deploy-to-github-pages/&amp;text=Deploy%20to%20GitHub%20Pages" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=http://michaelbarrowman.co.uk/post/deploy-to-github-pages/&amp;text=Deploy%20to%20GitHub%20Pages" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -842,7 +845,7 @@ jobs:
       
       
       <li>
-        <a href="https://www.facebook.com/sharer.php?u=/post/deploy-to-github-pages/&amp;t=Deploy%20to%20GitHub%20Pages" target="_blank" rel="noopener" class="share-btn-facebook">
+        <a href="https://www.facebook.com/sharer.php?u=http://michaelbarrowman.co.uk/post/deploy-to-github-pages/&amp;t=Deploy%20to%20GitHub%20Pages" target="_blank" rel="noopener" class="share-btn-facebook">
           <i class="fab fa-facebook"></i>
         </a>
       </li>
@@ -855,7 +858,7 @@ jobs:
       
       
       <li>
-        <a href="mailto:?subject=Deploy%20to%20GitHub%20Pages&amp;body=/post/deploy-to-github-pages/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=Deploy%20to%20GitHub%20Pages&amp;body=http://michaelbarrowman.co.uk/post/deploy-to-github-pages/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -868,7 +871,7 @@ jobs:
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=/post/deploy-to-github-pages/&amp;title=Deploy%20to%20GitHub%20Pages" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=http://michaelbarrowman.co.uk/post/deploy-to-github-pages/&amp;title=Deploy%20to%20GitHub%20Pages" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -881,7 +884,7 @@ jobs:
       
       
       <li>
-        <a href="whatsapp://send?text=Deploy%20to%20GitHub%20Pages%20/post/deploy-to-github-pages/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="whatsapp://send?text=Deploy%20to%20GitHub%20Pages%20http://michaelbarrowman.co.uk/post/deploy-to-github-pages/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -894,8 +897,21 @@ jobs:
       
       
       <li>
-        <a href="https://service.weibo.com/share/share.php?url=/post/deploy-to-github-pages/&amp;title=Deploy%20to%20GitHub%20Pages" target="_blank" rel="noopener" class="share-btn-weibo">
+        <a href="https://service.weibo.com/share/share.php?url=http://michaelbarrowman.co.uk/post/deploy-to-github-pages/&amp;title=Deploy%20to%20GitHub%20Pages" target="_blank" rel="noopener" class="share-btn-weibo">
           <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://reddit.com/submit?url=http://michaelbarrowman.co.uk/post/deploy-to-github-pages/&amp;title=Deploy%20to%20GitHub%20Pages" target="_blank" rel="noopener" class="share-btn-reddit">
+          <i class="fab fa-reddit-alien"></i>
         </a>
       </li>
     
