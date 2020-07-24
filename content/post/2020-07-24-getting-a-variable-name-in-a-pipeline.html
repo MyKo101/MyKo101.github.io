@@ -1,0 +1,170 @@
+---
+title: Getting a variable name in a pipeline
+author: ~
+date: '2020-07-24'
+slug: getting-a-variable-name-in-a-pipeline
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-07-24T00:25:35+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p>There is no greater staple of the <code>{tidyverse}</code> than the pipe, <code>%&gt;%</code>, however not a lot of people understand what’s going on “under-the-bonnet” of the pipe. To be fair, not many people have to worry about it. Until you start trying to do a bit of meta-programming. Then things can get difficult.</p>
+<p>Recently, a <a href="https://community.rstudio.com/t/getting-argument-name-when-passed-via-i-keep-getting/74086">question</a> posed by user <a href="https://community.rstudio.com/u/preposterior">preposterior</a> on RStudio Community embodied an issue that can happen when trying to extract the name of a variable.</p>
+<p>When using the <code>{rlang}</code> package, we can get the name of a variable passed into a function using the following:</p>
+<pre class="r"><code>simple_get_name &lt;- function(x){
+  x_sym &lt;- ensym(x)
+  as_name(x_sym)
+}
+
+my_variable &lt;- 1
+
+simple_get_name(my_variable)</code></pre>
+<pre><code>## [1] &quot;my_variable&quot;</code></pre>
+<p>However, when we try to use this with a pipe, it goes wrong:</p>
+<pre class="r"><code>my_variable %&gt;% simple_get_name()</code></pre>
+<pre><code>## [1] &quot;.&quot;</code></pre>
+<p>What is this!? Where did that dot come from? Well, that’s why you’re here. The <code>.</code> can actually be used as a variable name in R, it’s perfectly syntactic, although ill-advised. Many functions (particularly <code>{tidyverse}</code> ones) use the <code>.</code> as a filler for other purposes, the pipe is a big example, but it is also prominent in the <code>map()</code> family of functions in <code>{purrr}</code>.</p>
+<p>The reason we get this output is because the pipe actually turns your pipeline of functions into a chain of new functions defined something like this:</p>
+<pre class="r"><code>function(.)
+simple_get_name(.)</code></pre>
+<p>So, it’s a chain of wrapper functions around your pipeline’d functions. The functions are direct copies of what you use in your pipeline. For example, if you have a few arguments, the <code>.</code> will be inserted as the first argument. This makes sense as this is what the pipe does (passes your input into the first agrument, unless told otherwise).</p>
+<p>Once the pipe has this chain of functions, it uses the <code>freduce()</code> function to apply the functions in order to the output of the previous one. You already knew what a pipeline did, know you’ve got a little insight into how.</p>
+<p>So how do we pull out that <code>my_variable</code> name from within a piped function? Well the problem is that, within the context of that function, that variable is lost. It’s value has been put into the variable <code>.</code>, but that original name is long gone.</p>
+<p>We can, however, look back over the call-stack where the current function is being evaluated (which is what error-finding functions like <code>traceback()</code> do). Within the pipe, it actually creates a relatively deeply nested set of calls (about 9 calls deep). However, the <code>sys.calls()</code> function can return this stack. Compare for example the following two outputs:</p>
+<pre class="r"><code>stack_fun &lt;- function(x){
+  sys.calls()
+}
+stack_fun(my_variable)
+my_variable %&gt;% stack_fun</code></pre>
+<pre><code>## [[1]]
+## stack_fun(my_variable)</code></pre>
+<pre><code>## [[1]]
+## my_variable %&gt;% stack_fun
+## 
+## [[2]]
+## withVisible(eval(quote(`_fseq`(`_lhs`)), env, env))
+## 
+## [[3]]
+## eval(quote(`_fseq`(`_lhs`)), env, env)
+## 
+## [[4]]
+## eval(quote(`_fseq`(`_lhs`)), env, env)
+## 
+## [[5]]
+## `_fseq`(`_lhs`)
+## 
+## [[6]]
+## freduce(value, `_function_list`)
+## 
+## [[7]]
+## withVisible(function_list[[k]](value))
+## 
+## [[8]]
+## function_list[[k]](value)
+## 
+## [[9]]
+## stack_fun(.)</code></pre>
+<p>The first element of this stack will be the initial call, in this case <code>my_variable %&gt;% stack_fun()</code>. This will be a <code>call</code> object and so we can pull out the left-hand side by extracting the second element (the <code>%&gt;%</code> is the first element, and <code>stack_fun</code> is the third). Therefore, the previous function can be written as:</p>
+<pre class="r"><code>stacked_get_name &lt;- function(x){
+  first_call &lt;- sys.calls()[[1]] #get the first entry on the call stack
+  lhs &lt;- first_call[[2]] #get the second element of this entry
+  z &lt;- rlang::as_name(lhs)
+  print(z)
+}
+
+my_variable %&gt;% stacked_get_name()</code></pre>
+<pre><code>## [1] &quot;my_variable&quot;</code></pre>
+<p>It worked! Brilliant!</p>
+<p>But, that’s not the end of our tale!</p>
+<p>This is just looking for the initial call, and isn’t strictly going to seek out where there is a pipe. For example, it wouldn’t work with the following function, since <code>wrap_stacked_get_name()</code> would be at the top of the stack:</p>
+<pre class="r"><code>wrap_stacked_get_name &lt;- function(wrapped_var){
+  this_variable &lt;- wrapped_var+1
+  this_variable %&gt;% stacked_get_name
+}
+
+wrap_stacked_get_name(my_variable)</code></pre>
+<pre><code>## [1] &quot;my_variable&quot;</code></pre>
+<p>This should return <code>this_variable</code>, but since it’s looking at the initial call, it looks too far back up the call-stack and misses this variable.</p>
+<p>However, by inspecting the entire stack for a pipe, we can pull out the most recent (i.e. the lowest) entry that is a pipe, and grab the left-hand side of that call.</p>
+<pre class="r"><code>get_lhs &lt;- function(){
+  calls &lt;- sys.calls()
+  
+  #pull out the function or operator (e.g. the `%&gt;%`)
+  call_firsts &lt;- lapply(calls,`[[`,1) 
+  
+  #check which ones are equal to the pipe
+  pipe_calls &lt;- vapply(call_firsts,identical,logical(1),quote(`%&gt;%`))
+  
+  #if we have no pipes, then get_lhs() was called incorrectly
+  if(all(!pipe_calls)){
+    NULL
+  } else {
+    #Get the most recent pipe, lowest on the 
+    pipe_calls &lt;- which(pipe_calls)
+    pipe_calls &lt;- pipe_calls[length(pipe_calls)]
+    
+    #Get the second element of the pipe call
+    this_call &lt;- calls[[c(pipe_calls,2)]]
+    
+    #We need to dig down into the call to find the original
+    while(is.call(this_call) &amp;&amp; identical(this_call[[1]],quote(`%&gt;%`))){
+      this_call &lt;- this_call[[2]]
+    }
+    this_call
+    
+  }
+}</code></pre>
+<p>Once we have the call, getting the lhs of it requires digging down. If we have pipeline, then it’s actually a nested sequence of operators. For example, <code>2+3+4</code> makes sense to us, but R can’t add like this, it breaks this down by calculating from left to right, basically it does this <code>(2 + 3) + 4</code>, which is the same as <code>add(add(2,3),4)</code>. R does this with the pipe too.</p>
+<p>If we’re piping a few things together, we write this: <code>my_variable %&gt;% fun1 %&gt;% fun2 %&gt;% fun3</code>, R reads it as this: <code>((my_variable %&gt;% fun1) %&gt;% fun2) %&gt;% fun3</code>.</p>
+<p>So we repeatedly check that the current function/operator/call name is a pipe, if it is, grab the second entry (which is what is being piped into the current pipe). If it isn’t, we’ve dug down far enough.</p>
+<p>So, now that we have that little function, we can re-write our function to check for this first:</p>
+<pre class="r"><code>get_name &lt;- function(x){
+  lhs &lt;- get_lhs()
+  if(is.null(lhs)){
+    lhs &lt;- rlang::ensym(x)
+  }
+  as_name(lhs)
+}
+get_name(my_variable)</code></pre>
+<pre><code>## [1] &quot;my_variable&quot;</code></pre>
+<pre class="r"><code>my_variable %&gt;% get_name</code></pre>
+<pre><code>## [1] &quot;my_variable&quot;</code></pre>
+<p>Eureka! Now, let’s check the wrapper function:</p>
+<pre class="r"><code>wrap_get_name &lt;- function(wrapped_var){
+  this_variable &lt;- wrapped_var+1
+  this_variable %&gt;% get_name
+}
+
+wrap_get_name(my_variable)</code></pre>
+<pre><code>## [1] &quot;this_variable&quot;</code></pre>
+<pre class="r"><code>my_variable %&gt;% wrap_get_name</code></pre>
+<pre><code>## [1] &quot;this_variable&quot;</code></pre>
+<p>This function acts a little strange around <code>fseq</code> functions. But, the results make sense when you think about it.</p>
+<pre class="r"><code>fseq_get_name &lt;- . %&gt;% get_name</code></pre>
+<p>This method of creating a function, where the initial starting value of the pipeline is actually that previously discussed <code>.</code>, this is essentially the same as the previous, <code>wrap_get_name()</code> function:</p>
+<pre class="r"><code>fseq_get_name_dummy &lt;- function(.){
+  . %&gt;% get_name
+}</code></pre>
+<p>As usual, we can use this function in one of two ways, either as a regular function with brackets or as a piped function</p>
+<pre class="r"><code>fseq_get_name(my_variable)</code></pre>
+<pre><code>## [1] &quot;.&quot;</code></pre>
+<p>Looking at the alternate definition above, this makes sense as a result. The pipeline starts with a <code>.</code></p>
+<pre class="r"><code>my_variable %&gt;% fseq_get_name</code></pre>
+<pre><code>## [1] &quot;my_variable&quot;</code></pre>
+<p>What? This time, it’s returned the value being piped in. But, if we imagine a <code>fseq</code>-style as sticking the pipelines together, then the actual start of this pipeline <em>is</em> the <code>my_variable</code>.</p>
+<p>And there we go. You’ve now got a bit more of an understanding of the <code>sys.calls()</code> function and can extract the name of a variable being passed into a pipeline. This is a very basic way of doing it, it doesn’t do nearly enough checks as a function in-production would have to do, but it’s a good start. You could also extract any part of that original pipeline call.</p>
+<p style="font-size: calc(100% - 6px);">
+Sidenote for the pro’s out there. This page is written in <code>{rmarkdown}</code> and rendered using <code>{blogdown}</code>. This meant that when I used the <code>sys.calls()</code> function, I actually got a much deeper nesting of calls when rendering in these than in my RStudio application. This is because when rendering, each code chunk is evaluated <em>within another call</em>. For the local render with <code>{rmarkdown}</code>, I had to remove the first 18 calls before the “first” call was the one actually used above. For the <code>{blogdown}</code> render, it is 24. This page has a bunch of hidden code chunks (using <code>eval=F</code> and <code>echo=F</code>) to make the code and the output look seamless.
+</p>

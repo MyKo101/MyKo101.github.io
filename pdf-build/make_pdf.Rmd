@@ -1,0 +1,62 @@
+---
+title: "michael-barrowman-cv"
+author: "Michael A Barrowman"
+date: "23/07/2020"
+header-includes:
+  - \usepackage{makecell}
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+  - \usepackage{threeparttablex}
+  - \usepackage[normalem]{ulem}
+  - \usepackage{xcolor}
+
+output:
+  pdf_document
+---
+
+<!-- rmarkdown::render(here::here("pdf-build","make_pdf.Rmd"),output_dir=here::here("assets","files"),output_file="michael-barrowman-cv.pdf") -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source(here::here("pdf-build","pre_load.R"))
+```
+
+# Experience
+
+Before
+
+```{r, echo=F}
+
+glue_exp <- "**{\\large <title>}**\n*\\textcolor{lightgray}{<company>}*\n<month_start> - <month_end>\n<description>"
+glue_exp <- "<title>"
+
+#get_experience() %>%
+#  arrange(!is.na(date_end),desc(date_end),desc(date_start)) %>%
+#  slice(1:6) %>%
+#  str_glue_data(glue_exp,.open="<",.close=">") %>%
+#  gsub("&","\\&",.) %>%
+#  linebreak %>%
+#  matrix(byrow = T,ncol=2) %>%
+#  set_colnames(c("L","R")) %>%
+#  as_tibble %>%
+#  kable("latex",booktabs=T,escape=F,col.names=NULL)
+
+tibble(x=1:10,
+       y = rnorm(10)) %>%
+  kable("latex",booktabs=T,escape=F,col.names=NULL)
+
+```
+
+
+After
+
+
+

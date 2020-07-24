@@ -1,0 +1,217 @@
+---
+title: Getting a variable name in a pipeline
+author: ~
+date: '2020-07-24'
+slug: getting-a-variable-name-in-a-pipeline
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-07-24T00:25:35+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+```{r, include=F}
+library(rlang)
+library(magrittr)
+```
+
+There is no greater staple of the `{tidyverse}` than the  pipe, `%>%`, however not a lot of people understand what's going on "under-the-bonnet" of the pipe. To be fair, not many people have to worry about it. Until you start trying to do a bit of meta-programming. Then things can get difficult.
+
+Recently, a [question](https://community.rstudio.com/t/getting-argument-name-when-passed-via-i-keep-getting/74086) posed by user [preposterior](https://community.rstudio.com/u/preposterior) on RStudio Community embodied an issue that can happen when trying to extract the name of a variable.
+
+When using the `{rlang}` package, we can get the name of a variable passed into a function using the following:
+```{r, simple_get_name_def}
+simple_get_name <- function(x){
+  x_sym <- ensym(x)
+  as_name(x_sym)
+}
+
+my_variable <- 1
+
+simple_get_name(my_variable)
+```
+
+However, when we try to use this with a pipe, it goes wrong:
+
+```{r simple_get_name_pipe}
+my_variable %>% simple_get_name()
+```
+
+What is this!? Where did that dot come from? Well, that's why you're here. The `.` can actually be used as a variable name in R, it's perfectly syntactic, although ill-advised. Many functions (particularly `{tidyverse}` ones) use the `.` as a filler for other purposes, the pipe is a big example, but it is also prominent in the `map()` family of functions in `{purrr}`.
+
+The reason we get this output is because the pipe actually turns your pipeline of functions into a chain of new functions defined something like this:
+```{r anonymous_simple_get_name, eval=F}
+function(.)
+simple_get_name(.)
+```
+So, it's a chain of wrapper functions around your pipeline'd functions. The functions are direct copies of what you use in your pipeline. For example, if you have a few arguments, the `.` will be inserted as the first argument. This makes sense as this is what the pipe does (passes your input into the first agrument, unless told otherwise).
+
+Once the pipe has this chain of functions, it uses the `freduce()` function to apply the functions in order to the output of the previous one. You already knew what a pipeline did, know you've got a little insight into how.
+
+So how do we pull out that `my_variable` name from within a piped function? Well the problem is that, within the context of that function, that variable is lost. It's value has been put into the variable `.`, but that original name is long gone.
+
+We can, however, look back over the call-stack where the current function is being evaluated (which is what error-finding functions like `traceback()` do). Within the pipe, it actually creates a relatively deeply nested set of calls (about 9 calls deep). However, the `sys.calls()` function can return this stack. Compare for example the following two outputs:
+```{r stack_fun_dummy,eval=F}
+stack_fun <- function(x){
+  sys.calls()
+}
+stack_fun(my_variable)
+my_variable %>% stack_fun
+```
+```{r stack_fun_def, echo=F}
+stack_fun <- function(x){
+  sys.calls()[-(1:24)]
+}
+stack_fun(my_variable)
+my_variable %>% stack_fun
+```
+
+The first element of this stack will be the initial call, in this case `my_variable %>% stack_fun()`. This will be a `call` object and so we can pull out the left-hand side by extracting the second element (the `%>%` is the first element, and `stack_fun` is the third). Therefore, the previous function can be written as:
+```{r stacked_get_name_dummy, eval=F}
+stacked_get_name <- function(x){
+  first_call <- sys.calls()[[1]] #get the first entry on the call stack
+  lhs <- first_call[[2]] #get the second element of this entry
+  z <- rlang::as_name(lhs)
+  print(z)
+}
+
+my_variable %>% stacked_get_name()
+```
+```{r stacked_get_name_def, echo=F}
+stacked_get_name <- function(x){
+  first_call <- sys.calls()[[25]] #get the first entry on the call stack
+  lhs <- first_call[[2]] #get the second element of this entry
+  z <- rlang::as_name(lhs)
+  print(z)
+}
+
+my_variable %>% stacked_get_name()
+```
+It worked! Brilliant!
+
+But, that's not the end of our tale!
+
+This is just looking for the initial call, and isn't strictly going to seek out where there is a pipe.  For example, it wouldn't work with the following function, since `wrap_stacked_get_name()` would be at the top of the stack:
+```{r wrap_stacked_get_name_def}
+wrap_stacked_get_name <- function(wrapped_var){
+  this_variable <- wrapped_var+1
+  this_variable %>% stacked_get_name
+}
+
+wrap_stacked_get_name(my_variable)
+
+```
+This should return `this_variable`, but since it's looking at the initial call, it looks too far back up the call-stack and misses this variable.
+
+However, by inspecting the entire stack for a pipe, we can pull out the most recent (i.e. the lowest) entry that is a pipe, and grab the left-hand side of that call.
+```{r get_lhs_def}
+get_lhs <- function(){
+  calls <- sys.calls()
+  
+  #pull out the function or operator (e.g. the `%>%`)
+  call_firsts <- lapply(calls,`[[`,1) 
+  
+  #check which ones are equal to the pipe
+  pipe_calls <- vapply(call_firsts,identical,logical(1),quote(`%>%`))
+  
+  #if we have no pipes, then get_lhs() was called incorrectly
+  if(all(!pipe_calls)){
+    NULL
+  } else {
+    #Get the most recent pipe, lowest on the 
+    pipe_calls <- which(pipe_calls)
+    pipe_calls <- pipe_calls[length(pipe_calls)]
+    
+    #Get the second element of the pipe call
+    this_call <- calls[[c(pipe_calls,2)]]
+    
+    #We need to dig down into the call to find the original
+    while(is.call(this_call) && identical(this_call[[1]],quote(`%>%`))){
+      this_call <- this_call[[2]]
+    }
+    this_call
+    
+  }
+}
+```
+
+Once we have the call, getting the lhs of it requires digging down. If we have pipeline, then it's actually a nested sequence of operators. For example, `2+3+4` makes sense to us, but R can't add like this, it breaks this down by calculating from left to right, basically it does this `(2 + 3) + 4`, which is the same as `add(add(2,3),4)`. R does this with the pipe too.
+
+If we're piping a few things together, we write this: `my_variable %>% fun1 %>% fun2 %>% fun3`, R reads it as this: `((my_variable %>% fun1) %>% fun2) %>% fun3`.
+
+So we repeatedly check that the current function/operator/call name is a pipe, if it is, grab the second entry (which is what is being piped into the current pipe). If it isn't, we've dug down far enough.
+
+So, now that we have that little function, we can re-write our function to check for this first:
+```{r get_name_def}
+get_name <- function(x){
+  lhs <- get_lhs()
+  if(is.null(lhs)){
+    lhs <- rlang::ensym(x)
+  }
+  as_name(lhs)
+}
+get_name(my_variable)
+my_variable %>% get_name
+```
+
+Eureka! Now, let's check the wrapper function:
+```{r wrap_get_name_lhs}
+wrap_get_name <- function(wrapped_var){
+  this_variable <- wrapped_var+1
+  this_variable %>% get_name
+}
+
+wrap_get_name(my_variable)
+my_variable %>% wrap_get_name
+```
+
+This function acts a little strange around `fseq` functions. But, the results make sense when you think about it.
+
+```{r fseq_get_name_def}
+fseq_get_name <- . %>% get_name
+```
+
+This method of creating a function, where the initial starting value of the pipeline is actually that previously discussed `.`, this is essentially the same as the previous, `wrap_get_name()` function:
+```{r fseq_get_name_dummy, eval=F}
+fseq_get_name_dummy <- function(.){
+  . %>% get_name
+}
+```
+
+As usual, we can use this function in one of two ways, either as a regular function with brackets or as a piped function
+
+```{r fseq_get_name_brackets}
+fseq_get_name(my_variable)
+```
+Looking at the alternate definition above, this makes sense as a result. The pipeline starts with a `.`
+
+```{r fseq_get_name_pipe}
+my_variable %>% fseq_get_name
+```
+
+What? This time, it's returned the value being piped in. But, if we imagine a `fseq`-style as sticking the pipelines together, then the actual start of this pipeline *is* the `my_variable`.
+
+
+And there we go. You've now got a bit more of an understanding of the `sys.calls()` function and can extract the name of a variable being passed into a pipeline. This is a very basic way of doing it, it doesn't do nearly enough checks as a function in-production would have to do, but it's a good start. You could also extract any part of that original pipeline call. 
+
+
+<p style="font-size: calc(100% - 6px);">Sidenote for the pro's out there. This page is written in `{rmarkdown}` and rendered using `{blogdown}`. This meant that when I used the `sys.calls()` function, I actually got a much deeper nesting of calls when rendering in these than in my RStudio application. This is because when rendering, each code chunk is evaluated *within another call*. For the local render with `{rmarkdown}`, I had to remove the first 18 calls before the "first" call was the one actually used above. For the `{blogdown}` render, it is 24. This page has a bunch of hidden code chunks (using `eval=F` and `echo=F`) to make the code and the output look seamless.</p>
+
+
+
+
+
+
+
+
+
+
+
+
