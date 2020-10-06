@@ -17,9 +17,17 @@ header-includes:
   - \usepackage{threeparttablex}
   - \usepackage[normalem]{ulem}
   - \usepackage{xcolor}
+  - \usepackage{tikz-inet,pgf}
+  - \usepackage[english]{babel}
+  - \usepackage[pscoord]{eso-pic}
+
 
 output:
-  pdf_document
+  pdf_document:
+    latex_engine: xelatex
+    includes:
+      in_header: preamble.tex
+fontsize: 8pt
 ---
 
 <!-- rmarkdown::render(here::here("pdf-build","make_pdf.Rmd"),output_dir=here::here("assets","files"),output_file="michael-barrowman-cv.pdf") -->
@@ -32,31 +40,10 @@ source(here::here("pdf-build","pre_load.R"))
 # Experience
 
 Before
-
-```{r, echo=F}
-
-glue_exp <- "**{\\large <title>}**\n*\\textcolor{lightgray}{<company>}*\n<month_start> - <month_end>\n<description>"
-glue_exp <- "<title>"
-
-#get_experience() %>%
-#  arrange(!is.na(date_end),desc(date_end),desc(date_start)) %>%
-#  slice(1:6) %>%
-#  str_glue_data(glue_exp,.open="<",.close=">") %>%
-#  gsub("&","\\&",.) %>%
-#  linebreak %>%
-#  matrix(byrow = T,ncol=2) %>%
-#  set_colnames(c("L","R")) %>%
-#  as_tibble %>%
-#  kable("latex",booktabs=T,escape=F,col.names=NULL)
-
-tibble(x=1:10,
-       y = rnorm(10)) %>%
-  kable("latex",booktabs=T,escape=F,col.names=NULL)
-
-```
-
+`r make_experience(7)`
 
 After
+
 
 
 

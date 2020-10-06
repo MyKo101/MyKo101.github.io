@@ -73,7 +73,7 @@ He has previously worked within both the public and private sector providing dat
 
 He is interested in Data Science, particularly using R and RStudio to their fullest potential, encouraging others to do the same and is an advocate for neat and reproducible coding practices.
 
-He lives in Merseyside, UK with his wife and two children. They enjoy walks down by the local canal, visiting castles & historic monuments and camping in rural Scotland.
+He lives in Merseyside, UK and he enjoy walks down by the local canal and to the park with his two children, visiting castles & historic monuments and camping.
 
 
 
