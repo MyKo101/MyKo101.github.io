@@ -56,7 +56,7 @@ Most statistical operations within R that can act on a *character* variable will
 
 This conversion makes many processes that work with characters a bit slow. If you're wanting to do 20 functions on a data set and each one needs to convert your characters to factors internally before doing what it needs to, it's clearly much faster to manually convert _once_ before using these functions.
 
-Factors also take up slightly less space in your system's memory. In R, this is approximately half the space of a factor, however the way R stores this kind of data is surprisingly efficient. This also means that working with factor variables is often much faster.
+Factors also take up slightly less space in your system's memory. In R, this is approximately half the space of a character, however the way R stores this kind of data is surprisingly efficient. It's definitely a good habit to get into if you ever want to move onto less efficient storage methods.
 
 # Converting
 
@@ -103,7 +103,8 @@ With `{tidyverse}` processes, the key thing we're trying to do is build a "sente
 
 ```{r SimpleSolution}
 df %<>% mutate(across(where(is.character),as_factor))
-#Update the df by mutating it across variables where it is a character, and perform as_factor
+#Update the df by mutating it across variables where it is a
+#   character by performing as_factor on them
 
 df
 ```
@@ -114,13 +115,13 @@ And as if by magic, all of the characters are now factors (note the `<fct>` unde
 
 The above code uses five functions, and an operation to perform the action. We'll dig down into the functions and then climb back out as their results are processed:
 
-* `%<>%` grabs the tibble on it's left hand side and passes it to the function on the right. At this point, it works exactly like the regular `%>%` operator.
+* `%<>%` grabs the tibble on it's left hand side and passes it to the function on the right. At this point, it works exactly like the regular `%>%` operator
     * `mutate()` means we are creating or updating a variable inside the tibble
-        * `across()` allows us perform a function _across_ many variables within the tibble. These functions will be applied and then overwrite the variable within the tibble
-            * `where()` allows us to specify _where_ we want `across()` to perform the function, this is passed as the first argument to `across()`
-                * `is.character()`, in the above line, we don't use the brackets for `is.character()` because we're not applying it, we're referencing it. We're telling the `where()` function to use this when checking where we want the function to be applied. The `is.character()` function returned `TRUE` when the variable is a character and `FALSE` when it isn't (e.g. a numeric).
-            * `where()` therefore returns a vector of `TRUE` and `FALSE` to indicate which variables in the tibble we want `across()` to act on
+        * `across()` allows us perform a function _across_ many variables within the tibble
+            * `where()` allows us to specify _where_ we want `across()` to perform the function
+                * `is.character()`, in the above line, we don't use the brackets for `is.character()` because we're not applying it, we're referencing it. We're telling the `where()` function to use this when checking where we want the function to be applied. The `is.character()` function returned `TRUE` when the variable is a character and `FALSE` when it isn't (e.g. a numeric)
+            * `where()` therefore applies this function to every variable in `df` and returns a vector of `TRUE` and `FALSE` to `across()` to indicate which variables in the tibble we want `across()` to act on
             * `as_factor()` converts things (e.g. characters) into factors.
-        * `across()` has therefore been passed a logical vector telling it where to apply a function and a function that it needs to apply. So it does just that and outputs another tibble.
-    * `mutate()` has then been passed a tibble for it's first argument (`df` via the `%<>%` pipe) and another tibble as the output of `across()`. It stitches these together, if there are any names in common, it overwrites those in `df` with those from `across()`
-* `%<>%` then recieves this new tibble from `mutate()` and stores it back into the `df` tibble that we originally passed to it. It overwrites this original with the new, updated one. That's why this is called the _assignment pipe_ or _updating pipe_.
+        * `across()` has now been passed a logical vector telling it which columns to apply a function and a function that it needs to apply. So it does just that and outputs another tibble
+    * `mutate()` has then been passed a tibble for it's first argument (`df` via the `%<>%` pipe) and another tibble as the output of `across()`. It stitches these together, if there are any names in common, it overwrites those in `df` with those from `across()`. All the variables in `across()` will also appear in `df` because that's where they came from, so the old values are overwritten with the new ones
+* `%<>%` then receives this new tibble from `mutate()` and stores it back into the `df` tibble that we originally passed to it. This is essentially saying that `df %<>% f()` is the same as `df <- df %>% f()`, that's why this is called the _assignment pipe_ or _updating pipe_.
