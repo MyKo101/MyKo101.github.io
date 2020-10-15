@@ -110,4 +110,6 @@ ignoreFiles = ["\\.ipynb$", ".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "
   description = "Michael Barrowmans' website, CV and statistics blog"
   images = ["Share Logo.png"]
   title = "MyKo101"
-  
+
+[taxonomies]
+  series = "series"  
