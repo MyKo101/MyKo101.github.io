@@ -108,6 +108,6 @@ ignoreFiles = ["\\.ipynb$", ".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "
     
 [params]
   description = "Michael Barrowmans' website, CV and statistics blog"
-  images = ["images/Share Logo.png"]
+  images = ["Share Logo.png"]
   title = "MyKo101"
   
