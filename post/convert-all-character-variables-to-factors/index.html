@@ -737,7 +737,7 @@ eg_df</code></pre>
 <h1>Why factors?</h1>
 <p>Most statistical operations within R that can act on a <em>character</em> variable will essentially convert to a <em>factor</em> first. So, it’s more efficient to convert characters to factors before passing them into these kinds of functions. This also gives us more control over what we’re going to get.</p>
 <p>This conversion makes many processes that work with characters a bit slow. If you’re wanting to do 20 functions on a data set and each one needs to convert your characters to factors internally before doing what it needs to, it’s clearly much faster to manually convert <em>once</em> before using these functions.</p>
-<p>Factors also take up slightly less space in your system’s memory. In R, this is approximately half the space of a factor, however the way R stores this kind of data is surprisingly efficient. This also means that working with factor variables is often much faster.</p>
+<p>Factors also take up slightly less space in your system’s memory. In R, this is approximately half the space of a character, however the way R stores this kind of data is surprisingly efficient. It’s definitely a good habit to get into if you ever want to move onto less efficient storage methods.</p>
 </div>
 <div id="converting" class="section level1">
 <h1>Converting</h1>
@@ -793,7 +793,8 @@ df</code></pre>
 <h1>The solution</h1>
 <p>With <code>{tidyverse}</code> processes, the key thing we’re trying to do is build a “sentence” explaining what we’re doing. Here’s our expression, followed by the English sentence equivalent</p>
 <pre class="r"><code>df %&lt;&gt;% mutate(across(where(is.character),as_factor))
-#Update the df by mutating it across variables where it is a character, and perform as_factor
+#Update the df by mutating it across variables where it is a
+#   character by performing as_factor on them
 
 df</code></pre>
 <pre><code>## # A tibble: 1,000 x 14
@@ -816,24 +817,24 @@ df</code></pre>
 <h1>The Explanation</h1>
 <p>The above code uses five functions, and an operation to perform the action. We’ll dig down into the functions and then climb back out as their results are processed:</p>
 <ul>
-<li><code>%&lt;&gt;%</code> grabs the tibble on it’s left hand side and passes it to the function on the right. At this point, it works exactly like the regular <code>%&gt;%</code> operator.
+<li><code>%&lt;&gt;%</code> grabs the tibble on it’s left hand side and passes it to the function on the right. At this point, it works exactly like the regular <code>%&gt;%</code> operator
 <ul>
 <li><code>mutate()</code> means we are creating or updating a variable inside the tibble
 <ul>
-<li><code>across()</code> allows us perform a function <em>across</em> many variables within the tibble. These functions will be applied and then overwrite the variable within the tibble
+<li><code>across()</code> allows us perform a function <em>across</em> many variables within the tibble
 <ul>
-<li><code>where()</code> allows us to specify <em>where</em> we want <code>across()</code> to perform the function, this is passed as the first argument to <code>across()</code>
+<li><code>where()</code> allows us to specify <em>where</em> we want <code>across()</code> to perform the function
 <ul>
-<li><code>is.character()</code>, in the above line, we don’t use the brackets for <code>is.character()</code> because we’re not applying it, we’re referencing it. We’re telling the <code>where()</code> function to use this when checking where we want the function to be applied. The <code>is.character()</code> function returned <code>TRUE</code> when the variable is a character and <code>FALSE</code> when it isn’t (e.g. a numeric).</li>
+<li><code>is.character()</code>, in the above line, we don’t use the brackets for <code>is.character()</code> because we’re not applying it, we’re referencing it. We’re telling the <code>where()</code> function to use this when checking where we want the function to be applied. The <code>is.character()</code> function returned <code>TRUE</code> when the variable is a character and <code>FALSE</code> when it isn’t (e.g. a numeric)</li>
 </ul></li>
-<li><code>where()</code> therefore returns a vector of <code>TRUE</code> and <code>FALSE</code> to indicate which variables in the tibble we want <code>across()</code> to act on</li>
+<li><code>where()</code> therefore applies this function to every variable in <code>df</code> and returns a vector of <code>TRUE</code> and <code>FALSE</code> to <code>across()</code> to indicate which variables in the tibble we want <code>across()</code> to act on</li>
 <li><code>as_factor()</code> converts things (e.g. characters) into factors.</li>
 </ul></li>
-<li><code>across()</code> has therefore been passed a logical vector telling it where to apply a function and a function that it needs to apply. So it does just that and outputs another tibble.</li>
+<li><code>across()</code> has now been passed a logical vector telling it which columns to apply a function and a function that it needs to apply. So it does just that and outputs another tibble</li>
 </ul></li>
-<li><code>mutate()</code> has then been passed a tibble for it’s first argument (<code>df</code> via the <code>%&lt;&gt;%</code> pipe) and another tibble as the output of <code>across()</code>. It stitches these together, if there are any names in common, it overwrites those in <code>df</code> with those from <code>across()</code></li>
+<li><code>mutate()</code> has then been passed a tibble for it’s first argument (<code>df</code> via the <code>%&lt;&gt;%</code> pipe) and another tibble as the output of <code>across()</code>. It stitches these together, if there are any names in common, it overwrites those in <code>df</code> with those from <code>across()</code>. All the variables in <code>across()</code> will also appear in <code>df</code> because that’s where they came from, so the old values are overwritten with the new ones</li>
 </ul></li>
-<li><code>%&lt;&gt;%</code> then recieves this new tibble from <code>mutate()</code> and stores it back into the <code>df</code> tibble that we originally passed to it. It overwrites this original with the new, updated one. That’s why this is called the <em>assignment pipe</em> or <em>updating pipe</em>.</li>
+<li><code>%&lt;&gt;%</code> then receives this new tibble from <code>mutate()</code> and stores it back into the <code>df</code> tibble that we originally passed to it. This is essentially saying that <code>df %&lt;&gt;% f()</code> is the same as <code>df &lt;- df %&gt;% f()</code>, that’s why this is called the <em>assignment pipe</em> or <em>updating pipe</em>.</li>
 </ul>
 </div>
 

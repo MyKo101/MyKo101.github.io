@@ -55,7 +55,7 @@ eg_df&lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;Why factors?&lt;/h1&gt;
 &lt;p&gt;Most statistical operations within R that can act on a &lt;em&gt;character&lt;/em&gt; variable will essentially convert to a &lt;em&gt;factor&lt;/em&gt; first. So, it’s more efficient to convert characters to factors before passing them into these kinds of functions. This also gives us more control over what we’re going to get.&lt;/p&gt;
 &lt;p&gt;This conversion makes many processes that work with characters a bit slow. If you’re wanting to do 20 functions on a data set and each one needs to convert your characters to factors internally before doing what it needs to, it’s clearly much faster to manually convert &lt;em&gt;once&lt;/em&gt; before using these functions.&lt;/p&gt;
-&lt;p&gt;Factors also take up slightly less space in your system’s memory. In R, this is approximately half the space of a factor, however the way R stores this kind of data is surprisingly efficient. This also means that working with factor variables is often much faster.&lt;/p&gt;
+&lt;p&gt;Factors also take up slightly less space in your system’s memory. In R, this is approximately half the space of a character, however the way R stores this kind of data is surprisingly efficient. It’s definitely a good habit to get into if you ever want to move onto less efficient storage methods.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;converting&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Converting&lt;/h1&gt;
@@ -111,7 +111,8 @@ df&lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;The solution&lt;/h1&gt;
 &lt;p&gt;With &lt;code&gt;{tidyverse}&lt;/code&gt; processes, the key thing we’re trying to do is build a “sentence” explaining what we’re doing. Here’s our expression, followed by the English sentence equivalent&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df %&amp;lt;&amp;gt;% mutate(across(where(is.character),as_factor))
-#Update the df by mutating it across variables where it is a character, and perform as_factor
+#Update the df by mutating it across variables where it is a
+#   character by performing as_factor on them
 
 df&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## # A tibble: 1,000 x 14
@@ -134,24 +135,24 @@ df&lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;The Explanation&lt;/h1&gt;
 &lt;p&gt;The above code uses five functions, and an operation to perform the action. We’ll dig down into the functions and then climb back out as their results are processed:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;%&amp;lt;&amp;gt;%&lt;/code&gt; grabs the tibble on it’s left hand side and passes it to the function on the right. At this point, it works exactly like the regular &lt;code&gt;%&amp;gt;%&lt;/code&gt; operator.
+&lt;li&gt;&lt;code&gt;%&amp;lt;&amp;gt;%&lt;/code&gt; grabs the tibble on it’s left hand side and passes it to the function on the right. At this point, it works exactly like the regular &lt;code&gt;%&amp;gt;%&lt;/code&gt; operator
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;mutate()&lt;/code&gt; means we are creating or updating a variable inside the tibble
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;across()&lt;/code&gt; allows us perform a function &lt;em&gt;across&lt;/em&gt; many variables within the tibble. These functions will be applied and then overwrite the variable within the tibble
+&lt;li&gt;&lt;code&gt;across()&lt;/code&gt; allows us perform a function &lt;em&gt;across&lt;/em&gt; many variables within the tibble
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;where()&lt;/code&gt; allows us to specify &lt;em&gt;where&lt;/em&gt; we want &lt;code&gt;across()&lt;/code&gt; to perform the function, this is passed as the first argument to &lt;code&gt;across()&lt;/code&gt;
+&lt;li&gt;&lt;code&gt;where()&lt;/code&gt; allows us to specify &lt;em&gt;where&lt;/em&gt; we want &lt;code&gt;across()&lt;/code&gt; to perform the function
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;is.character()&lt;/code&gt;, in the above line, we don’t use the brackets for &lt;code&gt;is.character()&lt;/code&gt; because we’re not applying it, we’re referencing it. We’re telling the &lt;code&gt;where()&lt;/code&gt; function to use this when checking where we want the function to be applied. The &lt;code&gt;is.character()&lt;/code&gt; function returned &lt;code&gt;TRUE&lt;/code&gt; when the variable is a character and &lt;code&gt;FALSE&lt;/code&gt; when it isn’t (e.g. a numeric).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;is.character()&lt;/code&gt;, in the above line, we don’t use the brackets for &lt;code&gt;is.character()&lt;/code&gt; because we’re not applying it, we’re referencing it. We’re telling the &lt;code&gt;where()&lt;/code&gt; function to use this when checking where we want the function to be applied. The &lt;code&gt;is.character()&lt;/code&gt; function returned &lt;code&gt;TRUE&lt;/code&gt; when the variable is a character and &lt;code&gt;FALSE&lt;/code&gt; when it isn’t (e.g. a numeric)&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;where()&lt;/code&gt; therefore returns a vector of &lt;code&gt;TRUE&lt;/code&gt; and &lt;code&gt;FALSE&lt;/code&gt; to indicate which variables in the tibble we want &lt;code&gt;across()&lt;/code&gt; to act on&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;where()&lt;/code&gt; therefore applies this function to every variable in &lt;code&gt;df&lt;/code&gt; and returns a vector of &lt;code&gt;TRUE&lt;/code&gt; and &lt;code&gt;FALSE&lt;/code&gt; to &lt;code&gt;across()&lt;/code&gt; to indicate which variables in the tibble we want &lt;code&gt;across()&lt;/code&gt; to act on&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;as_factor()&lt;/code&gt; converts things (e.g. characters) into factors.&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;across()&lt;/code&gt; has therefore been passed a logical vector telling it where to apply a function and a function that it needs to apply. So it does just that and outputs another tibble.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;across()&lt;/code&gt; has now been passed a logical vector telling it which columns to apply a function and a function that it needs to apply. So it does just that and outputs another tibble&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;mutate()&lt;/code&gt; has then been passed a tibble for it’s first argument (&lt;code&gt;df&lt;/code&gt; via the &lt;code&gt;%&amp;lt;&amp;gt;%&lt;/code&gt; pipe) and another tibble as the output of &lt;code&gt;across()&lt;/code&gt;. It stitches these together, if there are any names in common, it overwrites those in &lt;code&gt;df&lt;/code&gt; with those from &lt;code&gt;across()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;mutate()&lt;/code&gt; has then been passed a tibble for it’s first argument (&lt;code&gt;df&lt;/code&gt; via the &lt;code&gt;%&amp;lt;&amp;gt;%&lt;/code&gt; pipe) and another tibble as the output of &lt;code&gt;across()&lt;/code&gt;. It stitches these together, if there are any names in common, it overwrites those in &lt;code&gt;df&lt;/code&gt; with those from &lt;code&gt;across()&lt;/code&gt;. All the variables in &lt;code&gt;across()&lt;/code&gt; will also appear in &lt;code&gt;df&lt;/code&gt; because that’s where they came from, so the old values are overwritten with the new ones&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;%&amp;lt;&amp;gt;%&lt;/code&gt; then recieves this new tibble from &lt;code&gt;mutate()&lt;/code&gt; and stores it back into the &lt;code&gt;df&lt;/code&gt; tibble that we originally passed to it. It overwrites this original with the new, updated one. That’s why this is called the &lt;em&gt;assignment pipe&lt;/em&gt; or &lt;em&gt;updating pipe&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;%&amp;lt;&amp;gt;%&lt;/code&gt; then receives this new tibble from &lt;code&gt;mutate()&lt;/code&gt; and stores it back into the &lt;code&gt;df&lt;/code&gt; tibble that we originally passed to it. This is essentially saying that &lt;code&gt;df %&amp;lt;&amp;gt;% f()&lt;/code&gt; is the same as &lt;code&gt;df &amp;lt;- df %&amp;gt;% f()&lt;/code&gt;, that’s why this is called the &lt;em&gt;assignment pipe&lt;/em&gt; or &lt;em&gt;updating pipe&lt;/em&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 </description>
