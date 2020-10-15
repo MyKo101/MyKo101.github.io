@@ -1,0 +1,155 @@
+---
+title: Convert all Character variables to Factors
+author: Michael Barrowman
+date: '2020-10-15'
+slug: convert-all-character-variables-to-factors
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-10-15T15:05:08+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>First, let’s load up what we need!</p>
+<pre class="r"><code>set.seed(15102020)
+library(tidyverse) #We&#39;ll use tidyverse functions
+library(magrittr) #A few extra pipes from magrittr
+library(lexicon) #For a word dictionary</code></pre>
+<p>When dealing wth complex datasets, it is common that a variable may be stored as a <em>character</em> variable, when in reality what you want is a <em>factor</em> variable. On the surface, these two constructs look very similar:</p>
+<pre class="r"><code>eg_df &lt;- tibble(
+  c_var = c(&quot;Cat&quot;,&quot;Dog&quot;,&quot;Cat&quot;,&quot;Mouse&quot;,&quot;Mouse&quot;),
+  f_var = factor(c(&quot;Cat&quot;,&quot;Dog&quot;,&quot;Cat&quot;,&quot;Mouse&quot;,&quot;Mouse&quot;))
+)
+eg_df</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   c_var f_var
+##   &lt;chr&gt; &lt;fct&gt;
+## 1 Cat   Cat  
+## 2 Dog   Dog  
+## 3 Cat   Cat  
+## 4 Mouse Mouse
+## 5 Mouse Mouse</code></pre>
+<p>However, underneath they are treated quite differently. Behind the scenes, the factors are actually stored as integers with a special lookup table called their <em>levels</em>, which can be seen if we print the variable individually:</p>
+<pre class="r"><code>eg_df$f_var</code></pre>
+<pre><code>## [1] Cat   Dog   Cat   Mouse Mouse
+## Levels: Cat Dog Mouse</code></pre>
+<p>We can also see the hidden numbers by converting this to numeric:</p>
+<pre class="r"><code>as.numeric(eg_df$f_var)</code></pre>
+<pre><code>## [1] 1 2 1 3 3</code></pre>
+<p>The first element, <code>Cat</code> is associated with the first level, so it is stored as a <code>1</code>, the third element is also <code>Cat</code>, so it is also stored as a <code>1</code>. The fourth &amp; fifth are both <code>Mouse</code> and so they’re stored as <code>3</code>, indicating to use the third level.</p>
+</div>
+<div id="why-factors" class="section level1">
+<h1>Why factors?</h1>
+<p>Most statistical operations within R that can act on a <em>character</em> variable will essentially convert to a <em>factor</em> first. So, it’s more efficient to convert characters to factors before passing them into these kinds of functions. This also gives us more control over what we’re going to get.</p>
+<p>This conversion makes many processes that work with characters a bit slow. If you’re wanting to do 20 functions on a data set and each one needs to convert your characters to factors internally before doing what it needs to, it’s clearly much faster to manually convert <em>once</em> before using these functions.</p>
+<p>Factors also take up slightly less space in your system’s memory. In R, this is approximately half the space of a factor, however the way R stores this kind of data is surprisingly efficient. This also means that working with factor variables is often much faster.</p>
+</div>
+<div id="converting" class="section level1">
+<h1>Converting</h1>
+<p>Above, I used the <code>factor()</code> function to quickly convert a single character variable to a factor variable. But what about if you’ve got a large dataset with many, many character variables that you want to convert to factors. What’s the smoothest way to do this?</p>
+<div id="example-random-dataset" class="section level2">
+<h2>Example random dataset</h2>
+<p>First, let’s create a large dataset, we’ll loop through a bunch of columns. We’ll use Fry’s 1000 Most Commonly Use English Words, as found in the <code>sw_fry_1000</code> dataset from the <code>{lexicon}</code> package to choose random words for each variable. We’ll also throw in some numeric variables to make things harder:</p>
+<pre class="r"><code>df &lt;- tibble(id=1:1000) #declare a tibble with just an id variable
+for(i in 1:10)
+{
+  #How many distinct words should this variable have?
+  distinct_words &lt;- round(rexp(1,1/20)) +1
+  
+  #What words can we choose from for this variable?
+  these_words &lt;- sample(sw_fry_1000,distinct_words)
+  
+  #What&#39;s the name of this variable?
+  this_name &lt;- paste0(&quot;var_&quot;,ncol(df) + 1)
+  
+  #Generate the variable
+  this_variable &lt;- sample(these_words,1000,replace=T)
+  
+  #Store it in the tibble
+  df[[this_name]] &lt;- this_variable
+  
+  #Approximated 1/3 of the time, we&#39;ll add a numeric variable
+  if(rbinom(1,1,1/3) == 1){
+    this_name &lt;- paste0(&quot;var_&quot;,ncol(df)+1)
+    
+    df[[this_name]] &lt;- rnorm(1000)
+  }
+  
+}
+df</code></pre>
+<pre><code>## # A tibble: 1,000 x 14
+##       id var_2   var_3 var_4 var_5 var_6 var_7 var_8 var_9 var_10  var_11 var_12
+##    &lt;int&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; 
+##  1     1 prop~  1.83   row   gove~ gene~ cow   else  women length  0.249  home  
+##  2     2 four  -0.225  wind~ reas~ speak cow   squa~ gold  exerc~  0.688  numer~
+##  3     3 leave  0.367  gold  plant came  cow   egg   human exerc~ -0.517  tell  
+##  4     4 rock   0.919  that  meat  gene~ cow   leave human skill  -0.280  fill  
+##  5     5 favor -1.01   mile  nine  tree  cow   very  hand  has    -0.0302 left  
+##  6     6 shop   1.14   hunt  drink speak cow   take  meat  hit     0.908  over  
+##  7     7 end    0.0427 engi~ seas~ gene~ cow   art   women exerc~  0.0395 unit  
+##  8     8 favor -0.647  body  drink gene~ cow   diff~ doll~ most   -0.458  people
+##  9     9 earth -2.47   fight nine  tree  cow   deci~ air   king    0.0182 child 
+## 10    10 end    1.35   prot~ drink speak cow   carry women grand  -0.978  conti~
+## # ... with 990 more rows, and 2 more variables: var_13 &lt;chr&gt;, var_14 &lt;dbl&gt;</code></pre>
+<p>The generation of this data is actually rather clunky as it’s using a loop, and we’re going to avoid that. Instead, we’re going to turn all these characters into factors in a single line. Here’s the line of code which will update the dataset, followed by the explanation:</p>
+</div>
+</div>
+<div id="the-solution" class="section level1">
+<h1>The solution</h1>
+<p>With <code>{tidyverse}</code> processes, the key thing we’re trying to do is build a “sentence” explaining what we’re doing. Here’s our expression, followed by the English sentence equivalent</p>
+<pre class="r"><code>df %&lt;&gt;% mutate(across(where(is.character),as_factor))
+#Update the df by mutating it across variables where it is a character, and perform as_factor
+
+df</code></pre>
+<pre><code>## # A tibble: 1,000 x 14
+##       id var_2   var_3 var_4 var_5 var_6 var_7 var_8 var_9 var_10  var_11 var_12
+##    &lt;int&gt; &lt;fct&gt;   &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;    &lt;dbl&gt; &lt;fct&gt; 
+##  1     1 prop~  1.83   row   gove~ gene~ cow   else  women length  0.249  home  
+##  2     2 four  -0.225  wind~ reas~ speak cow   squa~ gold  exerc~  0.688  numer~
+##  3     3 leave  0.367  gold  plant came  cow   egg   human exerc~ -0.517  tell  
+##  4     4 rock   0.919  that  meat  gene~ cow   leave human skill  -0.280  fill  
+##  5     5 favor -1.01   mile  nine  tree  cow   very  hand  has    -0.0302 left  
+##  6     6 shop   1.14   hunt  drink speak cow   take  meat  hit     0.908  over  
+##  7     7 end    0.0427 engi~ seas~ gene~ cow   art   women exerc~  0.0395 unit  
+##  8     8 favor -0.647  body  drink gene~ cow   diff~ doll~ most   -0.458  people
+##  9     9 earth -2.47   fight nine  tree  cow   deci~ air   king    0.0182 child 
+## 10    10 end    1.35   prot~ drink speak cow   carry women grand  -0.978  conti~
+## # ... with 990 more rows, and 2 more variables: var_13 &lt;fct&gt;, var_14 &lt;dbl&gt;</code></pre>
+<p>And as if by magic, all of the characters are now factors (note the <code>&lt;fct&gt;</code> under the variable names).</p>
+</div>
+<div id="the-explanation" class="section level1">
+<h1>The Explanation</h1>
+<p>The above code uses five functions, and an operation to perform the action. We’ll dig down into the functions and then climb back out as their results are processed:</p>
+<ul>
+<li><code>%&lt;&gt;%</code> grabs the tibble on it’s left hand side and passes it to the function on the right. At this point, it works exactly like the regular <code>%&gt;%</code> operator.
+<ul>
+<li><code>mutate()</code> means we are creating or updating a variable inside the tibble
+<ul>
+<li><code>across()</code> allows us perform a function <em>across</em> many variables within the tibble. These functions will be applied and then overwrite the variable within the tibble
+<ul>
+<li><code>where()</code> allows us to specify <em>where</em> we want <code>across()</code> to perform the function, this is passed as the first argument to <code>across()</code>
+<ul>
+<li><code>is.character()</code>, in the above line, we don’t use the brackets for <code>is.character()</code> because we’re not applying it, we’re referencing it. We’re telling the <code>where()</code> function to use this when checking where we want the function to be applied. The <code>is.character()</code> function returned <code>TRUE</code> when the variable is a character and <code>FALSE</code> when it isn’t (e.g. a numeric).</li>
+</ul></li>
+<li><code>where()</code> therefore returns a vector of <code>TRUE</code> and <code>FALSE</code> to indicate which variables in the tibble we want <code>across()</code> to act on</li>
+<li><code>as_factor()</code> converts things (e.g. characters) into factors.</li>
+</ul></li>
+<li><code>across()</code> has therefore been passed a logical vector telling it where to apply a function and a function that it needs to apply. So it does just that and outputs another tibble.</li>
+</ul></li>
+<li><code>mutate()</code> has then been passed a tibble for it’s first argument (<code>df</code> via the <code>%&lt;&gt;%</code> pipe) and another tibble as the output of <code>across()</code>. It stitches these together, if there are any names in common, it overwrites those in <code>df</code> with those from <code>across()</code></li>
+</ul></li>
+<li><code>%&lt;&gt;%</code> then recieves this new tibble from <code>mutate()</code> and stores it back into the <code>df</code> tibble that we originally passed to it. It overwrites this original with the new, updated one. That’s why this is called the <em>assignment pipe</em> or <em>updating pipe</em>.</li>
+</ul>
+</div>

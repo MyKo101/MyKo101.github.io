@@ -18,17 +18,22 @@
   </url>
   
   <url>
-    <loc>/post/getting-a-variable-name-in-a-pipeline/</loc>
-    <lastmod>2020-07-24T00:25:35+01:00</lastmod>
+    <loc>/post/convert-all-character-variables-to-factors/</loc>
+    <lastmod>2020-10-15T15:05:08+01:00</lastmod>
   </url>
   
   <url>
     <loc>/</loc>
-    <lastmod>2020-07-24T00:25:35+01:00</lastmod>
+    <lastmod>2020-10-15T15:05:08+01:00</lastmod>
   </url>
   
   <url>
     <loc>/post/</loc>
+    <lastmod>2020-10-15T15:05:08+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/getting-a-variable-name-in-a-pipeline/</loc>
     <lastmod>2020-07-24T00:25:35+01:00</lastmod>
   </url>
   

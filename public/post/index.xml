@@ -5,12 +5,157 @@
     <link>/post/</link>
       <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2020</copyright><lastBuildDate>Fri, 24 Jul 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2020</copyright><lastBuildDate>Thu, 15 Oct 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png</url>
       <title>Posts</title>
       <link>/post/</link>
     </image>
+    
+    <item>
+      <title>Convert all Character variables to Factors</title>
+      <link>/post/convert-all-character-variables-to-factors/</link>
+      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>/post/convert-all-character-variables-to-factors/</guid>
+      <description>
+&lt;script src=&#34;/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;First, let’s load up what we need!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;set.seed(15102020)
+library(tidyverse) #We&amp;#39;ll use tidyverse functions
+library(magrittr) #A few extra pipes from magrittr
+library(lexicon) #For a word dictionary&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;When dealing wth complex datasets, it is common that a variable may be stored as a &lt;em&gt;character&lt;/em&gt; variable, when in reality what you want is a &lt;em&gt;factor&lt;/em&gt; variable. On the surface, these two constructs look very similar:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;eg_df &amp;lt;- tibble(
+  c_var = c(&amp;quot;Cat&amp;quot;,&amp;quot;Dog&amp;quot;,&amp;quot;Cat&amp;quot;,&amp;quot;Mouse&amp;quot;,&amp;quot;Mouse&amp;quot;),
+  f_var = factor(c(&amp;quot;Cat&amp;quot;,&amp;quot;Dog&amp;quot;,&amp;quot;Cat&amp;quot;,&amp;quot;Mouse&amp;quot;,&amp;quot;Mouse&amp;quot;))
+)
+eg_df&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 5 x 2
+##   c_var f_var
+##   &amp;lt;chr&amp;gt; &amp;lt;fct&amp;gt;
+## 1 Cat   Cat  
+## 2 Dog   Dog  
+## 3 Cat   Cat  
+## 4 Mouse Mouse
+## 5 Mouse Mouse&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;However, underneath they are treated quite differently. Behind the scenes, the factors are actually stored as integers with a special lookup table called their &lt;em&gt;levels&lt;/em&gt;, which can be seen if we print the variable individually:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;eg_df$f_var&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] Cat   Dog   Cat   Mouse Mouse
+## Levels: Cat Dog Mouse&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can also see the hidden numbers by converting this to numeric:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;as.numeric(eg_df$f_var)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 1 2 1 3 3&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The first element, &lt;code&gt;Cat&lt;/code&gt; is associated with the first level, so it is stored as a &lt;code&gt;1&lt;/code&gt;, the third element is also &lt;code&gt;Cat&lt;/code&gt;, so it is also stored as a &lt;code&gt;1&lt;/code&gt;. The fourth &amp;amp; fifth are both &lt;code&gt;Mouse&lt;/code&gt; and so they’re stored as &lt;code&gt;3&lt;/code&gt;, indicating to use the third level.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;why-factors&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Why factors?&lt;/h1&gt;
+&lt;p&gt;Most statistical operations within R that can act on a &lt;em&gt;character&lt;/em&gt; variable will essentially convert to a &lt;em&gt;factor&lt;/em&gt; first. So, it’s more efficient to convert characters to factors before passing them into these kinds of functions. This also gives us more control over what we’re going to get.&lt;/p&gt;
+&lt;p&gt;This conversion makes many processes that work with characters a bit slow. If you’re wanting to do 20 functions on a data set and each one needs to convert your characters to factors internally before doing what it needs to, it’s clearly much faster to manually convert &lt;em&gt;once&lt;/em&gt; before using these functions.&lt;/p&gt;
+&lt;p&gt;Factors also take up slightly less space in your system’s memory. In R, this is approximately half the space of a factor, however the way R stores this kind of data is surprisingly efficient. This also means that working with factor variables is often much faster.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;converting&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Converting&lt;/h1&gt;
+&lt;p&gt;Above, I used the &lt;code&gt;factor()&lt;/code&gt; function to quickly convert a single character variable to a factor variable. But what about if you’ve got a large dataset with many, many character variables that you want to convert to factors. What’s the smoothest way to do this?&lt;/p&gt;
+&lt;div id=&#34;example-random-dataset&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Example random dataset&lt;/h2&gt;
+&lt;p&gt;First, let’s create a large dataset, we’ll loop through a bunch of columns. We’ll use Fry’s 1000 Most Commonly Use English Words, as found in the &lt;code&gt;sw_fry_1000&lt;/code&gt; dataset from the &lt;code&gt;{lexicon}&lt;/code&gt; package to choose random words for each variable. We’ll also throw in some numeric variables to make things harder:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df &amp;lt;- tibble(id=1:1000) #declare a tibble with just an id variable
+for(i in 1:10)
+{
+  #How many distinct words should this variable have?
+  distinct_words &amp;lt;- round(rexp(1,1/20)) +1
+  
+  #What words can we choose from for this variable?
+  these_words &amp;lt;- sample(sw_fry_1000,distinct_words)
+  
+  #What&amp;#39;s the name of this variable?
+  this_name &amp;lt;- paste0(&amp;quot;var_&amp;quot;,ncol(df) + 1)
+  
+  #Generate the variable
+  this_variable &amp;lt;- sample(these_words,1000,replace=T)
+  
+  #Store it in the tibble
+  df[[this_name]] &amp;lt;- this_variable
+  
+  #Approximated 1/3 of the time, we&amp;#39;ll add a numeric variable
+  if(rbinom(1,1,1/3) == 1){
+    this_name &amp;lt;- paste0(&amp;quot;var_&amp;quot;,ncol(df)+1)
+    
+    df[[this_name]] &amp;lt;- rnorm(1000)
+  }
+  
+}
+df&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 1,000 x 14
+##       id var_2   var_3 var_4 var_5 var_6 var_7 var_8 var_9 var_10  var_11 var_12
+##    &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;   &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;    &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt; 
+##  1     1 prop~  1.83   row   gove~ gene~ cow   else  women length  0.249  home  
+##  2     2 four  -0.225  wind~ reas~ speak cow   squa~ gold  exerc~  0.688  numer~
+##  3     3 leave  0.367  gold  plant came  cow   egg   human exerc~ -0.517  tell  
+##  4     4 rock   0.919  that  meat  gene~ cow   leave human skill  -0.280  fill  
+##  5     5 favor -1.01   mile  nine  tree  cow   very  hand  has    -0.0302 left  
+##  6     6 shop   1.14   hunt  drink speak cow   take  meat  hit     0.908  over  
+##  7     7 end    0.0427 engi~ seas~ gene~ cow   art   women exerc~  0.0395 unit  
+##  8     8 favor -0.647  body  drink gene~ cow   diff~ doll~ most   -0.458  people
+##  9     9 earth -2.47   fight nine  tree  cow   deci~ air   king    0.0182 child 
+## 10    10 end    1.35   prot~ drink speak cow   carry women grand  -0.978  conti~
+## # ... with 990 more rows, and 2 more variables: var_13 &amp;lt;chr&amp;gt;, var_14 &amp;lt;dbl&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The generation of this data is actually rather clunky as it’s using a loop, and we’re going to avoid that. Instead, we’re going to turn all these characters into factors in a single line. Here’s the line of code which will update the dataset, followed by the explanation:&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-solution&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;The solution&lt;/h1&gt;
+&lt;p&gt;With &lt;code&gt;{tidyverse}&lt;/code&gt; processes, the key thing we’re trying to do is build a “sentence” explaining what we’re doing. Here’s our expression, followed by the English sentence equivalent&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df %&amp;lt;&amp;gt;% mutate(across(where(is.character),as_factor))
+#Update the df by mutating it across variables where it is a character, and perform as_factor
+
+df&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 1,000 x 14
+##       id var_2   var_3 var_4 var_5 var_6 var_7 var_8 var_9 var_10  var_11 var_12
+##    &amp;lt;int&amp;gt; &amp;lt;fct&amp;gt;   &amp;lt;dbl&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt;    &amp;lt;dbl&amp;gt; &amp;lt;fct&amp;gt; 
+##  1     1 prop~  1.83   row   gove~ gene~ cow   else  women length  0.249  home  
+##  2     2 four  -0.225  wind~ reas~ speak cow   squa~ gold  exerc~  0.688  numer~
+##  3     3 leave  0.367  gold  plant came  cow   egg   human exerc~ -0.517  tell  
+##  4     4 rock   0.919  that  meat  gene~ cow   leave human skill  -0.280  fill  
+##  5     5 favor -1.01   mile  nine  tree  cow   very  hand  has    -0.0302 left  
+##  6     6 shop   1.14   hunt  drink speak cow   take  meat  hit     0.908  over  
+##  7     7 end    0.0427 engi~ seas~ gene~ cow   art   women exerc~  0.0395 unit  
+##  8     8 favor -0.647  body  drink gene~ cow   diff~ doll~ most   -0.458  people
+##  9     9 earth -2.47   fight nine  tree  cow   deci~ air   king    0.0182 child 
+## 10    10 end    1.35   prot~ drink speak cow   carry women grand  -0.978  conti~
+## # ... with 990 more rows, and 2 more variables: var_13 &amp;lt;fct&amp;gt;, var_14 &amp;lt;dbl&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And as if by magic, all of the characters are now factors (note the &lt;code&gt;&amp;lt;fct&amp;gt;&lt;/code&gt; under the variable names).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-explanation&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;The Explanation&lt;/h1&gt;
+&lt;p&gt;The above code uses five functions, and an operation to perform the action. We’ll dig down into the functions and then climb back out as their results are processed:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;%&amp;lt;&amp;gt;%&lt;/code&gt; grabs the tibble on it’s left hand side and passes it to the function on the right. At this point, it works exactly like the regular &lt;code&gt;%&amp;gt;%&lt;/code&gt; operator.
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mutate()&lt;/code&gt; means we are creating or updating a variable inside the tibble
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;across()&lt;/code&gt; allows us perform a function &lt;em&gt;across&lt;/em&gt; many variables within the tibble. These functions will be applied and then overwrite the variable within the tibble
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;where()&lt;/code&gt; allows us to specify &lt;em&gt;where&lt;/em&gt; we want &lt;code&gt;across()&lt;/code&gt; to perform the function, this is passed as the first argument to &lt;code&gt;across()&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;is.character()&lt;/code&gt;, in the above line, we don’t use the brackets for &lt;code&gt;is.character()&lt;/code&gt; because we’re not applying it, we’re referencing it. We’re telling the &lt;code&gt;where()&lt;/code&gt; function to use this when checking where we want the function to be applied. The &lt;code&gt;is.character()&lt;/code&gt; function returned &lt;code&gt;TRUE&lt;/code&gt; when the variable is a character and &lt;code&gt;FALSE&lt;/code&gt; when it isn’t (e.g. a numeric).&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;where()&lt;/code&gt; therefore returns a vector of &lt;code&gt;TRUE&lt;/code&gt; and &lt;code&gt;FALSE&lt;/code&gt; to indicate which variables in the tibble we want &lt;code&gt;across()&lt;/code&gt; to act on&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;as_factor()&lt;/code&gt; converts things (e.g. characters) into factors.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;across()&lt;/code&gt; has therefore been passed a logical vector telling it where to apply a function and a function that it needs to apply. So it does just that and outputs another tibble.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;mutate()&lt;/code&gt; has then been passed a tibble for it’s first argument (&lt;code&gt;df&lt;/code&gt; via the &lt;code&gt;%&amp;lt;&amp;gt;%&lt;/code&gt; pipe) and another tibble as the output of &lt;code&gt;across()&lt;/code&gt;. It stitches these together, if there are any names in common, it overwrites those in &lt;code&gt;df&lt;/code&gt; with those from &lt;code&gt;across()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;%&amp;lt;&amp;gt;%&lt;/code&gt; then recieves this new tibble from &lt;code&gt;mutate()&lt;/code&gt; and stores it back into the &lt;code&gt;df&lt;/code&gt; tibble that we originally passed to it. It overwrites this original with the new, updated one. That’s why this is called the &lt;em&gt;assignment pipe&lt;/em&gt; or &lt;em&gt;updating pipe&lt;/em&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>Getting a variable name in a pipeline</title>
@@ -191,7 +336,7 @@ Sidenote for the pro’s out there. This page is written in &lt;code&gt;{rmarkdo
 &lt;a href=&#34;https://yihui.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;yihui&lt;/a&gt;, the package autho, are to set up your &lt;code&gt;git&lt;/code&gt; directory inside this subdirectory. This has the limitation of meaning the content of your parent folder is not backed up to GitHub, and is only stored locally.&lt;/p&gt;
 &lt;p&gt;However, thanks to GitHub user 
 &lt;a href=&#34;https://github.com/s0&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;s0&lt;/code&gt;&lt;/a&gt; and their GitHub Action, it&amp;rsquo;s possible to keep your work inside the &lt;code&gt;doc&lt;/code&gt; folder on your &lt;code&gt;default&lt;/code&gt; branch (whatever it&amp;rsquo;s name may be) and have that folder automatically pushed to the &lt;code&gt;gh-pages&lt;/code&gt; branch.&lt;/p&gt;
-&lt;p&gt;For those who don&amp;rsquo;t know, GitHub Actions allows automation when certain events (triggers) occur within your repo. You can try to write your own complicated commands, or use those created by other users within a relatively simple skeleton. We&amp;rsquo;re going to use one of these simple skeletons to utilise &lt;code&gt;s0&lt;/code&gt;&#39;s work, thus allowing us to use the &lt;code&gt;main&lt;/code&gt; branch, rather than the &lt;code&gt;master&lt;/code&gt; branch on our repo. In order to use GitHub Actions, we need to add a 
+&lt;p&gt;For those who don&amp;rsquo;t know, GitHub Actions allows automation when certain events (triggers) occur within your repo. You can try to write your own complicated commands, or use those created by other users within a relatively simple skeleton. We&amp;rsquo;re going to use one of these simple skeletons to utilise &lt;code&gt;s0&lt;/code&gt;&amp;rsquo;s work, thus allowing us to use the &lt;code&gt;main&lt;/code&gt; branch, rather than the &lt;code&gt;master&lt;/code&gt; branch on our repo. In order to use GitHub Actions, we need to add a 
 &lt;a href=&#34;https://en.wikipedia.org/wiki/YAML&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;.yaml&lt;/code&gt;&lt;/a&gt; file (stands for YAML Ain&amp;rsquo;t Markup Language) within our repo.&lt;/p&gt;
 &lt;h2 id=&#34;rename-the-branch&#34;&gt;Rename the branch&lt;/h2&gt;
 &lt;p&gt;The first step in this process would be to actually change the name of our &lt;code&gt;master&lt;/code&gt; branch to &lt;code&gt;main&lt;/code&gt; (or whatever you choose).&lt;/p&gt;
