@@ -105,3 +105,9 @@ ignoreFiles = ["\\.ipynb$", ".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "
   [[related.indices]]
     name = "authors"
     weight = 20.0
+    
+[params]
+  description = "Michael Barrowmans' website, CV and statistics blog"
+  images = ["images/Share Logo.png"]
+  title = "MyKo101"
+  
