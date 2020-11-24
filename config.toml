@@ -36,7 +36,9 @@ summaryLength = 30  # Listing summary length in words. Also, see `abstract_lengt
 paginate = 10  # Number of items per page in paginated lists.
 enableEmoji = true
 footnotereturnlinkcontents = "<sup>^</sup>"
-ignoreFiles = ["\\.ipynb$", ".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+ignoreFiles = ["\\.ipynb$", ".ipynb_checkpoints$", "\\.Rmd$",
+                "\\.knit\\.md$", "\\.utf8\\.md$",
+                "\\.Rmarkdown$", "_cache$"]
 
 # Workaround Hugo publishing taxonomy URLs as plurals - consistently use singular across Academic.
 [permalinks]
@@ -79,6 +81,7 @@ ignoreFiles = ["\\.ipynb$", ".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "
   category = "categories"
   publication_type = "publication_types"
   author = "authors"
+  series = "series" 
 
 # Related content.
 [related]
@@ -111,5 +114,3 @@ ignoreFiles = ["\\.ipynb$", ".ipynb_checkpoints$", "\\.Rmd$", "\\.Rmarkdown$", "
   images = ["Share Logo.png"]
   title = "MyKo101"
 
-[taxonomies]
-  series = "series"  
