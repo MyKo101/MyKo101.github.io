@@ -2,29 +2,37 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Publications | MyKo101</title>
-    <link>/publication/</link>
-      <atom:link href="/publication/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://michaelbarrowman.co.uk/publication/</link>
+      <atom:link href="https://michaelbarrowman.co.uk/publication/index.xml" rel="self" type="application/rss+xml" />
     <description>Publications</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2020</copyright><lastBuildDate>Wed, 31 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2020</copyright><lastBuildDate>Sun, 26 Jul 2020 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png</url>
+      <url>https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png</url>
       <title>Publications</title>
-      <link>/publication/</link>
+      <link>https://michaelbarrowman.co.uk/publication/</link>
     </image>
     
     <item>
-      <title>How unmeasured confounding in a competing risks setting can affect treatment effect estimates in observational studies</title>
-      <link>/publication/barrowman-2019a/</link>
-      <pubDate>Wed, 31 Jul 2019 00:00:00 +0000</pubDate>
-      <guid>/publication/barrowman-2019a/</guid>
+      <title>Toward a Framework for the Design, Implementation, and Reporting of Methodology Scoping Reviews</title>
+      <link>https://michaelbarrowman.co.uk/publication/martin-2020a/</link>
+      <pubDate>Sun, 26 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>https://michaelbarrowman.co.uk/publication/martin-2020a/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Study investigating the generalisability of a COPD trial based in primary care (Salford Lung Study) and the presence of a Hawthorne effect</title>
-      <link>/publication/pate-2018a/</link>
+      <title>How Unmeasured Confounding in a Competing Risks Setting Can Affect Treatment Effect Estimates in Observational Studies</title>
+      <link>https://michaelbarrowman.co.uk/publication/barrowman-2019a/</link>
+      <pubDate>Wed, 31 Jul 2019 00:00:00 +0000</pubDate>
+      <guid>https://michaelbarrowman.co.uk/publication/barrowman-2019a/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Study Investigating the Generalisability of a COPD Trial Based in Primary Care (Salford Lung Study) and the Presence of a Hawthorne Effect</title>
+      <link>https://michaelbarrowman.co.uk/publication/pate-2018a/</link>
       <pubDate>Thu, 25 Oct 2018 00:00:00 +0000</pubDate>
-      <guid>/publication/pate-2018a/</guid>
+      <guid>https://michaelbarrowman.co.uk/publication/pate-2018a/</guid>
       <description></description>
     </item>
     

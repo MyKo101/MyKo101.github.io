@@ -3,161 +3,205 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/package/mpipe/</loc>
+    <loc>https://michaelbarrowman.co.uk/package/mpipe/</loc>
     <lastmod>2020-06-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/package/mutils/</loc>
+    <loc>https://michaelbarrowman.co.uk/package/mutils/</loc>
     <lastmod>2020-07-21T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/package/typos/</loc>
+    <loc>https://michaelbarrowman.co.uk/package/typos/</loc>
     <lastmod>2020-06-14T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/convert-all-character-variables-to-factors/</loc>
+    <loc>https://michaelbarrowman.co.uk/post/convert-all-character-variables-to-factors/</loc>
     <lastmod>2020-10-15T15:05:08+01:00</lastmod>
   </url>
   
   <url>
-    <loc>/</loc>
+    <loc>https://michaelbarrowman.co.uk/</loc>
     <lastmod>2020-10-15T15:05:08+01:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/</loc>
+    <loc>https://michaelbarrowman.co.uk/post/</loc>
     <lastmod>2020-10-15T15:05:08+01:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/getting-a-variable-name-in-a-pipeline/</loc>
+    <loc>https://michaelbarrowman.co.uk/publication-type/2/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/alexander-pate/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/anthony-wilson/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/authors/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/camilla-sammut-powell/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/david-a-jenkins/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/glen-philip-martin/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/lijing-lin/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/lucy-bull/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/matthew-sperrin/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/michael-barrowman/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/niels-peek/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/predictive-healthcare-analtics-group/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/publication_types/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/publication/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/rose-sisk/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/publication/martin-2020a/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/wenjuan-wang/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/author/william-hulme/</loc>
+    <lastmod>2020-07-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://michaelbarrowman.co.uk/post/getting-a-variable-name-in-a-pipeline/</loc>
     <lastmod>2020-07-24T00:25:35+01:00</lastmod>
   </url>
   
   <url>
-    <loc>/post/deploy-to-github-pages/</loc>
+    <loc>https://michaelbarrowman.co.uk/post/deploy-to-github-pages/</loc>
     <lastmod>2020-07-22T11:04:02+01:00</lastmod>
   </url>
   
   <url>
-    <loc>/package/</loc>
+    <loc>https://michaelbarrowman.co.uk/package/</loc>
     <lastmod>2020-07-21T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/tag/r-package/</loc>
+    <loc>https://michaelbarrowman.co.uk/tag/r-package/</loc>
     <lastmod>2020-07-21T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/</loc>
+    <loc>https://michaelbarrowman.co.uk/tags/</loc>
     <lastmod>2020-07-21T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/publication-type/2/</loc>
+    <loc>https://michaelbarrowman.co.uk/publication/barrowman-2019a/</loc>
     <lastmod>2019-07-31T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/authors/</loc>
+    <loc>https://michaelbarrowman.co.uk/author/mark-lambie/</loc>
     <lastmod>2019-07-31T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/author/glen-philip-martin/</loc>
-    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/publication/barrowman-2019a/</loc>
-    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/author/mark-lambie/</loc>
-    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/author/matthew-sperrin/</loc>
-    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/author/michael-barrowman/</loc>
-    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/author/niels-peek/</loc>
-    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/publication_types/</loc>
-    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/publication/</loc>
-    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/author/alexander-pate/</loc>
+    <loc>https://michaelbarrowman.co.uk/author/david-webb/</loc>
     <lastmod>2018-10-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/author/david-webb/</loc>
+    <loc>https://michaelbarrowman.co.uk/author/jeanne-m-pimenta/</loc>
     <lastmod>2018-10-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/author/jeanne-m-pimenta/</loc>
+    <loc>https://michaelbarrowman.co.uk/author/kourtney-j-davies/</loc>
     <lastmod>2018-10-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/author/kourtney-j-davies/</loc>
+    <loc>https://michaelbarrowman.co.uk/author/rachael-williams/</loc>
     <lastmod>2018-10-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/author/rachael-williams/</loc>
+    <loc>https://michaelbarrowman.co.uk/publication/pate-2018a/</loc>
     <lastmod>2018-10-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/publication/pate-2018a/</loc>
+    <loc>https://michaelbarrowman.co.uk/author/tjeerd-van-staa/</loc>
     <lastmod>2018-10-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/author/tjeerd-van-staa/</loc>
-    <lastmod>2018-10-25T00:00:00+00:00</lastmod>
+    <loc>https://michaelbarrowman.co.uk/categories/</loc>
   </url>
   
   <url>
-    <loc>/privacy/</loc>
-    <lastmod>2018-06-28T00:00:00+01:00</lastmod>
+    <loc>https://michaelbarrowman.co.uk/experience/</loc>
   </url>
   
   <url>
-    <loc>/terms/</loc>
-    <lastmod>2018-06-28T00:00:00+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/</loc>
-  </url>
-  
-  <url>
-    <loc>/experience/</loc>
+    <loc>https://michaelbarrowman.co.uk/series/</loc>
   </url>
   
 </urlset>

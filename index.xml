@@ -2,48 +2,48 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>MyKo101</title>
-    <link>/</link>
-      <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://michaelbarrowman.co.uk/</link>
+      <atom:link href="https://michaelbarrowman.co.uk/index.xml" rel="self" type="application/rss+xml" />
     <description>MyKo101</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2020</copyright><lastBuildDate>Thu, 15 Oct 2020 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png</url>
+      <url>https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png</url>
       <title>MyKo101</title>
-      <link>/</link>
+      <link>https://michaelbarrowman.co.uk/</link>
     </image>
     
     <item>
       <title>mpipe</title>
-      <link>/package/mpipe/</link>
+      <link>https://michaelbarrowman.co.uk/package/mpipe/</link>
       <pubDate>Mon, 22 Jun 2020 00:00:00 +0000</pubDate>
-      <guid>/package/mpipe/</guid>
+      <guid>https://michaelbarrowman.co.uk/package/mpipe/</guid>
       <description>&lt;p&gt;&lt;img src = &#34;featured.png&#34; /&gt;&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>mutils</title>
-      <link>/package/mutils/</link>
+      <link>https://michaelbarrowman.co.uk/package/mutils/</link>
       <pubDate>Tue, 21 Jul 2020 00:00:00 +0000</pubDate>
-      <guid>/package/mutils/</guid>
+      <guid>https://michaelbarrowman.co.uk/package/mutils/</guid>
       <description></description>
     </item>
     
     <item>
       <title>typos</title>
-      <link>/package/typos/</link>
+      <link>https://michaelbarrowman.co.uk/package/typos/</link>
       <pubDate>Sun, 14 Jun 2020 00:00:00 +0000</pubDate>
-      <guid>/package/typos/</guid>
+      <guid>https://michaelbarrowman.co.uk/package/typos/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Convert all Character variables to Factors</title>
-      <link>/post/convert-all-character-variables-to-factors/</link>
+      <link>https://michaelbarrowman.co.uk/post/convert-all-character-variables-to-factors/</link>
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>/post/convert-all-character-variables-to-factors/</guid>
+      <guid>https://michaelbarrowman.co.uk/post/convert-all-character-variables-to-factors/</guid>
       <description>
-&lt;script src=&#34;/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
@@ -184,12 +184,20 @@ df&lt;/code&gt;&lt;/pre&gt;
     </item>
     
     <item>
+      <title>Toward a Framework for the Design, Implementation, and Reporting of Methodology Scoping Reviews</title>
+      <link>https://michaelbarrowman.co.uk/publication/martin-2020a/</link>
+      <pubDate>Sun, 26 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>https://michaelbarrowman.co.uk/publication/martin-2020a/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Getting a variable name in a pipeline</title>
-      <link>/post/getting-a-variable-name-in-a-pipeline/</link>
+      <link>https://michaelbarrowman.co.uk/post/getting-a-variable-name-in-a-pipeline/</link>
       <pubDate>Fri, 24 Jul 2020 00:00:00 +0000</pubDate>
-      <guid>/post/getting-a-variable-name-in-a-pipeline/</guid>
+      <guid>https://michaelbarrowman.co.uk/post/getting-a-variable-name-in-a-pipeline/</guid>
       <description>
-&lt;script src=&#34;/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;There is no greater staple of the &lt;code&gt;{tidyverse}&lt;/code&gt; than the pipe, &lt;code&gt;%&amp;gt;%&lt;/code&gt;, however not a lot of people understand what’s going on “under-the-bonnet” of the pipe. To be fair, not many people have to worry about it. Until you start trying to do a bit of meta-programming. Then things can get difficult.&lt;/p&gt;
@@ -345,9 +353,9 @@ Sidenote for the pro’s out there. This page is written in &lt;code&gt;{rmarkdo
     
     <item>
       <title>Deploy to GitHub Pages</title>
-      <link>/post/deploy-to-github-pages/</link>
+      <link>https://michaelbarrowman.co.uk/post/deploy-to-github-pages/</link>
       <pubDate>Wed, 22 Jul 2020 00:00:00 +0000</pubDate>
-      <guid>/post/deploy-to-github-pages/</guid>
+      <guid>https://michaelbarrowman.co.uk/post/deploy-to-github-pages/</guid>
       <description>&lt;p&gt;Within &lt;code&gt;git&lt;/code&gt;, the default branch is usually named &lt;code&gt;master&lt;/code&gt;, however in recent times, the negative connotations of that word are coming to the forefront of a lot of people&amp;rsquo;s minds, and so they are wishing to diverge away from that kind of terminology. The simplest change that we can make is to default to the &lt;code&gt;HEAD&lt;/code&gt; branch of a repo, which will point towards whatever the actual default branch is for a the repo, whether that is &lt;code&gt;master&lt;/code&gt;, &lt;code&gt;main&lt;/code&gt; or &lt;code&gt;Captain&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Unfortunately, this change can be slow, and although resources like GitHub have expressed interest in switching away from the default &lt;code&gt;master&lt;/code&gt;, some things are still hardcoded. One of which is the limitations of GitHub Pages deployment. Users can currently choose from one of three options:&lt;/p&gt;
 &lt;ul&gt;
@@ -464,44 +472,26 @@ jobs:
     </item>
     
     <item>
-      <title>How unmeasured confounding in a competing risks setting can affect treatment effect estimates in observational studies</title>
-      <link>/publication/barrowman-2019a/</link>
+      <title>How Unmeasured Confounding in a Competing Risks Setting Can Affect Treatment Effect Estimates in Observational Studies</title>
+      <link>https://michaelbarrowman.co.uk/publication/barrowman-2019a/</link>
       <pubDate>Wed, 31 Jul 2019 00:00:00 +0000</pubDate>
-      <guid>/publication/barrowman-2019a/</guid>
+      <guid>https://michaelbarrowman.co.uk/publication/barrowman-2019a/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Study investigating the generalisability of a COPD trial based in primary care (Salford Lung Study) and the presence of a Hawthorne effect</title>
-      <link>/publication/pate-2018a/</link>
+      <title>Study Investigating the Generalisability of a COPD Trial Based in Primary Care (Salford Lung Study) and the Presence of a Hawthorne Effect</title>
+      <link>https://michaelbarrowman.co.uk/publication/pate-2018a/</link>
       <pubDate>Thu, 25 Oct 2018 00:00:00 +0000</pubDate>
-      <guid>/publication/pate-2018a/</guid>
+      <guid>https://michaelbarrowman.co.uk/publication/pate-2018a/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>Privacy Policy</title>
-      <link>/privacy/</link>
-      <pubDate>Thu, 28 Jun 2018 00:00:00 +0100</pubDate>
-      <guid>/privacy/</guid>
-      <description>&lt;p&gt;&amp;hellip;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Terms</title>
-      <link>/terms/</link>
-      <pubDate>Thu, 28 Jun 2018 00:00:00 +0100</pubDate>
-      <guid>/terms/</guid>
-      <description>&lt;p&gt;&amp;hellip;&lt;/p&gt;
-</description>
     </item>
     
     <item>
       <title>Experience</title>
-      <link>/experience/</link>
+      <link>https://michaelbarrowman.co.uk/experience/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>/experience/</guid>
+      <guid>https://michaelbarrowman.co.uk/experience/</guid>
       <description></description>
     </item>
     
