@@ -2,38 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>R Package | MyKo101</title>
-    <link>/tag/r-package/</link>
-      <atom:link href="/tag/r-package/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://michaelbarrowman.co.uk/tag/r-package/</link>
+      <atom:link href="https://michaelbarrowman.co.uk/tag/r-package/index.xml" rel="self" type="application/rss+xml" />
     <description>R Package</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2020</copyright><lastBuildDate>Tue, 21 Jul 2020 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png</url>
+      <url>https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png</url>
       <title>R Package</title>
-      <link>/tag/r-package/</link>
+      <link>https://michaelbarrowman.co.uk/tag/r-package/</link>
     </image>
     
     <item>
       <title>mpipe</title>
-      <link>/package/mpipe/</link>
+      <link>https://michaelbarrowman.co.uk/package/mpipe/</link>
       <pubDate>Mon, 22 Jun 2020 00:00:00 +0000</pubDate>
-      <guid>/package/mpipe/</guid>
+      <guid>https://michaelbarrowman.co.uk/package/mpipe/</guid>
       <description>&lt;p&gt;&lt;img src = &#34;featured.png&#34; /&gt;&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>mutils</title>
-      <link>/package/mutils/</link>
+      <link>https://michaelbarrowman.co.uk/package/mutils/</link>
       <pubDate>Tue, 21 Jul 2020 00:00:00 +0000</pubDate>
-      <guid>/package/mutils/</guid>
+      <guid>https://michaelbarrowman.co.uk/package/mutils/</guid>
       <description></description>
     </item>
     
     <item>
       <title>typos</title>
-      <link>/package/typos/</link>
+      <link>https://michaelbarrowman.co.uk/package/typos/</link>
       <pubDate>Sun, 14 Jun 2020 00:00:00 +0000</pubDate>
-      <guid>/package/typos/</guid>
+      <guid>https://michaelbarrowman.co.uk/package/typos/</guid>
       <description></description>
     </item>
     

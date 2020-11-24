@@ -2,23 +2,23 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts | MyKo101</title>
-    <link>/post/</link>
-      <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://michaelbarrowman.co.uk/post/</link>
+      <atom:link href="https://michaelbarrowman.co.uk/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2020</copyright><lastBuildDate>Thu, 15 Oct 2020 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png</url>
+      <url>https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png</url>
       <title>Posts</title>
-      <link>/post/</link>
+      <link>https://michaelbarrowman.co.uk/post/</link>
     </image>
     
     <item>
       <title>Convert all Character variables to Factors</title>
-      <link>/post/convert-all-character-variables-to-factors/</link>
+      <link>https://michaelbarrowman.co.uk/post/convert-all-character-variables-to-factors/</link>
       <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>/post/convert-all-character-variables-to-factors/</guid>
+      <guid>https://michaelbarrowman.co.uk/post/convert-all-character-variables-to-factors/</guid>
       <description>
-&lt;script src=&#34;/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
@@ -160,11 +160,11 @@ df&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>Getting a variable name in a pipeline</title>
-      <link>/post/getting-a-variable-name-in-a-pipeline/</link>
+      <link>https://michaelbarrowman.co.uk/post/getting-a-variable-name-in-a-pipeline/</link>
       <pubDate>Fri, 24 Jul 2020 00:00:00 +0000</pubDate>
-      <guid>/post/getting-a-variable-name-in-a-pipeline/</guid>
+      <guid>https://michaelbarrowman.co.uk/post/getting-a-variable-name-in-a-pipeline/</guid>
       <description>
-&lt;script src=&#34;/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;There is no greater staple of the &lt;code&gt;{tidyverse}&lt;/code&gt; than the pipe, &lt;code&gt;%&amp;gt;%&lt;/code&gt;, however not a lot of people understand what’s going on “under-the-bonnet” of the pipe. To be fair, not many people have to worry about it. Until you start trying to do a bit of meta-programming. Then things can get difficult.&lt;/p&gt;
@@ -320,9 +320,9 @@ Sidenote for the pro’s out there. This page is written in &lt;code&gt;{rmarkdo
     
     <item>
       <title>Deploy to GitHub Pages</title>
-      <link>/post/deploy-to-github-pages/</link>
+      <link>https://michaelbarrowman.co.uk/post/deploy-to-github-pages/</link>
       <pubDate>Wed, 22 Jul 2020 00:00:00 +0000</pubDate>
-      <guid>/post/deploy-to-github-pages/</guid>
+      <guid>https://michaelbarrowman.co.uk/post/deploy-to-github-pages/</guid>
       <description>&lt;p&gt;Within &lt;code&gt;git&lt;/code&gt;, the default branch is usually named &lt;code&gt;master&lt;/code&gt;, however in recent times, the negative connotations of that word are coming to the forefront of a lot of people&amp;rsquo;s minds, and so they are wishing to diverge away from that kind of terminology. The simplest change that we can make is to default to the &lt;code&gt;HEAD&lt;/code&gt; branch of a repo, which will point towards whatever the actual default branch is for a the repo, whether that is &lt;code&gt;master&lt;/code&gt;, &lt;code&gt;main&lt;/code&gt; or &lt;code&gt;Captain&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Unfortunately, this change can be slow, and although resources like GitHub have expressed interest in switching away from the default &lt;code&gt;master&lt;/code&gt;, some things are still hardcoded. One of which is the limitations of GitHub Pages deployment. Users can currently choose from one of three options:&lt;/p&gt;
 &lt;ul&gt;

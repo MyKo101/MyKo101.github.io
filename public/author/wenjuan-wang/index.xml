@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Wenjuan Wang | MyKo101</title>
+    <link>https://michaelbarrowman.co.uk/author/wenjuan-wang/</link>
+      <atom:link href="https://michaelbarrowman.co.uk/author/wenjuan-wang/index.xml" rel="self" type="application/rss+xml" />
+    <description>Wenjuan Wang</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2020</copyright><lastBuildDate>Sun, 26 Jul 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png</url>
+      <title>Wenjuan Wang</title>
+      <link>https://michaelbarrowman.co.uk/author/wenjuan-wang/</link>
+    </image>
+    
+    <item>
+      <title>Toward a Framework for the Design, Implementation, and Reporting of Methodology Scoping Reviews</title>
+      <link>https://michaelbarrowman.co.uk/publication/martin-2020a/</link>
+      <pubDate>Sun, 26 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>https://michaelbarrowman.co.uk/publication/martin-2020a/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
