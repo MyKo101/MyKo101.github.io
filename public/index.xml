@@ -119,18 +119,18 @@ ggplot2::autoplot(bm2)&lt;/code&gt;&lt;/pre&gt;
 ## $base
 ## (function(y) 2 * y)(x)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Again the standard and base versions are parsed the same.&lt;/p&gt;
-&lt;p&gt;One final critic of the new pipe is that you can only pass an object to the &lt;em&gt;first&lt;/em&gt; argument in a function. This is a limitation in a lot of cases, particularly because most &lt;code&gt;{base}&lt;/code&gt; functions don’t follow the convention of passing the out current data as the first argumnt. But using the lambda &lt;code&gt;\\()&lt;/code&gt; syntax, we can get around this. We can also pass named arguments in the same way we usually would when calling a function. Let’s try it and time it&lt;/p&gt;
+&lt;p&gt;One final critic of the new pipe is that you can only pass an object to the &lt;em&gt;first&lt;/em&gt; argument in a function. This is a limitation in a lot of cases, particularly because most &lt;code&gt;{base}&lt;/code&gt; functions don’t follow the convention of passing the current data as the first argument. In &lt;code&gt;{magrittr}&lt;/code&gt;, we can use a But using the lambda &lt;code&gt;\()&lt;/code&gt; syntax, we can get around this. We can also pass named arguments in the same way we usually would when calling a function. Let’s try it and time it&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;multiplier &amp;lt;- function(a,val) a*val
 bm3 &amp;lt;- bench::mark(
   standard = multiplier(2,x),
   magrittrclassic = x %&amp;gt;&amp;gt;% multiplier(2,.),
   magrittr = x %&amp;gt;% multiplier(2,.),
-  base_lambda = x |&amp;gt; \(y) multiplier(2,y),
-  base_named = x |&amp;gt; multiplier(a=2)
+  base_named = x |&amp;gt; multiplier(a=2),
+  base_lambda = x |&amp;gt; \(y) multiplier(2,y)
 )
 ggplot2::autoplot(bm3)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/multiargs-1.png&#34; width=&#34;672&#34; /&gt;
-Clearly, the lambda version of the base packages needs more time, again because it is creating the function in the middle, whereas the named version does not have to do this. Why? Again, let’s capture them:&lt;/p&gt;
+Clearly, the lambda version of the base packages takes more time, again because it is creating the function in the middle, whereas the named version does not have to do this. Let’s capture them to check that this is true&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rlang::exprs(
   standard = multiplier(2,x),
   magrittrclassic = x %&amp;gt;&amp;gt;% multiplier(2,.),
@@ -153,7 +153,7 @@ Clearly, the lambda version of the base packages needs more time, again because 
 ## $base_named
 ## multiplier(x, a = 2)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;One final thing to look at is the lambda function part of this whole process. While the &lt;code&gt;{tidyverse}&lt;/code&gt; doesn’t provide a general shortcut to produce these, they can be created within other functions. For example, the above syntax &lt;code&gt;{2*.}&lt;/code&gt; only works within the context of a pipe and wouldn’t work as a piece of code on it’s own.&lt;/p&gt;
-&lt;p&gt;The other major way in which lambda functions are declared is through the &lt;code&gt;{purrr}&lt;/code&gt; package. The &lt;code&gt;{purrr}&lt;/code&gt; package provides methods of functional programming (to an extent), and so within a &lt;code&gt;{purrr}&lt;/code&gt; function, we can define a function using the &lt;code&gt;~&lt;/code&gt; symbol. Let’s compare it to the &lt;code&gt;\\()&lt;/code&gt; syntax, remember, this is again a syntax and not a function/call!&lt;/p&gt;
+&lt;p&gt;The other major way in which lambda functions are declared is through the &lt;code&gt;{purrr}&lt;/code&gt; package. The &lt;code&gt;{purrr}&lt;/code&gt; package provides methods of functional programming (to an extent), and so within a &lt;code&gt;{purrr}&lt;/code&gt; function, we can define a function using the &lt;code&gt;~&lt;/code&gt; symbol and, like the previous &lt;code&gt;{tidyverse}&lt;/code&gt; lambda, using the &lt;code&gt;.&lt;/code&gt; as the value being passed to the function. Let’s compare it to the &lt;code&gt;\()&lt;/code&gt; syntax, remember, this is again a syntax and not a function/call!&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(purrr,warn.conflicts=F)
 bm4 &amp;lt;- bench::mark(
   standard = {
@@ -166,7 +166,7 @@ bm4 &amp;lt;- bench::mark(
 )
 ggplot2::autoplot(bm4)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/lambda-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Again due to the lack of overheads for the &lt;code&gt;\\()`` syntax, speed is definitely on it&#39;s side. We could just as easily use the&lt;/code&gt;lapply()&lt;code&gt;function here and declare the&lt;/code&gt;FUN&lt;code&gt;argument using&lt;/code&gt;function(i) mean(1:i)&lt;code&gt;, but writing&lt;/code&gt;\()` is much quicker/easier.&lt;/p&gt;
+&lt;p&gt;Again due to the lack of overheads for the &lt;code&gt;\()&lt;/code&gt; syntax, speed is definitely on it’s side. We could just as easily use the &lt;code&gt;lapply()&lt;/code&gt; function here and declare the &lt;code&gt;FUN&lt;/code&gt; argument using &lt;code&gt;function(i) mean(1:i)&lt;/code&gt;, but writing &lt;code&gt;\()&lt;/code&gt; is much quicker/easier.&lt;/p&gt;
 </description>
     </item>
     

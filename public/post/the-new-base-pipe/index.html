@@ -788,18 +788,18 @@ ggplot2::autoplot(bm2)</code></pre>
 ## $base
 ## (function(y) 2 * y)(x)</code></pre>
 <p>Again the standard and base versions are parsed the same.</p>
-<p>One final critic of the new pipe is that you can only pass an object to the <em>first</em> argument in a function. This is a limitation in a lot of cases, particularly because most <code>{base}</code> functions don’t follow the convention of passing the out current data as the first argumnt. But using the lambda <code>\\()</code> syntax, we can get around this. We can also pass named arguments in the same way we usually would when calling a function. Let’s try it and time it</p>
+<p>One final critic of the new pipe is that you can only pass an object to the <em>first</em> argument in a function. This is a limitation in a lot of cases, particularly because most <code>{base}</code> functions don’t follow the convention of passing the current data as the first argument. In <code>{magrittr}</code>, we can use a But using the lambda <code>\()</code> syntax, we can get around this. We can also pass named arguments in the same way we usually would when calling a function. Let’s try it and time it</p>
 <pre class="r"><code>multiplier &lt;- function(a,val) a*val
 bm3 &lt;- bench::mark(
   standard = multiplier(2,x),
   magrittrclassic = x %&gt;&gt;% multiplier(2,.),
   magrittr = x %&gt;% multiplier(2,.),
-  base_lambda = x |&gt; \(y) multiplier(2,y),
-  base_named = x |&gt; multiplier(a=2)
+  base_named = x |&gt; multiplier(a=2),
+  base_lambda = x |&gt; \(y) multiplier(2,y)
 )
 ggplot2::autoplot(bm3)</code></pre>
 <p><img src="/post/2020-12-06-the-new-base-pipe_files/figure-html/multiargs-1.png" width="672" />
-Clearly, the lambda version of the base packages needs more time, again because it is creating the function in the middle, whereas the named version does not have to do this. Why? Again, let’s capture them:</p>
+Clearly, the lambda version of the base packages takes more time, again because it is creating the function in the middle, whereas the named version does not have to do this. Let’s capture them to check that this is true</p>
 <pre class="r"><code>rlang::exprs(
   standard = multiplier(2,x),
   magrittrclassic = x %&gt;&gt;% multiplier(2,.),
@@ -822,7 +822,7 @@ Clearly, the lambda version of the base packages needs more time, again because 
 ## $base_named
 ## multiplier(x, a = 2)</code></pre>
 <p>One final thing to look at is the lambda function part of this whole process. While the <code>{tidyverse}</code> doesn’t provide a general shortcut to produce these, they can be created within other functions. For example, the above syntax <code>{2*.}</code> only works within the context of a pipe and wouldn’t work as a piece of code on it’s own.</p>
-<p>The other major way in which lambda functions are declared is through the <code>{purrr}</code> package. The <code>{purrr}</code> package provides methods of functional programming (to an extent), and so within a <code>{purrr}</code> function, we can define a function using the <code>~</code> symbol. Let’s compare it to the <code>\\()</code> syntax, remember, this is again a syntax and not a function/call!</p>
+<p>The other major way in which lambda functions are declared is through the <code>{purrr}</code> package. The <code>{purrr}</code> package provides methods of functional programming (to an extent), and so within a <code>{purrr}</code> function, we can define a function using the <code>~</code> symbol and, like the previous <code>{tidyverse}</code> lambda, using the <code>.</code> as the value being passed to the function. Let’s compare it to the <code>\()</code> syntax, remember, this is again a syntax and not a function/call!</p>
 <pre class="r"><code>library(purrr,warn.conflicts=F)
 bm4 &lt;- bench::mark(
   standard = {
@@ -835,7 +835,7 @@ bm4 &lt;- bench::mark(
 )
 ggplot2::autoplot(bm4)</code></pre>
 <p><img src="/post/2020-12-06-the-new-base-pipe_files/figure-html/lambda-1.png" width="672" /></p>
-<p>Again due to the lack of overheads for the <code>\\()`` syntax, speed is definitely on it's side. We could just as easily use the</code>lapply()<code>function here and declare the</code>FUN<code>argument using</code>function(i) mean(1:i)<code>, but writing</code>\()` is much quicker/easier.</p>
+<p>Again due to the lack of overheads for the <code>\()</code> syntax, speed is definitely on it’s side. We could just as easily use the <code>lapply()</code> function here and declare the <code>FUN</code> argument using <code>function(i) mean(1:i)</code>, but writing <code>\()</code> is much quicker/easier.</p>
 
     </div>
 
