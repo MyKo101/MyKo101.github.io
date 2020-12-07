@@ -140,8 +140,10 @@ bm4 <- bench::mark(
   base = lapply(1:10,\(i) mean(1:i))
 )
 ggplot2::autoplot(bm4)
-
+ 
 ```
 
 Again due to the lack of overheads for the `\()` syntax, speed is definitely on it's side. We could just as easily use the `lapply()` function here and declare the `FUN` argument using `function(i) mean(1:i)`, but writing `\()` is much quicker/easier.
+
+
 
