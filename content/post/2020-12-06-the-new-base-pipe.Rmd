@@ -1,0 +1,147 @@
+---
+title: The New Base Pipe
+author: Michael Barrowman
+date: '2020-12-06'
+slug: the-new-base-pipe
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-12-06T15:05:08+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyr)
+```
+
+Here, we're going to take a quick look at the new pipe introduced in the development version of [R 4.1.0](https://cran.r-project.org/bin/windows/base/rdevel.html), and compare it to the well-known `%>%` pipe from the `{magrittr}` package that is used throughout the `{tidyverse}`.
+
+There was a recent update to `{magrittr}` which switched to implementing the bulk of the piping in the C language rather than directly in R. Because of this, as well as showing some features of the new base pipe, `|>`, I'm going to compare it to both the new `{magrittr}` pipe, `%>%` and the old version, which I am going to style as `%>>%`
+
+```{r installpackages, eval=F}
+install.packages("magrittr")
+remotes::install_github("Myko101/magrittrclassic")
+```
+
+```{r loadlibrary, include=F}
+library(magrittr)
+library(magrittrclassic)
+```
+
+If you want to install the classic `{magrittr}` without this updated `%>>%` pipe then run `remotes::install_github("Myko101/magrittrclassic@classic")` to have it loaded as a package called `{magrittrclassic}` or `remotes::install_github("tidyverse/magrittr@v1.5)` to have it overwrite your current `{magrittr}` package. Note that this is prone to errors, particularly if `{magrittr}` or any packages that depend on it are loaded.
+
+The first thing to inspect is the _speed_ of this new pipe in a simple situation. Let's create a simple function and see how it goes in the `bench::mark()` function
+
+```{r benchsimple}
+doubler <- function(val) 2*val
+x <- 1:10
+bm <- bench::mark(
+  standard = doubler(x),
+  magrittrclassic = x %>>% doubler(),
+  magrittr = x %>% doubler(),
+  base = x |> doubler()
+)
+ggplot2::autoplot(bm)
+```
+Note that the `bench::mark()`` function by default also checks whether the results we get are the same.
+
+The first thing that jumps out is just how *slow* the old `{magrittr}` implementation is and how fast the base/standard versions are. The time scale on the plot is logarithmic, which shows that the old `{magrittr}` function is almost 2 orders of magnitude slower (800ns vs 72.5 us), that's nearly 100x slower!
+
+Why is this? Firstly, the old `{magrittr}` pipe builds functions in R and then applies them to data turn by turn. However, the new `{magrittr}` pipe does all this in C. How is the base version so much faster? Well it is a syntax rather than an infix operator or a call.
+
+This means that `x %>% f()` builds functions and performs actions to produce output which is identical to `f(x)`. However, `x |> f()` *is* the same as `f(x)`, it's just a different way of writing it. Think of using a single quote, `'` or a double quote `"` to create  a string, the command you're giving to R is different, but the result is parsed identically before any actual R code is ran. Similarly, when you run `2 + 3 + 4`, R will parse that as ` ( (2+3) + 4 )`because the addition operator can only run on two objects so R has to divvy them up appropriately (left to right).
+
+This can be evidenced by capturing the calls using the `rlang::exprs()` function
+
+```{r capture}
+rlang::exprs(
+  standard = doubler(x),
+  magrittrclassic = x %>>% doubler(),
+  magrittr = x %>% doubler(),
+  base = x |> doubler()
+)
+```
+
+See the last one there? `x |> doubler()` is _exactly_ `doubler(x)`. There's no transforming in R here, it just _is_ the same thing.
+
+This functionality is added to by the introduction of a new lambda function creation shortcut, let's compare it to the `{magrittr}` implementation(s) of anonymous functions, using the dot notation:
+
+```{r anon}
+bm2 <- bench::mark(
+  standard = (function(y) 2*y)(x),
+  magrittrclassic = x %>>% {2*.},
+  magrittr = x %>% {2*.},
+  base = x |> \(y) 2*y
+)
+ggplot2::autoplot(bm2)
+```
+
+Timings are very similar to the previous one, especially when only looking relatively. The slow down is probably due to the creation of a function in each use, which also explains why they are all around the same amount slower. What do these piped lambda functions look like?
+
+```{r anonexpr}
+rlang::exprs(
+  standard = (function(y) 2*y)(x),
+  magrittrclassic = x %>>% {2*.},
+  magrittr = x %>% {2*.},
+  base = x |> \(y) 2*y
+)
+```
+
+Again the standard and base versions are parsed the same.
+
+
+One final critic of the new pipe is that you can only pass an object to the _first_ argument in a function. This is a limitation in a lot of cases, particularly because most `{base}` functions don't follow the convention of passing the out current data as the first argumnt. But using the lambda `\\()` syntax, we can get around this. We can also pass named arguments in the same way we usually would when calling a function. Let's try it and time it
+
+```{r multiargs}
+multiplier <- function(a,val) a*val
+bm3 <- bench::mark(
+  standard = multiplier(2,x),
+  magrittrclassic = x %>>% multiplier(2,.),
+  magrittr = x %>% multiplier(2,.),
+  base_lambda = x |> \(y) multiplier(2,y),
+  base_named = x |> multiplier(a=2)
+)
+ggplot2::autoplot(bm3)
+
+```
+Clearly, the lambda version of the base packages needs more time, again because it is creating the function in the middle, whereas the named version does not have to do this. Why? Again, let's capture them:
+
+```{r captutemultipliargs}
+rlang::exprs(
+  standard = multiplier(2,x),
+  magrittrclassic = x %>>% multiplier(2,.),
+  magrittr = x %>% multiplier(2,.),
+  base_lambda = x |> \(y) multiplier(2,y),
+  base_named = x |> multiplier(a=2)
+)
+```
+
+One final thing to look at is the lambda function part of this whole process. While the `{tidyverse}` doesn't provide a general shortcut to produce these, they can be created within other functions. For example, the above syntax `{2*.}` only works within the context of a pipe and wouldn't work as a piece of code on it's own.
+
+The other major way in which lambda functions are declared is through the `{purrr}` package. The `{purrr}` package provides methods of functional programming (to an extent), and so within a `{purrr}` function, we can define a function using the `~` symbol. Let's compare it to the `\\()` syntax, remember, this is again a syntax and not a function/call!
+
+```{r lambda}
+library(purrr,warn.conflicts=F)
+bm4 <- bench::mark(
+  standard = {
+    res <- vector("list",10)
+    for(i in 1:10) res[[i]] <- mean(1:i)
+    res
+  },
+  purrr = map(1:10,~mean(1:.)),
+  base = lapply(1:10,\(i) mean(1:i))
+)
+ggplot2::autoplot(bm4)
+
+```
+
+Again due to the lack of overheads for the `\\()`` syntax, speed is definitely on it's side. We could just as easily use the `lapply()` function here and declare the `FUN` argument using `function(i) mean(1:i)`, but writing `\\()` is much quicker/easier.
+
