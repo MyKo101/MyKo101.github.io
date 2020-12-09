@@ -845,7 +845,7 @@ ggplot2::autoplot(bm4)</code></pre>
   throw_error()</code></pre>
 <pre><code>## Error in throw_error(.): OH NO!</code></pre>
 <pre class="r"><code>traceback()
-# 10: stop(&quot;Why am I here?&quot;) at #2
+# 10: stop(&quot;OH NO!&quot;) at #2
 #  9: throw_error(.)
 #  8: function_list[[k]](value)
 #  7: withVisible(function_list[[k]](value))
@@ -861,7 +861,7 @@ ggplot2::autoplot(bm4)</code></pre>
   throw_error()</code></pre>
 <pre><code>## Error in throw_error(.): OH NO!</code></pre>
 <pre class="r"><code>traceback()
-# 3: stop(&quot;Why am I here?&quot;) at #2
+# 3: stop(&quot;OH NO!&quot;) at #2
 # 2: throw_error(.)
 # 1: 1:10 %&gt;% throw_error()</code></pre>
 <p>Now let’s compare to the base pipe:</p>
@@ -869,7 +869,7 @@ ggplot2::autoplot(bm4)</code></pre>
   throw_error()</code></pre>
 <pre><code>## Error in throw_error(1:10): OH NO!</code></pre>
 <pre class="r"><code>traceback()
-# 2: stop(&quot;Why am I here?&quot;) at #2
+# 2: stop(&quot;OH NO!&quot;) at #2
 # 1: throw_error(1:10)</code></pre>
 <p>The trace is even shorter. This is because in the <code>{magrittr}</code> pipe, the actual pipe is considered to be a call, and so it appears first in the trace stack (bottom of the list), BUT the base pipe is not a call, and so it doesn’t appear there at all. Just like when capturing the expression, the values are already nested.</p>
 <p>Unlike errors though, warnings can be suppressed and code can continue, this means we can use the <code>suppressWarnings()</code> function to keep them quiet and just carry on. This is useful if you know about the warning beforehand, but is only recomended if you know <em>exactly</em> why the warning is appearing and just want your code to ignore it and run smoothly.</p>
