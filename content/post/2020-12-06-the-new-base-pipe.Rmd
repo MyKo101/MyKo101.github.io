@@ -98,7 +98,7 @@ rlang::exprs(
 Again the standard and base versions are parsed the same.
 
 
-One final critic of the new pipe is that you can only pass an object to the _first_ argument in a function. This is a limitation in a lot of cases, particularly because most `{base}` functions don't follow the convention of passing the current data as the first argument. In `{magrittr}`, we can use a But using the lambda `\()` syntax, we can get around this. We can also pass named arguments in the same way we usually would when calling a function. Let's try it and time it
+One final critic of the new pipe is that you can only pass an object to the _first_ argument in a function. This is a limitation in a lot of cases, particularly because most `{base}` functions don't follow the convention of passing the current data as the first argument. In `{magrittr}`, we can use a `.` to represent the piped data for other arguments, and if it appears at the top level (i.e. a direct argument) `{magrittr}` won't also ut it i as the first argument. But using the lambda `\()` syntax, we can get around this. We can also pass named arguments in the same way we usually would when calling a function. Let's try it and time it
 
 ```{r multiargs}
 multiplier <- function(a,val) a*val
@@ -145,5 +145,101 @@ ggplot2::autoplot(bm4)
 
 Again due to the lack of overheads for the `\()` syntax, speed is definitely on it's side. We could just as easily use the `lapply()` function here and declare the `FUN` argument using `function(i) mean(1:i)`, but writing `\()` is much quicker/easier.
 
+One last thing to inspect is how these functions handle errors.
+```{r errorfunctions}
+throw_error <- function(x){
+  stop("OH NO!")
+}
 
+```
+
+Previously, the trace stack for `{magrittr}` was confusing and made it incredibly difficult to spot where the error came from. Let's see how
+
+```{r errorclassic, error=TRUE}
+1:10 %>>%
+  throw_error()
+```
+```{r eval=F}
+traceback()
+# 10: stop("Why am I here?") at #2
+#  9: throw_error(.)
+#  8: function_list[[k]](value)
+#  7: withVisible(function_list[[k]](value))
+#  6: freduce(value, `_function_list`)
+#  5: `_fseq`(`_lhs`)
+#  4: eval(quote(`_fseq`(`_lhs`)), env, env)
+#  3: eval(quote(`_fseq`(`_lhs`)), env, env)
+#  2: withVisible(eval(quote(`_fseq`(`_lhs`)), env, env))
+#  1: 1:10 %>>% throw_error()
+```
+
+Because of the structure of the old `{magrittr}`, numbers 2 - 8 are functions that are called internally within the  pipe and so as end-users, they mean nothing!
+
+However, the new error handling, makes this much clearer without all the clutter:
+
+```{r errornewpipe, error = TRUE}
+1:10 %>%
+  throw_error()
+```
+```{r eval=F}
+traceback()
+# 3: stop("Why am I here?") at #2
+# 2: throw_error(.)
+# 1: 1:10 %>% throw_error()
+```
+Now let's compare to the base pipe:
+
+```{r errorbase, error=TRUE}
+1:10 |>
+  throw_error()
+
+```
+```{r eval=F}
+traceback()
+# 2: stop("Why am I here?") at #2
+# 1: throw_error(1:10)
+```
+
+The trace is even shorter. This is because in the `{magrittr}` pipe, the actual pipe is considered to be a call, and so it appears first in the trace stack (bottom of the list), BUT the base pipe is not a call, and so it doesn't appear there at all. Just like when capturing the expression, the values are already nested.
+
+Unlike errors though, warnings can be suppressed and code can continue, this means we can use the `suppressWarnings()` function to keep them quiet and just carry on. This is useful if you know about the warning beforehand, but is only recomended if you know *exactly* why the warning is appearing and just want your code to ignore it and run smoothly.
+
+```{r warningfunctions}
+throw_warning <- function(x) {
+  warning("oh no")
+  x
+}
+
+```
+
+This warning handling was one of the complaints about the old `{magrittr}` pipe,take the below which is instinctively what you would expect to do
+
+```{r suppresswarningsclassicfail}
+1:10 %>>%
+  throw_warning() %>>%
+  suppressWarnings()
+```
+
+It doesn't work, instead you'd have to run
+
+```{r suppresswarningsclassic}
+suppressWarnings(
+  1:10 %>>%
+    throw_warning()
+)
+
+```
+Which does not look pleasant and means going back to the beginning of your pipeline if you get to the point of wanting to suppress warnings.
+
+The new `{magrittr}` pipe and the `{base}` pipe don't have such qualms and they are evaluated exactly as you would expect them to:
+
+```{r suppresswarnings}
+1:10 %>%
+  throw_warning() %>%
+  suppressWarnings()
+
+1:10 |>
+  throw_warning() |>
+  suppressWarnings()
+```
 
