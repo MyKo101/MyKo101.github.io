@@ -5,7 +5,7 @@
     <link>https://michaelbarrowman.co.uk/</link>
       <atom:link href="https://michaelbarrowman.co.uk/index.xml" rel="self" type="application/rss+xml" />
     <description>MyKo101</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2020</copyright><lastBuildDate>Sun, 06 Dec 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2021</copyright><lastBuildDate>Sun, 06 Dec 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png</url>
       <title>MyKo101</title>
@@ -230,6 +230,346 @@ ggplot2::autoplot(bm4)&lt;/code&gt;&lt;/pre&gt;
   throw_warning() |&amp;gt;
   suppressWarnings()&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>The New Base Pipe</title>
+      <link>https://michaelbarrowman.co.uk/post/the-new-base-pipe/</link>
+      <pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>https://michaelbarrowman.co.uk/post/the-new-base-pipe/</guid>
+      <description>
+&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;This question on Reddit, got me thinking about the &lt;code&gt;lapply()&lt;/code&gt; family of functions, and how a beginner might want to learn about them. Here is my take&lt;/p&gt;
+&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;The easiest one to understand is &lt;code&gt;lapply()&lt;/code&gt;, I’ll work through that and then extend to the others. As an aside, the programmatic terminology is &lt;em&gt;vectorising&lt;/em&gt; as it allows us to perform an action over an entire &lt;em&gt;vector&lt;/em&gt; at once or &lt;em&gt;list&lt;/em&gt; in R.&lt;/p&gt;
+&lt;p&gt;Ignoring the dots, &lt;code&gt;lapply()&lt;/code&gt; takes two arguments &lt;code&gt;X&lt;/code&gt; and &lt;code&gt;FUN&lt;/code&gt;. &lt;code&gt;FUN&lt;/code&gt; is the name of the function, and &lt;code&gt;X&lt;/code&gt; is a list of objects. When I say list, this could be an actual, as created by the &lt;code&gt;list()&lt;/code&gt; function, or a vector such as &lt;code&gt;1:10&lt;/code&gt;. But if you try to put something more complicated in like a &lt;code&gt;data.frame()&lt;/code&gt;, you can get unexpected results (I’ll come back to this).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;lists&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;lists&lt;/h1&gt;
+&lt;p&gt;So, let’s say we have&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X &amp;lt;- list(1:10,11:20,21:30)
+X&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+##  [1]  1  2  3  4  5  6  7  8  9 10
+## 
+## [[2]]
+##  [1] 11 12 13 14 15 16 17 18 19 20
+## 
+## [[3]]
+##  [1] 21 22 23 24 25 26 27 28 29 30&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This list has three elements, and each element consists of a vector of 10 numbers. We can access them using &lt;code&gt;[[&lt;/code&gt;, where &lt;code&gt;X[[1]]&lt;/code&gt; will return the first element, the numbers 1 to 10:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X[[1]]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;X[[2]]&lt;/code&gt; will return the second element, etc… This is &lt;em&gt;extraction&lt;/em&gt; as it extracts an element from a list. Extraction can only bring out a single element. We can also &lt;em&gt;subset&lt;/em&gt; using &lt;code&gt;[&lt;/code&gt; for example&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X[1:2]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+##  [1]  1  2  3  4  5  6  7  8  9 10
+## 
+## [[2]]
+##  [1] 11 12 13 14 15 16 17 18 19 20&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This return the first and second elements. &lt;code&gt;X[1]&lt;/code&gt; will return a subset consisting of the first element.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X[1]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What’s the difference between &lt;code&gt;X[1]&lt;/code&gt; and &lt;code&gt;X[[1]]&lt;/code&gt;? Well, &lt;code&gt;X[1]&lt;/code&gt; returns a list, which is just 1 element long, that element being a vector of the numbers from 1 to 10. &lt;code&gt;X[[1]]&lt;/code&gt; returns the actual element at position 1.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;length(X[1])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 1&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;length(X[[1]])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 10&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;class(X[1])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;list&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;class(X[[1]])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;integer&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The difference between a list and a vector is that a vector has to all be of the same type (e.g. all characters as in &lt;code&gt;c(&#34;a&#34;,&#34;b&#34;,&#34;c&#34;)&lt;/code&gt; or all numbers as in &lt;code&gt;c(1,2,3)&lt;/code&gt;, the &lt;code&gt;c()&lt;/code&gt; function will &lt;em&gt;coerce&lt;/em&gt; them otherwise, so &lt;code&gt;c(1,&#34;2&#34;,3)&lt;/code&gt; will coerce to characters. But a list can all be different, so &lt;code&gt;list(&#34;hello&#34;,2,1:10)&lt;/code&gt; has three elements. In fact lists can contain lists (nested lists)&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Y &amp;lt;- list(&amp;quot;hello&amp;quot;,1:10,list(&amp;quot;one&amp;quot;,&amp;quot;two&amp;quot;,&amp;quot;three&amp;quot;))
+Y&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] &amp;quot;hello&amp;quot;
+## 
+## [[2]]
+##  [1]  1  2  3  4  5  6  7  8  9 10
+## 
+## [[3]]
+## [[3]][[1]]
+## [1] &amp;quot;one&amp;quot;
+## 
+## [[3]][[2]]
+## [1] &amp;quot;two&amp;quot;
+## 
+## [[3]][[3]]
+## [1] &amp;quot;three&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;has three elements. If you &lt;em&gt;extract&lt;/em&gt; the third element,&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Y[[3]]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] &amp;quot;one&amp;quot;
+## 
+## [[2]]
+## [1] &amp;quot;two&amp;quot;
+## 
+## [[3]]
+## [1] &amp;quot;three&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;you get another list. If you &lt;em&gt;subset&lt;/em&gt; the third element,&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Y[3]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [[1]][[1]]
+## [1] &amp;quot;one&amp;quot;
+## 
+## [[1]][[2]]
+## [1] &amp;quot;two&amp;quot;
+## 
+## [[1]][[3]]
+## [1] &amp;quot;three&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;you get a list with 1 element.&lt;/p&gt;
+&lt;p&gt;As far as nomenclature is concerned, a &lt;em&gt;vector&lt;/em&gt; is a type of &lt;em&gt;list&lt;/em&gt; which has the requirement that all entries be of the same type. You can even use extraction on a vector,&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x &amp;lt;- 1:10
+x[3]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 3&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x[[3]]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 3&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Although when dealing with a vector, the second version is much less common. The reason this works is that &lt;em&gt;extraction&lt;/em&gt; and &lt;em&gt;subsetting&lt;/em&gt; are essentially the same thing in a vector (because it will always return a vector, it just might be of length 1).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;lapply&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;lapply()&lt;/h1&gt;
+&lt;p&gt;So, now that we know what a list is, we can look at what &lt;code&gt;lapply()&lt;/code&gt; does to that list. If we supply a function, &lt;code&gt;lapply()&lt;/code&gt; will run that function on every element in that list. The simplest example would be, using &lt;code&gt;X&lt;/code&gt; from above, &lt;code&gt;lapply(X,mean)&lt;/code&gt; will return a list with the &lt;code&gt;mean()&lt;/code&gt; of every element in &lt;code&gt;X&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lapply(X,mean)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] 5.5
+## 
+## [[2]]
+## [1] 15.5
+## 
+## [[3]]
+## [1] 25.5&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Remember that the elements in &lt;code&gt;X&lt;/code&gt; are the vectors of numbers, &lt;code&gt;1:10&lt;/code&gt;, &lt;code&gt;11:20&lt;/code&gt; and &lt;code&gt;21:30&lt;/code&gt;. We’ve &lt;em&gt;applied&lt;/em&gt; the function to the &lt;em&gt;list&lt;/em&gt; a &lt;em&gt;list-apply&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;The function doesn’t have to be one that is named, and we can supply a function in-line&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lapply(X, function(x) mean(x-5.5))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] 0
+## 
+## [[2]]
+## [1] 10
+## 
+## [[3]]
+## [1] 20&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This applies the function &lt;code&gt;function(x) mean(x-5.5)&lt;/code&gt; to every element in &lt;code&gt;X&lt;/code&gt;. You could define this function outside of the &lt;code&gt;lapply()&lt;/code&gt; function earlier, but there is no need if this is the only place we plan on using it.&lt;/p&gt;
+&lt;p&gt;For future, when the &lt;code&gt;R 4.1&lt;/code&gt; version is released, I believe this will be even easier with the shorthand &lt;code&gt;\()&lt;/code&gt; syntax.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;lapply(X, \(x) mean(x - 5.5))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So running &lt;code&gt;lapply(X,FUN)&lt;/code&gt; is the same as running the following &lt;code&gt;for()&lt;/code&gt; loop&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;output &amp;lt;- vector(&amp;quot;list&amp;quot;,length(X))
+for(i in 1:length(X)){
+  output[[i]] &amp;lt;- FUN(X[[i]])
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Compare the previous code to this:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;output &amp;lt;- vector(&amp;quot;list&amp;quot;,length(X))
+for(i in 1:length(X)){
+  output[[i]] &amp;lt;- mean(X[[i]])
+}
+output&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] 5.5
+## 
+## [[2]]
+## [1] 15.5
+## 
+## [[3]]
+## [1] 25.5&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Notice that I’ve defined the &lt;code&gt;output &amp;lt;- vector(&#34;list&#34;,length(X))&lt;/code&gt; before running the &lt;code&gt;for()&lt;/code&gt; loop. This line basically makes an empty list of the defined length. This will come up when we move on from &lt;code&gt;lapply()&lt;/code&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;dots&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;dots&lt;/h1&gt;
+&lt;p&gt;One part of &lt;code&gt;lapply()&lt;/code&gt; that I’ve ignored is the &lt;code&gt;...&lt;/code&gt; dots argument. These are basically other arguments that you want passed on to your function. Whatever is in the dots, will be passed to every call to &lt;code&gt;FUN&lt;/code&gt;, whether named or not:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lapply(c(&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;),paste,&amp;quot;2&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] &amp;quot;a 2&amp;quot;
+## 
+## [[2]]
+## [1] &amp;quot;b 2&amp;quot;
+## 
+## [[3]]
+## [1] &amp;quot;c 2&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lapply(list( 1:10, c(1,2,NA,4), 21:30), mean, na.rm=T)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] 5.5
+## 
+## [[2]]
+## [1] 2.333333
+## 
+## [[3]]
+## [1] 25.5&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Essentially, this runs the following loop:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X &amp;lt;- list( 1:10, c(1,2,NA,4), 21:30)
+output &amp;lt;- vector(&amp;quot;list&amp;quot;,3)
+for(i in 1:3){
+  output[[i]] &amp;lt;- mean(X[[i]],na.rm=T)
+}
+output&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] 5.5
+## 
+## [[2]]
+## [1] 2.333333
+## 
+## [[3]]
+## [1] 25.5&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Hopefully that will be enough to understand &lt;code&gt;lapply()&lt;/code&gt;. One unusual case is using &lt;code&gt;lapply()&lt;/code&gt; on a &lt;code&gt;data.frame&lt;/code&gt;-like structure. Now, a &lt;code&gt;data.frame&lt;/code&gt; looks like a table, but it’s actually a list, but the list is counter intuitive. Each element of the list is a &lt;em&gt;column&lt;/em&gt; in the &lt;code&gt;data.frame&lt;/code&gt;. So, if you run the following, you would get a result that is only 4 elements long&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;iris0 &amp;lt;- iris[,1:4]
+lapply(iris0,mean)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $Sepal.Length
+## [1] 5.843333
+## 
+## $Sepal.Width
+## [1] 3.057333
+## 
+## $Petal.Length
+## [1] 3.758
+## 
+## $Petal.Width
+## [1] 1.199333&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You might think that this would work &lt;em&gt;across&lt;/em&gt; the rows of the &lt;code&gt;data.frame&lt;/code&gt;, but it works &lt;em&gt;down&lt;/em&gt; the columns. Also note that these outputs are now also named the same as the input list. This can be useful for keeping track of your inputs and outputs.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;apply&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;apply()&lt;/h1&gt;
+&lt;p&gt;This brings us only &lt;code&gt;apply()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;apply()&lt;/code&gt; function does a similar job, however it doesn’t work on lists, it works on multi-dimensional objects, so matrices and arrays. It tries to collapse a multi-dimensional object down by one (or more) of its dimensions. So it turns a matrix into a vector (or an array into a smaller array). As well as &lt;code&gt;X&lt;/code&gt; (which must be multi-dimensional, so definitely &lt;em&gt;not&lt;/em&gt; a list) and &lt;code&gt;FUN&lt;/code&gt;, it also takes &lt;code&gt;MARGIN&lt;/code&gt; which tells &lt;code&gt;apply()&lt;/code&gt; which dimension(s) to collapse:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;M &amp;lt;- matrix(1:9,nrow=3)
+apply(M,1,mean) #takes the mean of each row&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 4 5 6&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;apply(M,2,mean) #takes the mean of each column&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 2 5 8&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The type returned is the same as the type we started with, and once again &lt;code&gt;apply()&lt;/code&gt; can take other arguments as dots. So this works quite well with character matrices:
+{&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;M &amp;lt;- matrix(letters[1:9],nrow=3)
+apply(M,1,paste0,collapse=&amp;quot;&amp;quot;) #pastes across the rows&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;adg&amp;quot; &amp;quot;beh&amp;quot; &amp;quot;cfi&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;apply(M,2,paste0,collapse=&amp;quot;&amp;quot;) #pastes down the columns&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;abc&amp;quot; &amp;quot;def&amp;quot; &amp;quot;ghi&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This means we can use &lt;code&gt;apply()&lt;/code&gt; on a &lt;code&gt;data.frame&lt;/code&gt; to work across the rows, rather than down the columns. In this case, ever though a &lt;code&gt;data.frame&lt;/code&gt; is a list, because it can be accessed in the same way as a matrix, it still works&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;apply(iris0,1,mean)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   [1] 2.550 2.375 2.350 2.350 2.550 2.850 2.425 2.525 2.225 2.400 2.700 2.500
+##  [13] 2.325 2.125 2.800 3.000 2.750 2.575 2.875 2.675 2.675 2.675 2.350 2.650
+##  [25] 2.575 2.450 2.600 2.600 2.550 2.425 2.425 2.675 2.725 2.825 2.425 2.400
+##  [37] 2.625 2.500 2.225 2.550 2.525 2.100 2.275 2.675 2.800 2.375 2.675 2.350
+##  [49] 2.675 2.475 4.075 3.900 4.100 3.275 3.850 3.575 3.975 2.900 3.850 3.300
+##  [61] 2.875 3.650 3.300 3.775 3.350 3.900 3.650 3.400 3.600 3.275 3.925 3.550
+##  [73] 3.800 3.700 3.725 3.850 3.950 4.100 3.725 3.200 3.200 3.150 3.400 3.850
+##  [85] 3.600 3.875 4.000 3.575 3.500 3.325 3.425 3.775 3.400 2.900 3.450 3.525
+##  [97] 3.525 3.675 2.925 3.475 4.525 3.875 4.525 4.150 4.375 4.825 3.400 4.575
+## [109] 4.200 4.850 4.200 4.075 4.350 3.800 4.025 4.300 4.200 5.100 4.875 3.675
+## [121] 4.525 3.825 4.800 3.925 4.450 4.550 3.900 3.950 4.225 4.400 4.550 5.025
+## [133] 4.250 3.925 3.925 4.775 4.425 4.200 3.900 4.375 4.450 4.350 3.875 4.550
+## [145] 4.550 4.300 3.925 4.175 4.325 3.950&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;now gives a vector of the averages of each row.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;rest-of-the-family&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Rest of the family&lt;/h1&gt;
+&lt;p&gt;Now for &lt;code&gt;lapply()&lt;/code&gt;’s sisters:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;vapply()&lt;/code&gt; takes an extra argument, which is of the same type as what you want your outcome to be. This is the one that I use most often. You can think of it like a &lt;code&gt;lapply()&lt;/code&gt; that will output something other than a list. I usually give &lt;code&gt;FUN.VALUE&lt;/code&gt; as something like &lt;code&gt;integer(1)&lt;/code&gt; or &lt;code&gt;character(1)&lt;/code&gt;. These functions generate empty vectors of that type, they are wrappers around things like &lt;code&gt;vector(&#34;integer&#34;,1)&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X &amp;lt;- list(1:10,11:20,21:30)
+vapply(X,mean,numeric(1))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1]  5.5 15.5 25.5&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This time, we get a numeric vector, rather than a list like we would with &lt;code&gt;lapply()&lt;/code&gt;. I find this much easier to ensure I’m working with the correct type of data.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;sapply()&lt;/code&gt; tries to simplify your output, So if &lt;code&gt;lapply()&lt;/code&gt; outputs a list of vectors that are all the same length, instead of a list, it’ll return a matrix&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X &amp;lt;- list(1:5, 6:10, 11:15)
+sapply(X,range)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##      [,1] [,2] [,3]
+## [1,]    1    6   11
+## [2,]    5   10   15&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Each column in this result is the same as one of the elements of the list &lt;code&gt;lapply(X,range)&lt;/code&gt;. They’ve just been &lt;code&gt;cbind&lt;/code&gt;’d together. The use of &lt;code&gt;sapply()&lt;/code&gt; is &lt;em&gt;not&lt;/em&gt; common as the output can be inconsistent. `&lt;code&gt;vapply()&lt;/code&gt; is much prefered as it gives more control over the output. The above can be replicated with &lt;code&gt;vapply()&lt;/code&gt; and will throw an error if the output is unexpected:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X &amp;lt;- list(1:5, 6:10, 11:15)
+vapply(X,range,numeric(2))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##      [,1] [,2] [,3]
+## [1,]    1    6   11
+## [2,]    5   10   15&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;tapply()&lt;/code&gt; is more complicated as it subsets the &lt;code&gt;X&lt;/code&gt; based on the &lt;code&gt;INDEX&lt;/code&gt;. It describes this as a &lt;em&gt;“Ragged Array”&lt;/em&gt;. I have &lt;em&gt;never&lt;/em&gt; used this directly, as I will usually do the subsetting manually using &lt;code&gt;split()&lt;/code&gt;, but that is essentialy what &lt;code&gt;tapply()&lt;/code&gt; does behind the scenes. &lt;code&gt;tapply()&lt;/code&gt; also comes with a &lt;code&gt;simplify&lt;/code&gt; argument, which decides whether R will try and simplify the results, like in &lt;code&gt;sapply()&lt;/code&gt; or not, by default it will try and invoke this simplification. The following are therefore (roughly) equivalent&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;tapply(X, INDEX, FUN, simplify=FALSE)
+
+lapply(split(X,INDEX), FUN)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;split()&lt;/code&gt; creates a list where the first vector is split into groups based on the second argument.&lt;/p&gt;
+&lt;p&gt;So we can compare using both a &lt;code&gt;lapply()&lt;/code&gt; and a &lt;code&gt;vapply()&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x &amp;lt;- 1:10
+grp &amp;lt;- c(1,1,1,2,2,3,3,3,4,5)
+tapply(x,grp,sum,simplify=FALSE)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $`1`
+## [1] 6
+## 
+## $`2`
+## [1] 9
+## 
+## $`3`
+## [1] 21
+## 
+## $`4`
+## [1] 9
+## 
+## $`5`
+## [1] 10&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lapply(split(x,grp),sum)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $`1`
+## [1] 6
+## 
+## $`2`
+## [1] 9
+## 
+## $`3`
+## [1] 21
+## 
+## $`4`
+## [1] 9
+## 
+## $`5`
+## [1] 10&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tapply(x,grp,sum)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  1  2  3  4  5 
+##  6  9 21  9 10&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;vapply(split(x,grp),sum,numeric(1))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  1  2  3  4  5 
+##  6  9 21  9 10&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The other member of the &lt;code&gt;lapply()&lt;/code&gt; family is &lt;code&gt;mapply()&lt;/code&gt;. This is even more powerful as it allows you to &lt;em&gt;vectorise&lt;/em&gt; over multiple arguments, rather than just the first. Syntactically, the difference here is that the dots are the vectorised arguments, and the non-vectorised arguments go into the &lt;code&gt;MoreArgs&lt;/code&gt; argument.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X &amp;lt;- list(&amp;quot;one&amp;quot;,&amp;quot;two&amp;quot;,c(&amp;quot;three&amp;quot;, &amp;quot;four&amp;quot;))
+Y &amp;lt;- list(&amp;quot;A&amp;quot;,&amp;quot;B&amp;quot;,c(&amp;quot;C&amp;quot;,&amp;quot;D&amp;quot;))
+mapply(paste,X,Y)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] &amp;quot;one A&amp;quot;
+## 
+## [[2]]
+## [1] &amp;quot;two B&amp;quot;
+## 
+## [[3]]
+## [1] &amp;quot;three C&amp;quot; &amp;quot;four D&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is the same as doing:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;list(
+  paste(X[[1]],Y[[1]]),
+  paste(X[[2]],Y[[2]]),
+  paste(X[[3]],Y[[3]])
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] &amp;quot;one A&amp;quot;
+## 
+## [[2]]
+## [1] &amp;quot;two B&amp;quot;
+## 
+## [[3]]
+## [1] &amp;quot;three C&amp;quot; &amp;quot;four D&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here is one final example using &lt;code&gt;rep()&lt;/code&gt;, which repeats the first argument a specific number of times&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;  X &amp;lt;- letters[1:4]
+  Y &amp;lt;- 1:4
+  mapply(rep,X,Y)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $a
+## [1] &amp;quot;a&amp;quot;
+## 
+## $b
+## [1] &amp;quot;b&amp;quot; &amp;quot;b&amp;quot;
+## 
+## $c
+## [1] &amp;quot;c&amp;quot; &amp;quot;c&amp;quot; &amp;quot;c&amp;quot;
+## 
+## $d
+## [1] &amp;quot;d&amp;quot; &amp;quot;d&amp;quot; &amp;quot;d&amp;quot; &amp;quot;d&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 </description>
     </item>
     
