@@ -1,0 +1,1607 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.8.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Michael Barrowman">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="This question on Reddit, got me thinking about the lapply() family of functions, and how a beginner might want to learn about them. Here is my take
+IntroductionThe easiest one to understand is lapply(), I’ll work through that and then extend to the others.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://michaelbarrowman.co.uk/post/the-lapply-family/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.min.css" integrity="sha256-4w9DunooKSr3MFXHXWyFER38WmPdm361bQS/2KUWZbU=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous">
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js" integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+        
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+    
+      
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+    
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/academic.css">
+
+  
+
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-173403317-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'UA-173403317-1', {});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+
+  
+  
+
+  
+
+  <link rel="manifest" href="/index.webmanifest">
+  <link rel="icon" type="image/png" href="/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="https://michaelbarrowman.co.uk/post/the-lapply-family/">
+
+  
+  
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary">
+  
+  <meta property="twitter:site" content="@MyKo101ab">
+  <meta property="twitter:creator" content="@MyKo101ab">
+  
+  <meta property="og:site_name" content="MyKo101">
+  <meta property="og:url" content="https://michaelbarrowman.co.uk/post/the-lapply-family/">
+  <meta property="og:title" content="The lapply() family | MyKo101">
+  <meta property="og:description" content="This question on Reddit, got me thinking about the lapply() family of functions, and how a beginner might want to learn about them. Here is my take
+IntroductionThe easiest one to understand is lapply(), I’ll work through that and then extend to the others."><meta property="og:image" content="https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png">
+  <meta property="twitter:image" content="https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2020-12-06T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2020-12-06T15:05:08&#43;01:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://michaelbarrowman.co.uk/post/the-lapply-family/"
+  },
+  "headline": "The lapply() family",
+  
+  "datePublished": "2020-12-06T00:00:00Z",
+  "dateModified": "2020-12-06T15:05:08+01:00",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Michael Barrowman"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "MyKo101",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "This question on Reddit, got me thinking about the lapply() family of functions, and how a beginner might want to learn about them. Here is my take\nIntroduction\rThe easiest one to understand is lapply(), I’ll work through that and then extend to the others."
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>The lapply() family | MyKo101</title>
+  <meta property="og:title" content="The lapply() family" />
+<meta property="og:description" content="This question on Reddit, got me thinking about the lapply() family of functions, and how a beginner might want to learn about them. Here is my take
+IntroductionThe easiest one to understand is lapply(), I’ll work through that and then extend to the others." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://michaelbarrowman.co.uk/post/the-lapply-family/" />
+<meta property="og:image" content="https://michaelbarrowman.co.uk/Share%20Logo.png"/>
+<meta property="article:published_time" content="2020-12-06T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-12-06T15:05:08+01:00" /><meta property="og:site_name" content="MyKo101" />
+
+  <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://michaelbarrowman.co.uk/Share%20Logo.png"/>
+
+<meta name="twitter:title" content="The lapply() family"/>
+<meta name="twitter:description" content="This question on Reddit, got me thinking about the lapply() family of functions, and how a beginner might want to learn about them. Here is my take
+IntroductionThe easiest one to understand is lapply(), I’ll work through that and then extend to the others."/>
+
+
+</head>
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">MyKo101</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">MyKo101</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>About</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#packages"><span>Packages</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#experience"><span>Experience</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#publications"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link js-theme-selector" data-toggle="dropdown" aria-haspopup="true">
+          <i class="fas fa-palette" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>The lapply() family</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+          Last updated on
+      
+    
+    Dec 6, 2020
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    11 min read
+  </span>
+  
+
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p><a href="https://www.reddit.com/r/rstats/comments/l0gvh3/good_site_to_understand_the_apply_collection_of/">This question on Reddit</a>, got me thinking about the <code>lapply()</code> family of functions, and how a beginner might want to learn about them. Here is my take</p>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The easiest one to understand is <code>lapply()</code>, I’ll work through that and then extend to the others. As an aside, the programmatic terminology is <em>vectorising</em> as it allows us to perform an action over an entire <em>vector</em> at once or <em>list</em> in R.</p>
+<p>Ignoring the dots, <code>lapply()</code> takes two arguments <code>X</code> and <code>FUN</code>. <code>FUN</code> is the name of the function, and <code>X</code> is a list of objects. When I say list, this could be an actual, as created by the <code>list()</code> function, or a vector such as <code>1:10</code>. But if you try to put something more complicated in like a <code>data.frame()</code>, you can get unexpected results (I’ll come back to this).</p>
+</div>
+<div id="lists" class="section level1">
+<h1>lists</h1>
+<p>So, let’s say we have</p>
+<pre class="r"><code>X &lt;- list(1:10,11:20,21:30)
+X</code></pre>
+<pre><code>## [[1]]
+##  [1]  1  2  3  4  5  6  7  8  9 10
+## 
+## [[2]]
+##  [1] 11 12 13 14 15 16 17 18 19 20
+## 
+## [[3]]
+##  [1] 21 22 23 24 25 26 27 28 29 30</code></pre>
+<p>This list has three elements, and each element consists of a vector of 10 numbers. We can access them using <code>[[</code>, where <code>X[[1]]</code> will return the first element, the numbers 1 to 10:</p>
+<pre class="r"><code>X[[1]]</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<p><code>X[[2]]</code> will return the second element, etc… This is <em>extraction</em> as it extracts an element from a list. Extraction can only bring out a single element. We can also <em>subset</em> using <code>[</code> for example</p>
+<pre class="r"><code>X[1:2]</code></pre>
+<pre><code>## [[1]]
+##  [1]  1  2  3  4  5  6  7  8  9 10
+## 
+## [[2]]
+##  [1] 11 12 13 14 15 16 17 18 19 20</code></pre>
+<p>This return the first and second elements. <code>X[1]</code> will return a subset consisting of the first element.</p>
+<pre class="r"><code>X[1]</code></pre>
+<pre><code>## [[1]]
+##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<p>What’s the difference between <code>X[1]</code> and <code>X[[1]]</code>? Well, <code>X[1]</code> returns a list, which is just 1 element long, that element being a vector of the numbers from 1 to 10. <code>X[[1]]</code> returns the actual element at position 1.</p>
+<pre class="r"><code>length(X[1])</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>length(X[[1]])</code></pre>
+<pre><code>## [1] 10</code></pre>
+<pre class="r"><code>class(X[1])</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>class(X[[1]])</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<p>So <code>X[1]</code> is a list, just like <code>X</code> but is shorter, a subset, just like how <code>X[1:2]</code> is a subset with length 2. Whereas <code>X[[1]]</code> <em>is</em> the first element of <code>X</code>. This is clearer if we try to add something to these two objects:</p>
+<pre class="r"><code>X[[1]] + 3</code></pre>
+<pre><code>##  [1]  4  5  6  7  8  9 10 11 12 13</code></pre>
+<pre class="r"><code>X[1] + 3</code></pre>
+<pre><code>## Error in X[1] + 3: non-numeric argument to binary operator</code></pre>
+<p>Again, to stress the point. <code>X[1]</code> is <em>not</em> a number, it is a list containing a single element. Since <code>X[1]</code> is a list, we can therefore <em>extract</em> that first element from it:</p>
+<pre class="r"><code>X[1][[1]]</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<p>The difference between a list and a vector is that a vector has to all be of the same type (e.g. all characters as in <code>c("a","b","c")</code> or all numbers as in <code>c(1,2,3)</code>, the <code>c()</code> function will <em>coerce</em> them otherwise, so <code>c(1,"2",3)</code> will coerce to characters. But a list can all be different, so <code>list("hello",2,1:10)</code> has three elements. In fact lists can contain lists (nested lists)</p>
+<pre class="r"><code>Y &lt;- list(&quot;hello&quot;,1:10,list(&quot;one&quot;,&quot;two&quot;,&quot;three&quot;))
+Y</code></pre>
+<pre><code>## [[1]]
+## [1] &quot;hello&quot;
+## 
+## [[2]]
+##  [1]  1  2  3  4  5  6  7  8  9 10
+## 
+## [[3]]
+## [[3]][[1]]
+## [1] &quot;one&quot;
+## 
+## [[3]][[2]]
+## [1] &quot;two&quot;
+## 
+## [[3]][[3]]
+## [1] &quot;three&quot;</code></pre>
+<p>has three elements. If you <em>extract</em> the third element,</p>
+<pre class="r"><code>Y[[3]]</code></pre>
+<pre><code>## [[1]]
+## [1] &quot;one&quot;
+## 
+## [[2]]
+## [1] &quot;two&quot;
+## 
+## [[3]]
+## [1] &quot;three&quot;</code></pre>
+<p>you get another list. If you <em>subset</em> the third element,</p>
+<pre class="r"><code>Y[3]</code></pre>
+<pre><code>## [[1]]
+## [[1]][[1]]
+## [1] &quot;one&quot;
+## 
+## [[1]][[2]]
+## [1] &quot;two&quot;
+## 
+## [[1]][[3]]
+## [1] &quot;three&quot;</code></pre>
+<p>you get a list with 1 element.</p>
+<p>As far as nomenclature is concerned, a <em>vector</em> is a type of <em>list</em> which has the requirement that all entries be of the same type. You can even use extraction on a vector,</p>
+<pre class="r"><code>x &lt;- 1:10
+x[3]</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>x[[3]]</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>Although when dealing with a vector, the second version is much less common. The reason this works is that <em>extraction</em> and <em>subsetting</em> are essentially the same thing in a vector (because it will always return a vector, it just might be of length 1).</p>
+</div>
+<div id="lapply" class="section level1">
+<h1>lapply()</h1>
+<p>So, now that we know what a list is, we can look at what <code>lapply()</code> does to that list. If we supply a function, <code>lapply()</code> will run that function on every element in that list. The simplest example would be, using <code>X</code> from above, <code>lapply(X,mean)</code> will return a list with the <code>mean()</code> of every element in <code>X</code>.</p>
+<pre class="r"><code>lapply(X,mean)</code></pre>
+<pre><code>## [[1]]
+## [1] 5.5
+## 
+## [[2]]
+## [1] 15.5
+## 
+## [[3]]
+## [1] 25.5</code></pre>
+<p>Remember that the elements in <code>X</code> are the vectors of numbers, <code>1:10</code>, <code>11:20</code> and <code>21:30</code>. We’ve <em>applied</em> the function to the <em>list</em> a <em>list-apply</em>.</p>
+<p>The function doesn’t have to be one that is named, and we can supply a function in-line</p>
+<pre class="r"><code>lapply(X, function(x) mean(x-5.5))</code></pre>
+<pre><code>## [[1]]
+## [1] 0
+## 
+## [[2]]
+## [1] 10
+## 
+## [[3]]
+## [1] 20</code></pre>
+<p>This applies the function <code>function(x) mean(x-5.5)</code> to every element in <code>X</code>. You could define this function outside of the <code>lapply()</code> function earlier, but there is no need if this is the only place we plan on using it.</p>
+<p>For future, when the <code>R 4.1</code> version is released, I believe this will be even easier with the shorthand <code>\()</code> syntax.</p>
+<pre><code>lapply(X, \(x) mean(x - 5.5))</code></pre>
+<p>So running <code>lapply(X,FUN)</code> is the same as running the following <code>for()</code> loop</p>
+<pre><code>output &lt;- vector(&quot;list&quot;,length(X))
+for(i in 1:length(X)){
+  output[[i]] &lt;- FUN(X[[i]])
+}</code></pre>
+<p>Compare the previous code to this:</p>
+<pre class="r"><code>output &lt;- vector(&quot;list&quot;,length(X))
+for(i in 1:length(X)){
+  output[[i]] &lt;- mean(X[[i]])
+}
+output</code></pre>
+<pre><code>## [[1]]
+## [1] 5.5
+## 
+## [[2]]
+## [1] 15.5
+## 
+## [[3]]
+## [1] 25.5</code></pre>
+<p>Notice that I’ve defined the <code>output &lt;- vector("list",length(X))</code> before running the <code>for()</code> loop. This line basically makes an empty list of the defined length. This will come up when we move on from <code>lapply()</code></p>
+</div>
+<div id="dots" class="section level1">
+<h1>dots</h1>
+<p>One part of <code>lapply()</code> that I’ve ignored is the <code>...</code> dots argument. These are basically other arguments that you want passed on to your function. Whatever is in the dots, will be passed to every call to <code>FUN</code>, whether named or not:</p>
+<pre class="r"><code>lapply(c(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;),paste,&quot;2&quot;)</code></pre>
+<pre><code>## [[1]]
+## [1] &quot;a 2&quot;
+## 
+## [[2]]
+## [1] &quot;b 2&quot;
+## 
+## [[3]]
+## [1] &quot;c 2&quot;</code></pre>
+<pre class="r"><code>lapply(list( 1:10, c(1,2,NA,4), 21:30), mean, na.rm=T)</code></pre>
+<pre><code>## [[1]]
+## [1] 5.5
+## 
+## [[2]]
+## [1] 2.333333
+## 
+## [[3]]
+## [1] 25.5</code></pre>
+<p>Essentially, this runs the following loop:</p>
+<pre class="r"><code>X &lt;- list( 1:10, c(1,2,NA,4), 21:30)
+output &lt;- vector(&quot;list&quot;,3)
+for(i in 1:3){
+  output[[i]] &lt;- mean(X[[i]],na.rm=T)
+}
+output</code></pre>
+<pre><code>## [[1]]
+## [1] 5.5
+## 
+## [[2]]
+## [1] 2.333333
+## 
+## [[3]]
+## [1] 25.5</code></pre>
+<p>Hopefully that will be enough to understand <code>lapply()</code>. One unusual case is using <code>lapply()</code> on a <code>data.frame</code>-like structure. Now, a <code>data.frame</code> looks like a table, but it’s actually a list, but the list is counter intuitive. Each element of the list is a <em>column</em> in the <code>data.frame</code>. So, if you run the following, you would get a result that is only 4 elements long</p>
+<pre class="r"><code>iris0 &lt;- iris[,1:4]
+lapply(iris0,mean)</code></pre>
+<pre><code>## $Sepal.Length
+## [1] 5.843333
+## 
+## $Sepal.Width
+## [1] 3.057333
+## 
+## $Petal.Length
+## [1] 3.758
+## 
+## $Petal.Width
+## [1] 1.199333</code></pre>
+<p>You might think that this would work <em>across</em> the rows of the <code>data.frame</code>, but it works <em>down</em> the columns. Also note that these outputs are now also named the same as the input list. This can be useful for keeping track of your inputs and outputs.</p>
+</div>
+<div id="apply" class="section level1">
+<h1>apply()</h1>
+<p>This brings us only <code>apply()</code>.</p>
+<p>The <code>apply()</code> function does a similar job, however it doesn’t work on lists, it works on multi-dimensional objects, so matrices and arrays. It tries to collapse a multi-dimensional object down by one (or more) of its dimensions. So it turns a matrix into a vector (or an array into a smaller array). As well as <code>X</code> (which must be multi-dimensional, so definitely <em>not</em> a list) and <code>FUN</code>, it also takes <code>MARGIN</code> which tells <code>apply()</code> which dimension(s) to collapse:</p>
+<pre class="r"><code>M &lt;- matrix(1:9,nrow=3)
+apply(M,1,mean) #takes the mean of each row</code></pre>
+<pre><code>## [1] 4 5 6</code></pre>
+<pre class="r"><code>apply(M,2,mean) #takes the mean of each column</code></pre>
+<pre><code>## [1] 2 5 8</code></pre>
+<p>The type returned is the same as the type we started with, and once again <code>apply()</code> can take other arguments as dots. So this works quite well with character matrices:
+{</p>
+<pre class="r"><code>M &lt;- matrix(letters[1:9],nrow=3)
+apply(M,1,paste0,collapse=&quot;&quot;) #pastes across the rows</code></pre>
+<pre><code>## [1] &quot;adg&quot; &quot;beh&quot; &quot;cfi&quot;</code></pre>
+<pre class="r"><code>apply(M,2,paste0,collapse=&quot;&quot;) #pastes down the columns</code></pre>
+<pre><code>## [1] &quot;abc&quot; &quot;def&quot; &quot;ghi&quot;</code></pre>
+<p>This means we can use <code>apply()</code> on a <code>data.frame</code> to work across the rows, rather than down the columns. In this case, ever though a <code>data.frame</code> is a list, because it can be accessed in the same way as a matrix, it still works</p>
+<pre class="r"><code>apply(iris0,1,mean)</code></pre>
+<pre><code>##   [1] 2.550 2.375 2.350 2.350 2.550 2.850 2.425 2.525 2.225 2.400 2.700 2.500
+##  [13] 2.325 2.125 2.800 3.000 2.750 2.575 2.875 2.675 2.675 2.675 2.350 2.650
+##  [25] 2.575 2.450 2.600 2.600 2.550 2.425 2.425 2.675 2.725 2.825 2.425 2.400
+##  [37] 2.625 2.500 2.225 2.550 2.525 2.100 2.275 2.675 2.800 2.375 2.675 2.350
+##  [49] 2.675 2.475 4.075 3.900 4.100 3.275 3.850 3.575 3.975 2.900 3.850 3.300
+##  [61] 2.875 3.650 3.300 3.775 3.350 3.900 3.650 3.400 3.600 3.275 3.925 3.550
+##  [73] 3.800 3.700 3.725 3.850 3.950 4.100 3.725 3.200 3.200 3.150 3.400 3.850
+##  [85] 3.600 3.875 4.000 3.575 3.500 3.325 3.425 3.775 3.400 2.900 3.450 3.525
+##  [97] 3.525 3.675 2.925 3.475 4.525 3.875 4.525 4.150 4.375 4.825 3.400 4.575
+## [109] 4.200 4.850 4.200 4.075 4.350 3.800 4.025 4.300 4.200 5.100 4.875 3.675
+## [121] 4.525 3.825 4.800 3.925 4.450 4.550 3.900 3.950 4.225 4.400 4.550 5.025
+## [133] 4.250 3.925 3.925 4.775 4.425 4.200 3.900 4.375 4.450 4.350 3.875 4.550
+## [145] 4.550 4.300 3.925 4.175 4.325 3.950</code></pre>
+<p>now gives a vector of the averages of each row.</p>
+</div>
+<div id="rest-of-the-family" class="section level1">
+<h1>Rest of the family</h1>
+<p>Now for <code>lapply()</code>’s sisters:</p>
+<p><code>vapply()</code> takes an extra argument, which is of the same type as what you want your outcome to be. This is the one that I use most often. You can think of it like a <code>lapply()</code> that will output something other than a list. I usually give <code>FUN.VALUE</code> as something like <code>integer(1)</code> or <code>character(1)</code>. These functions generate empty vectors of that type, they are wrappers around things like <code>vector("integer",1)</code></p>
+<pre class="r"><code>X &lt;- list(1:10,11:20,21:30)
+vapply(X,mean,numeric(1))</code></pre>
+<pre><code>## [1]  5.5 15.5 25.5</code></pre>
+<p>This time, we get a numeric vector, rather than a list like we would with <code>lapply()</code>. I find this much easier to ensure I’m working with the correct type of data.</p>
+<p><code>sapply()</code> tries to simplify your output, So if <code>lapply()</code> outputs a list of vectors that are all the same length, instead of a list, it’ll return a matrix</p>
+<pre class="r"><code>X &lt;- list(1:5, 6:10, 11:15)
+sapply(X,range)</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    6   11
+## [2,]    5   10   15</code></pre>
+<p>Each column in this result is the same as one of the elements of the list <code>lapply(X,range)</code>. They’ve just been <code>cbind</code>’d together. The use of <code>sapply()</code> is <em>not</em> common as the output can be inconsistent. `<code>vapply()</code> is much prefered as it gives more control over the output. The above can be replicated with <code>vapply()</code> and will throw an error if the output is unexpected:</p>
+<pre class="r"><code>X &lt;- list(1:5, 6:10, 11:15)
+vapply(X,range,numeric(2))</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    6   11
+## [2,]    5   10   15</code></pre>
+<p><code>tapply()</code> is more complicated as it subsets the <code>X</code> based on the <code>INDEX</code>. It describes this as a <em>“Ragged Array”</em>. I have <em>never</em> used this directly, as I will usually do the subsetting manually using <code>split()</code>, but that is essentialy what <code>tapply()</code> does behind the scenes. <code>tapply()</code> also comes with a <code>simplify</code> argument, which decides whether R will try and simplify the results, like in <code>sapply()</code> or not, by default it will try and invoke this simplification. The following are therefore (roughly) equivalent</p>
+<pre><code>tapply(X, INDEX, FUN, simplify=FALSE)
+
+lapply(split(X,INDEX), FUN)</code></pre>
+<p><code>split()</code> creates a list where the first vector is split into groups based on the second argument.</p>
+<p>So we can compare using both a <code>lapply()</code> and a <code>vapply()</code></p>
+<pre class="r"><code>x &lt;- 1:10
+grp &lt;- c(1,1,1,2,2,3,3,3,4,5)
+tapply(x,grp,sum,simplify=FALSE)</code></pre>
+<pre><code>## $`1`
+## [1] 6
+## 
+## $`2`
+## [1] 9
+## 
+## $`3`
+## [1] 21
+## 
+## $`4`
+## [1] 9
+## 
+## $`5`
+## [1] 10</code></pre>
+<pre class="r"><code>lapply(split(x,grp),sum)</code></pre>
+<pre><code>## $`1`
+## [1] 6
+## 
+## $`2`
+## [1] 9
+## 
+## $`3`
+## [1] 21
+## 
+## $`4`
+## [1] 9
+## 
+## $`5`
+## [1] 10</code></pre>
+<pre class="r"><code>tapply(x,grp,sum)</code></pre>
+<pre><code>##  1  2  3  4  5 
+##  6  9 21  9 10</code></pre>
+<pre class="r"><code>vapply(split(x,grp),sum,numeric(1))</code></pre>
+<pre><code>##  1  2  3  4  5 
+##  6  9 21  9 10</code></pre>
+<p>The other member of the <code>lapply()</code> family is <code>mapply()</code>. This is even more powerful as it allows you to <em>vectorise</em> over multiple arguments, rather than just the first. Syntactically, the difference here is that the dots are the vectorised arguments, and the non-vectorised arguments go into the <code>MoreArgs</code> argument.</p>
+<pre class="r"><code>X &lt;- list(&quot;one&quot;,&quot;two&quot;,c(&quot;three&quot;, &quot;four&quot;))
+Y &lt;- list(&quot;A&quot;,&quot;B&quot;,c(&quot;C&quot;,&quot;D&quot;))
+mapply(paste,X,Y)</code></pre>
+<pre><code>## [[1]]
+## [1] &quot;one A&quot;
+## 
+## [[2]]
+## [1] &quot;two B&quot;
+## 
+## [[3]]
+## [1] &quot;three C&quot; &quot;four D&quot;</code></pre>
+<p>This is the same as doing:</p>
+<pre class="r"><code>list(
+  paste(X[[1]],Y[[1]]),
+  paste(X[[2]],Y[[2]]),
+  paste(X[[3]],Y[[3]])
+)</code></pre>
+<pre><code>## [[1]]
+## [1] &quot;one A&quot;
+## 
+## [[2]]
+## [1] &quot;two B&quot;
+## 
+## [[3]]
+## [1] &quot;three C&quot; &quot;four D&quot;</code></pre>
+<p>Here is one final example using <code>rep()</code>, which repeats the first argument a specific number of times</p>
+<pre class="r"><code>  X &lt;- letters[1:4]
+  Y &lt;- 1:4
+  mapply(rep,X,Y)</code></pre>
+<pre><code>## $a
+## [1] &quot;a&quot;
+## 
+## $b
+## [1] &quot;b&quot; &quot;b&quot;
+## 
+## $c
+## [1] &quot;c&quot; &quot;c&quot; &quot;c&quot;
+## 
+## $d
+## [1] &quot;d&quot; &quot;d&quot; &quot;d&quot; &quot;d&quot;</code></pre>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=http://michaelbarrowman.co.ukhttps://michaelbarrowman.co.uk/post/the-lapply-family/&amp;text=The%20lapply%28%29%20family" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=http://michaelbarrowman.co.ukhttps://michaelbarrowman.co.uk/post/the-lapply-family/&amp;t=The%20lapply%28%29%20family" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=The%20lapply%28%29%20family&amp;body=http://michaelbarrowman.co.ukhttps://michaelbarrowman.co.uk/post/the-lapply-family/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=http://michaelbarrowman.co.ukhttps://michaelbarrowman.co.uk/post/the-lapply-family/&amp;title=The%20lapply%28%29%20family" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=The%20lapply%28%29%20family%20http://michaelbarrowman.co.ukhttps://michaelbarrowman.co.uk/post/the-lapply-family/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=http://michaelbarrowman.co.ukhttps://michaelbarrowman.co.uk/post/the-lapply-family/&amp;title=The%20lapply%28%29%20family" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://reddit.com/submit?url=http://michaelbarrowman.co.ukhttps://michaelbarrowman.co.uk/post/the-lapply-family/&amp;title=The%20lapply%28%29%20family" target="_blank" rel="noopener" class="share-btn-reddit">
+          <i class="fab fa-reddit-alien"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+    
+    
+    
+      
+    
+    
+    
+    <div class="media author-card content-widget-hr">
+      
+        
+        <img class="avatar mr-3 avatar-circle" src="/author/michael-barrowman/avatar_hu553692e3597e7780b5607087397fd7cb_66221_270x270_fill_q90_lanczos_center.jpg" alt="Michael Barrowman">
+      
+
+      <div class="media-body">
+        <h5 class="card-title"><a href="https://michaelbarrowman.co.uk/">Michael Barrowman</a></h5>
+        <h6 class="card-subtitle">Data Scientist</h6>
+        <p class="card-text">I am a Data Scientist, PhD candidate and Educator.</p>
+        <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/MyKo101ab" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/MyKo101" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.reddit.com/user/MyKo101" target="_blank" rel="noopener">
+        <i class="fab fa-reddit"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/michael-barrowman-0403a960/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.co.uk/citations?user=kxxeD1kAAAAJ" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://orcid.org/0000-0003-0718-4482" target="_blank" rel="noopener">
+        <i class="ai ai-orcid"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://michaelbarrowman.co.uk/cv/Michael%20Barrowman.pdf" target="_blank" rel="noopener">
+        <i class="far fa-file-alt"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:myko101ab@gmail.com" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="tel:&#43;447467456803" >
+        <i class="fas fa-phone-alt"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.google.com/maps/place/Newton-le-Willows/@53.4584287,-2.6730042" target="_blank" rel="noopener">
+        <i class="fas fa-map-marker-alt"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://ko-fi.com/myko101" target="_blank" rel="noopener">
+        <i class="fas fa-coffee"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://paypal.me/myko101ab" target="_blank" rel="noopener">
+        <i class="fab fa-paypal"></i>
+      </a>
+    </li>
+  
+</ul>
+
+      </div>
+    </div>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+    
+    <script>const isSiteThemeDark = false;</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"No results found","placeholder":"Search...","results":"results found"};
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks",
+        'slides' : "Slides"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="/js/academic.min.66c553246b0f279a03be6e5597f72b52.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    Michael Barrowman © 2021
+  </p>
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" class="back-to-top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

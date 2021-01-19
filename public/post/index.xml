@@ -13,211 +13,15 @@
     </image>
     
     <item>
-      <title>The New Base Pipe</title>
-      <link>https://michaelbarrowman.co.uk/post/the-new-base-pipe/</link>
+      <title>The lapply() family</title>
+      <link>https://michaelbarrowman.co.uk/post/the-lapply-family/</link>
       <pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate>
-      <guid>https://michaelbarrowman.co.uk/post/the-new-base-pipe/</guid>
-      <description>
-&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/anchor-sections/anchor-sections.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/anchor-sections/anchor-sections.js&#34;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;Here, we’re going to take a quick look at the new pipe introduced in the development version of &lt;a href=&#34;https://cran.r-project.org/bin/windows/base/rdevel.html&#34;&gt;R 4.1.0&lt;/a&gt;, and compare it to the well-known &lt;code&gt;%&amp;gt;%&lt;/code&gt; pipe from the &lt;code&gt;{magrittr}&lt;/code&gt; package that is used throughout the &lt;code&gt;{tidyverse}&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;There was a recent update to &lt;code&gt;{magrittr}&lt;/code&gt; which switched to implementing the bulk of the piping in the C language rather than directly in R. Because of this, as well as showing some features of the new base pipe, &lt;code&gt;|&amp;gt;&lt;/code&gt;, I’m going to compare it to both the new &lt;code&gt;{magrittr}&lt;/code&gt; pipe, &lt;code&gt;%&amp;gt;%&lt;/code&gt; and the old version, which I am going to style as &lt;code&gt;%&amp;gt;&amp;gt;%&lt;/code&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;install.packages(&amp;quot;magrittr&amp;quot;)
-remotes::install_github(&amp;quot;Myko101/magrittrclassic&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;If you want to install the classic &lt;code&gt;{magrittr}&lt;/code&gt; without this updated &lt;code&gt;%&amp;gt;&amp;gt;%&lt;/code&gt; pipe then run &lt;code&gt;remotes::install_github(&#34;Myko101/magrittrclassic@classic&#34;)&lt;/code&gt; to have it loaded as a package called &lt;code&gt;{magrittrclassic}&lt;/code&gt; or &lt;code&gt;remotes::install_github(&#34;tidyverse/magrittr@v1.5)&lt;/code&gt; to have it overwrite your current &lt;code&gt;{magrittr}&lt;/code&gt; package. Note that this is prone to errors, particularly if &lt;code&gt;{magrittr}&lt;/code&gt; or any packages that depend on it are loaded.&lt;/p&gt;
-&lt;p&gt;The first thing to inspect is the &lt;em&gt;speed&lt;/em&gt; of this new pipe in a simple situation. Let’s create a simple function and see how it goes in the &lt;code&gt;bench::mark()&lt;/code&gt; function&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;doubler &amp;lt;- function(val) 2*val
-x &amp;lt;- 1:10
-bm &amp;lt;- bench::mark(
-  standard = doubler(x),
-  magrittrclassic = x %&amp;gt;&amp;gt;% doubler(),
-  magrittr = x %&amp;gt;% doubler(),
-  base = x |&amp;gt; doubler()
-)
-ggplot2::autoplot(bm)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/benchsimple-1.png&#34; width=&#34;672&#34; /&gt;
-Note that the `bench::mark()`` function by default also checks whether the results we get are the same.&lt;/p&gt;
-&lt;p&gt;The first thing that jumps out is just how &lt;em&gt;slow&lt;/em&gt; the old &lt;code&gt;{magrittr}&lt;/code&gt; implementation is and how fast the base/standard versions are. The time scale on the plot is logarithmic, which shows that the old &lt;code&gt;{magrittr}&lt;/code&gt; function is almost 2 orders of magnitude slower (800ns vs 72.5 us), that’s nearly 100x slower!&lt;/p&gt;
-&lt;p&gt;Why is this? Firstly, the old &lt;code&gt;{magrittr}&lt;/code&gt; pipe builds functions in R and then applies them to data turn by turn. However, the new &lt;code&gt;{magrittr}&lt;/code&gt; pipe does all this in C. How is the base version so much faster? Well it is a syntax rather than an infix operator or a call.&lt;/p&gt;
-&lt;p&gt;This means that &lt;code&gt;x %&amp;gt;% f()&lt;/code&gt; builds functions and performs actions to produce output which is identical to &lt;code&gt;f(x)&lt;/code&gt;. However, &lt;code&gt;x |&amp;gt; f()&lt;/code&gt; &lt;em&gt;is&lt;/em&gt; the same as &lt;code&gt;f(x)&lt;/code&gt;, it’s just a different way of writing it. Think of using a single quote, &lt;code&gt;&#39;&lt;/code&gt; or a double quote &lt;code&gt;&#34;&lt;/code&gt; to create a string, the command you’re giving to R is different, but the result is parsed identically before any actual R code is ran. Similarly, when you run &lt;code&gt;2 + 3 + 4&lt;/code&gt;, R will parse that as &lt;code&gt;( (2+3) + 4 )&lt;/code&gt;because the addition operator can only run on two objects so R has to divvy them up appropriately (left to right).&lt;/p&gt;
-&lt;p&gt;This can be evidenced by capturing the calls using the &lt;code&gt;rlang::exprs()&lt;/code&gt; function&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rlang::exprs(
-  standard = doubler(x),
-  magrittrclassic = x %&amp;gt;&amp;gt;% doubler(),
-  magrittr = x %&amp;gt;% doubler(),
-  base = x |&amp;gt; doubler()
-)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## $standard
-## doubler(x)
-## 
-## $magrittrclassic
-## x %&amp;gt;&amp;gt;% doubler()
-## 
-## $magrittr
-## x %&amp;gt;% doubler()
-## 
-## $base
-## doubler(x)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;See the last one there? &lt;code&gt;x |&amp;gt; doubler()&lt;/code&gt; is &lt;em&gt;exactly&lt;/em&gt; &lt;code&gt;doubler(x)&lt;/code&gt;. There’s no transforming in R here, it just &lt;em&gt;is&lt;/em&gt; the same thing.&lt;/p&gt;
-&lt;p&gt;This functionality is added to by the introduction of a new lambda function creation shortcut, let’s compare it to the &lt;code&gt;{magrittr}&lt;/code&gt; implementation(s) of anonymous functions, using the dot notation:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;bm2 &amp;lt;- bench::mark(
-  standard = (function(y) 2*y)(x),
-  magrittrclassic = x %&amp;gt;&amp;gt;% {2*.},
-  magrittr = x %&amp;gt;% {2*.},
-  base = x |&amp;gt; \(y) 2*y
-)
-ggplot2::autoplot(bm2)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/anon-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Timings are very similar to the previous one, especially when only looking relatively. The slow down is probably due to the creation of a function in each use, which also explains why they are all around the same amount slower. What do these piped lambda functions look like?&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rlang::exprs(
-  standard = (function(y) 2*y)(x),
-  magrittrclassic = x %&amp;gt;&amp;gt;% {2*.},
-  magrittr = x %&amp;gt;% {2*.},
-  base = x |&amp;gt; \(y) 2*y
-)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## $standard
-## (function(y) 2 * y)(x)
-## 
-## $magrittrclassic
-## x %&amp;gt;&amp;gt;% {
-##     2 * .
-## }
-## 
-## $magrittr
-## x %&amp;gt;% {
-##     2 * .
-## }
-## 
-## $base
-## (function(y) 2 * y)(x)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Again the standard and base versions are parsed the same.&lt;/p&gt;
-&lt;p&gt;One final critic of the new pipe is that you can only pass an object to the &lt;em&gt;first&lt;/em&gt; argument in a function. This is a limitation in a lot of cases, particularly because most &lt;code&gt;{base}&lt;/code&gt; functions don’t follow the convention of passing the current data as the first argument. In &lt;code&gt;{magrittr}&lt;/code&gt;, we can use a &lt;code&gt;.&lt;/code&gt; to represent the piped data for other arguments, and if it appears at the top level (i.e. a direct argument) &lt;code&gt;{magrittr}&lt;/code&gt; won’t also ut it i as the first argument. But using the lambda &lt;code&gt;\()&lt;/code&gt; syntax, we can get around this. We can also pass named arguments in the same way we usually would when calling a function. Let’s try it and time it&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;multiplier &amp;lt;- function(a,val) a*val
-bm3 &amp;lt;- bench::mark(
-  standard = multiplier(2,x),
-  magrittrclassic = x %&amp;gt;&amp;gt;% multiplier(2,.),
-  magrittr = x %&amp;gt;% multiplier(2,.),
-  base_named = x |&amp;gt; multiplier(a=2),
-  base_lambda = x |&amp;gt; \(y) multiplier(2,y)
-)
-ggplot2::autoplot(bm3)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/multiargs-1.png&#34; width=&#34;672&#34; /&gt;
-Clearly, the lambda version of the base packages takes more time, again because it is creating the function in the middle, whereas the named version does not have to do this. Let’s capture them to check that this is true&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rlang::exprs(
-  standard = multiplier(2,x),
-  magrittrclassic = x %&amp;gt;&amp;gt;% multiplier(2,.),
-  magrittr = x %&amp;gt;% multiplier(2,.),
-  base_lambda = x |&amp;gt; \(y) multiplier(2,y),
-  base_named = x |&amp;gt; multiplier(a=2)
-)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## $standard
-## multiplier(2, x)
-## 
-## $magrittrclassic
-## x %&amp;gt;&amp;gt;% multiplier(2, .)
-## 
-## $magrittr
-## x %&amp;gt;% multiplier(2, .)
-## 
-## $base_lambda
-## (function(y) multiplier(2, y))(x)
-## 
-## $base_named
-## multiplier(x, a = 2)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;One final thing to look at is the lambda function part of this whole process. While the &lt;code&gt;{tidyverse}&lt;/code&gt; doesn’t provide a general shortcut to produce these, they can be created within other functions. For example, the above syntax &lt;code&gt;{2*.}&lt;/code&gt; only works within the context of a pipe and wouldn’t work as a piece of code on it’s own.&lt;/p&gt;
-&lt;p&gt;The other major way in which lambda functions are declared is through the &lt;code&gt;{purrr}&lt;/code&gt; package. The &lt;code&gt;{purrr}&lt;/code&gt; package provides methods of functional programming (to an extent), and so within a &lt;code&gt;{purrr}&lt;/code&gt; function, we can define a function using the &lt;code&gt;~&lt;/code&gt; symbol and, like the previous &lt;code&gt;{tidyverse}&lt;/code&gt; lambda, using the &lt;code&gt;.&lt;/code&gt; as the value being passed to the function. Let’s compare it to the &lt;code&gt;\()&lt;/code&gt; syntax, remember, this is again a syntax and not a function/call!&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(purrr,warn.conflicts=F)
-bm4 &amp;lt;- bench::mark(
-  standard = {
-    res &amp;lt;- vector(&amp;quot;list&amp;quot;,10)
-    for(i in 1:10) res[[i]] &amp;lt;- mean(1:i)
-    res
-  },
-  purrr = map(1:10,~mean(1:.)),
-  base = lapply(1:10,\(i) mean(1:i))
-)
-ggplot2::autoplot(bm4)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/lambda-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Again due to the lack of overheads for the &lt;code&gt;\()&lt;/code&gt; syntax, speed is definitely on it’s side. We could just as easily use the &lt;code&gt;lapply()&lt;/code&gt; function here and declare the &lt;code&gt;FUN&lt;/code&gt; argument using &lt;code&gt;function(i) mean(1:i)&lt;/code&gt;, but writing &lt;code&gt;\()&lt;/code&gt; is much quicker/easier.&lt;/p&gt;
-&lt;p&gt;One last thing to inspect is how these functions handle errors.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;throw_error &amp;lt;- function(x){
-  stop(&amp;quot;OH NO!&amp;quot;)
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Previously, the trace stack for &lt;code&gt;{magrittr}&lt;/code&gt; was confusing and made it incredibly difficult to spot where the error came from. Let’s see how&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 %&amp;gt;&amp;gt;%
-  throw_error()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Error in throw_error(.): OH NO!&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;traceback()
-# 10: stop(&amp;quot;Why am I here?&amp;quot;) at #2
-#  9: throw_error(.)
-#  8: function_list[[k]](value)
-#  7: withVisible(function_list[[k]](value))
-#  6: freduce(value, `_function_list`)
-#  5: `_fseq`(`_lhs`)
-#  4: eval(quote(`_fseq`(`_lhs`)), env, env)
-#  3: eval(quote(`_fseq`(`_lhs`)), env, env)
-#  2: withVisible(eval(quote(`_fseq`(`_lhs`)), env, env))
-#  1: 1:10 %&amp;gt;&amp;gt;% throw_error()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Because of the structure of the old &lt;code&gt;{magrittr}&lt;/code&gt;, numbers 2 - 8 are functions that are called internally within the pipe and so as end-users, they mean nothing!&lt;/p&gt;
-&lt;p&gt;However, the new error handling, makes this much clearer without all the clutter:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 %&amp;gt;%
-  throw_error()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Error in throw_error(.): OH NO!&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;traceback()
-# 3: stop(&amp;quot;Why am I here?&amp;quot;) at #2
-# 2: throw_error(.)
-# 1: 1:10 %&amp;gt;% throw_error()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Now let’s compare to the base pipe:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 |&amp;gt;
-  throw_error()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Error in throw_error(1:10): OH NO!&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;traceback()
-# 2: stop(&amp;quot;Why am I here?&amp;quot;) at #2
-# 1: throw_error(1:10)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The trace is even shorter. This is because in the &lt;code&gt;{magrittr}&lt;/code&gt; pipe, the actual pipe is considered to be a call, and so it appears first in the trace stack (bottom of the list), BUT the base pipe is not a call, and so it doesn’t appear there at all. Just like when capturing the expression, the values are already nested.&lt;/p&gt;
-&lt;p&gt;Unlike errors though, warnings can be suppressed and code can continue, this means we can use the &lt;code&gt;suppressWarnings()&lt;/code&gt; function to keep them quiet and just carry on. This is useful if you know about the warning beforehand, but is only recomended if you know &lt;em&gt;exactly&lt;/em&gt; why the warning is appearing and just want your code to ignore it and run smoothly.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;throw_warning &amp;lt;- function(x) {
-  warning(&amp;quot;oh no&amp;quot;)
-  x
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This warning handling was one of the complaints about the old &lt;code&gt;{magrittr}&lt;/code&gt; pipe,take the below which is instinctively what you would expect to do&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 %&amp;gt;&amp;gt;%
-  throw_warning() %&amp;gt;&amp;gt;%
-  suppressWarnings()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Warning in throw_warning(.): oh no&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;It doesn’t work, instead you’d have to run&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;suppressWarnings(
-  1:10 %&amp;gt;&amp;gt;%
-    throw_warning()
-)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Which does not look pleasant and means going back to the beginning of your pipeline if you get to the point of wanting to suppress warnings.&lt;/p&gt;
-&lt;p&gt;The new &lt;code&gt;{magrittr}&lt;/code&gt; pipe and the &lt;code&gt;{base}&lt;/code&gt; pipe don’t have such qualms and they are evaluated exactly as you would expect them to:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 %&amp;gt;%
-  throw_warning() %&amp;gt;%
-  suppressWarnings()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 |&amp;gt;
-  throw_warning() |&amp;gt;
-  suppressWarnings()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>The New Base Pipe</title>
-      <link>https://michaelbarrowman.co.uk/post/the-new-base-pipe/</link>
-      <pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate>
-      <guid>https://michaelbarrowman.co.uk/post/the-new-base-pipe/</guid>
+      <guid>https://michaelbarrowman.co.uk/post/the-lapply-family/</guid>
       <description>
 &lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
-&lt;p&gt;This question on Reddit, got me thinking about the &lt;code&gt;lapply()&lt;/code&gt; family of functions, and how a beginner might want to learn about them. Here is my take&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.reddit.com/r/rstats/comments/l0gvh3/good_site_to_understand_the_apply_collection_of/&#34;&gt;This question on Reddit&lt;/a&gt;, got me thinking about the &lt;code&gt;lapply()&lt;/code&gt; family of functions, and how a beginner might want to learn about them. Here is my take&lt;/p&gt;
 &lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Introduction&lt;/h1&gt;
 &lt;p&gt;The easiest one to understand is &lt;code&gt;lapply()&lt;/code&gt;, I’ll work through that and then extend to the others. As an aside, the programmatic terminology is &lt;em&gt;vectorising&lt;/em&gt; as it allows us to perform an action over an entire &lt;em&gt;vector&lt;/em&gt; at once or &lt;em&gt;list&lt;/em&gt; in R.&lt;/p&gt;
@@ -259,6 +63,14 @@ X&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] &amp;quot;list&amp;quot;&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;class(X[[1]])&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] &amp;quot;integer&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So &lt;code&gt;X[1]&lt;/code&gt; is a list, just like &lt;code&gt;X&lt;/code&gt; but is shorter, a subset, just like how &lt;code&gt;X[1:2]&lt;/code&gt; is a subset with length 2. Whereas &lt;code&gt;X[[1]]&lt;/code&gt; &lt;em&gt;is&lt;/em&gt; the first element of &lt;code&gt;X&lt;/code&gt;. This is clearer if we try to add something to these two objects:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X[[1]] + 3&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1]  4  5  6  7  8  9 10 11 12 13&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X[1] + 3&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Error in X[1] + 3: non-numeric argument to binary operator&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Again, to stress the point. &lt;code&gt;X[1]&lt;/code&gt; is &lt;em&gt;not&lt;/em&gt; a number, it is a list containing a single element. Since &lt;code&gt;X[1]&lt;/code&gt; is a list, we can therefore &lt;em&gt;extract&lt;/em&gt; that first element from it:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X[1][[1]]&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The difference between a list and a vector is that a vector has to all be of the same type (e.g. all characters as in &lt;code&gt;c(&#34;a&#34;,&#34;b&#34;,&#34;c&#34;)&lt;/code&gt; or all numbers as in &lt;code&gt;c(1,2,3)&lt;/code&gt;, the &lt;code&gt;c()&lt;/code&gt; function will &lt;em&gt;coerce&lt;/em&gt; them otherwise, so &lt;code&gt;c(1,&#34;2&#34;,3)&lt;/code&gt; will coerce to characters. But a list can all be different, so &lt;code&gt;list(&#34;hello&#34;,2,1:10)&lt;/code&gt; has three elements. In fact lists can contain lists (nested lists)&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Y &amp;lt;- list(&amp;quot;hello&amp;quot;,1:10,list(&amp;quot;one&amp;quot;,&amp;quot;two&amp;quot;,&amp;quot;three&amp;quot;))
 Y&lt;/code&gt;&lt;/pre&gt;
@@ -545,6 +357,202 @@ mapply(paste,X,Y)&lt;/code&gt;&lt;/pre&gt;
 ## $d
 ## [1] &amp;quot;d&amp;quot; &amp;quot;d&amp;quot; &amp;quot;d&amp;quot; &amp;quot;d&amp;quot;&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>The New Base Pipe</title>
+      <link>https://michaelbarrowman.co.uk/post/the-new-base-pipe/</link>
+      <pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>https://michaelbarrowman.co.uk/post/the-new-base-pipe/</guid>
+      <description>
+&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/anchor-sections/anchor-sections.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/anchor-sections/anchor-sections.js&#34;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;Here, we’re going to take a quick look at the new pipe introduced in the development version of &lt;a href=&#34;https://cran.r-project.org/bin/windows/base/rdevel.html&#34;&gt;R 4.1.0&lt;/a&gt;, and compare it to the well-known &lt;code&gt;%&amp;gt;%&lt;/code&gt; pipe from the &lt;code&gt;{magrittr}&lt;/code&gt; package that is used throughout the &lt;code&gt;{tidyverse}&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;There was a recent update to &lt;code&gt;{magrittr}&lt;/code&gt; which switched to implementing the bulk of the piping in the C language rather than directly in R. Because of this, as well as showing some features of the new base pipe, &lt;code&gt;|&amp;gt;&lt;/code&gt;, I’m going to compare it to both the new &lt;code&gt;{magrittr}&lt;/code&gt; pipe, &lt;code&gt;%&amp;gt;%&lt;/code&gt; and the old version, which I am going to style as &lt;code&gt;%&amp;gt;&amp;gt;%&lt;/code&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;install.packages(&amp;quot;magrittr&amp;quot;)
+remotes::install_github(&amp;quot;Myko101/magrittrclassic&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you want to install the classic &lt;code&gt;{magrittr}&lt;/code&gt; without this updated &lt;code&gt;%&amp;gt;&amp;gt;%&lt;/code&gt; pipe then run &lt;code&gt;remotes::install_github(&#34;Myko101/magrittrclassic@classic&#34;)&lt;/code&gt; to have it loaded as a package called &lt;code&gt;{magrittrclassic}&lt;/code&gt; or &lt;code&gt;remotes::install_github(&#34;tidyverse/magrittr@v1.5)&lt;/code&gt; to have it overwrite your current &lt;code&gt;{magrittr}&lt;/code&gt; package. Note that this is prone to errors, particularly if &lt;code&gt;{magrittr}&lt;/code&gt; or any packages that depend on it are loaded.&lt;/p&gt;
+&lt;p&gt;The first thing to inspect is the &lt;em&gt;speed&lt;/em&gt; of this new pipe in a simple situation. Let’s create a simple function and see how it goes in the &lt;code&gt;bench::mark()&lt;/code&gt; function&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;doubler &amp;lt;- function(val) 2*val
+x &amp;lt;- 1:10
+bm &amp;lt;- bench::mark(
+  standard = doubler(x),
+  magrittrclassic = x %&amp;gt;&amp;gt;% doubler(),
+  magrittr = x %&amp;gt;% doubler(),
+  base = x |&amp;gt; doubler()
+)
+ggplot2::autoplot(bm)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/benchsimple-1.png&#34; width=&#34;672&#34; /&gt;
+Note that the `bench::mark()`` function by default also checks whether the results we get are the same.&lt;/p&gt;
+&lt;p&gt;The first thing that jumps out is just how &lt;em&gt;slow&lt;/em&gt; the old &lt;code&gt;{magrittr}&lt;/code&gt; implementation is and how fast the base/standard versions are. The time scale on the plot is logarithmic, which shows that the old &lt;code&gt;{magrittr}&lt;/code&gt; function is almost 2 orders of magnitude slower (800ns vs 72.5 us), that’s nearly 100x slower!&lt;/p&gt;
+&lt;p&gt;Why is this? Firstly, the old &lt;code&gt;{magrittr}&lt;/code&gt; pipe builds functions in R and then applies them to data turn by turn. However, the new &lt;code&gt;{magrittr}&lt;/code&gt; pipe does all this in C. How is the base version so much faster? Well it is a syntax rather than an infix operator or a call.&lt;/p&gt;
+&lt;p&gt;This means that &lt;code&gt;x %&amp;gt;% f()&lt;/code&gt; builds functions and performs actions to produce output which is identical to &lt;code&gt;f(x)&lt;/code&gt;. However, &lt;code&gt;x |&amp;gt; f()&lt;/code&gt; &lt;em&gt;is&lt;/em&gt; the same as &lt;code&gt;f(x)&lt;/code&gt;, it’s just a different way of writing it. Think of using a single quote, &lt;code&gt;&#39;&lt;/code&gt; or a double quote &lt;code&gt;&#34;&lt;/code&gt; to create a string, the command you’re giving to R is different, but the result is parsed identically before any actual R code is ran. Similarly, when you run &lt;code&gt;2 + 3 + 4&lt;/code&gt;, R will parse that as &lt;code&gt;( (2+3) + 4 )&lt;/code&gt;because the addition operator can only run on two objects so R has to divvy them up appropriately (left to right).&lt;/p&gt;
+&lt;p&gt;This can be evidenced by capturing the calls using the &lt;code&gt;rlang::exprs()&lt;/code&gt; function&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rlang::exprs(
+  standard = doubler(x),
+  magrittrclassic = x %&amp;gt;&amp;gt;% doubler(),
+  magrittr = x %&amp;gt;% doubler(),
+  base = x |&amp;gt; doubler()
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $standard
+## doubler(x)
+## 
+## $magrittrclassic
+## x %&amp;gt;&amp;gt;% doubler()
+## 
+## $magrittr
+## x %&amp;gt;% doubler()
+## 
+## $base
+## doubler(x)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;See the last one there? &lt;code&gt;x |&amp;gt; doubler()&lt;/code&gt; is &lt;em&gt;exactly&lt;/em&gt; &lt;code&gt;doubler(x)&lt;/code&gt;. There’s no transforming in R here, it just &lt;em&gt;is&lt;/em&gt; the same thing.&lt;/p&gt;
+&lt;p&gt;This functionality is added to by the introduction of a new lambda function creation shortcut, let’s compare it to the &lt;code&gt;{magrittr}&lt;/code&gt; implementation(s) of anonymous functions, using the dot notation:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;bm2 &amp;lt;- bench::mark(
+  standard = (function(y) 2*y)(x),
+  magrittrclassic = x %&amp;gt;&amp;gt;% {2*.},
+  magrittr = x %&amp;gt;% {2*.},
+  base = x |&amp;gt; \(y) 2*y
+)
+ggplot2::autoplot(bm2)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/anon-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Timings are very similar to the previous one, especially when only looking relatively. The slow down is probably due to the creation of a function in each use, which also explains why they are all around the same amount slower. What do these piped lambda functions look like?&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rlang::exprs(
+  standard = (function(y) 2*y)(x),
+  magrittrclassic = x %&amp;gt;&amp;gt;% {2*.},
+  magrittr = x %&amp;gt;% {2*.},
+  base = x |&amp;gt; \(y) 2*y
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $standard
+## (function(y) 2 * y)(x)
+## 
+## $magrittrclassic
+## x %&amp;gt;&amp;gt;% {
+##     2 * .
+## }
+## 
+## $magrittr
+## x %&amp;gt;% {
+##     2 * .
+## }
+## 
+## $base
+## (function(y) 2 * y)(x)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Again the standard and base versions are parsed the same.&lt;/p&gt;
+&lt;p&gt;One final critic of the new pipe is that you can only pass an object to the &lt;em&gt;first&lt;/em&gt; argument in a function. This is a limitation in a lot of cases, particularly because most &lt;code&gt;{base}&lt;/code&gt; functions don’t follow the convention of passing the current data as the first argument. In &lt;code&gt;{magrittr}&lt;/code&gt;, we can use a &lt;code&gt;.&lt;/code&gt; to represent the piped data for other arguments, and if it appears at the top level (i.e. a direct argument) &lt;code&gt;{magrittr}&lt;/code&gt; won’t also ut it i as the first argument. But using the lambda &lt;code&gt;\()&lt;/code&gt; syntax, we can get around this. We can also pass named arguments in the same way we usually would when calling a function. Let’s try it and time it&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;multiplier &amp;lt;- function(a,val) a*val
+bm3 &amp;lt;- bench::mark(
+  standard = multiplier(2,x),
+  magrittrclassic = x %&amp;gt;&amp;gt;% multiplier(2,.),
+  magrittr = x %&amp;gt;% multiplier(2,.),
+  base_named = x |&amp;gt; multiplier(a=2),
+  base_lambda = x |&amp;gt; \(y) multiplier(2,y)
+)
+ggplot2::autoplot(bm3)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/multiargs-1.png&#34; width=&#34;672&#34; /&gt;
+Clearly, the lambda version of the base packages takes more time, again because it is creating the function in the middle, whereas the named version does not have to do this. Let’s capture them to check that this is true&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rlang::exprs(
+  standard = multiplier(2,x),
+  magrittrclassic = x %&amp;gt;&amp;gt;% multiplier(2,.),
+  magrittr = x %&amp;gt;% multiplier(2,.),
+  base_lambda = x |&amp;gt; \(y) multiplier(2,y),
+  base_named = x |&amp;gt; multiplier(a=2)
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $standard
+## multiplier(2, x)
+## 
+## $magrittrclassic
+## x %&amp;gt;&amp;gt;% multiplier(2, .)
+## 
+## $magrittr
+## x %&amp;gt;% multiplier(2, .)
+## 
+## $base_lambda
+## (function(y) multiplier(2, y))(x)
+## 
+## $base_named
+## multiplier(x, a = 2)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;One final thing to look at is the lambda function part of this whole process. While the &lt;code&gt;{tidyverse}&lt;/code&gt; doesn’t provide a general shortcut to produce these, they can be created within other functions. For example, the above syntax &lt;code&gt;{2*.}&lt;/code&gt; only works within the context of a pipe and wouldn’t work as a piece of code on it’s own.&lt;/p&gt;
+&lt;p&gt;The other major way in which lambda functions are declared is through the &lt;code&gt;{purrr}&lt;/code&gt; package. The &lt;code&gt;{purrr}&lt;/code&gt; package provides methods of functional programming (to an extent), and so within a &lt;code&gt;{purrr}&lt;/code&gt; function, we can define a function using the &lt;code&gt;~&lt;/code&gt; symbol and, like the previous &lt;code&gt;{tidyverse}&lt;/code&gt; lambda, using the &lt;code&gt;.&lt;/code&gt; as the value being passed to the function. Let’s compare it to the &lt;code&gt;\()&lt;/code&gt; syntax, remember, this is again a syntax and not a function/call!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(purrr,warn.conflicts=F)
+bm4 &amp;lt;- bench::mark(
+  standard = {
+    res &amp;lt;- vector(&amp;quot;list&amp;quot;,10)
+    for(i in 1:10) res[[i]] &amp;lt;- mean(1:i)
+    res
+  },
+  purrr = map(1:10,~mean(1:.)),
+  base = lapply(1:10,\(i) mean(1:i))
+)
+ggplot2::autoplot(bm4)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/lambda-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Again due to the lack of overheads for the &lt;code&gt;\()&lt;/code&gt; syntax, speed is definitely on it’s side. We could just as easily use the &lt;code&gt;lapply()&lt;/code&gt; function here and declare the &lt;code&gt;FUN&lt;/code&gt; argument using &lt;code&gt;function(i) mean(1:i)&lt;/code&gt;, but writing &lt;code&gt;\()&lt;/code&gt; is much quicker/easier.&lt;/p&gt;
+&lt;p&gt;One last thing to inspect is how these functions handle errors.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;throw_error &amp;lt;- function(x){
+  stop(&amp;quot;OH NO!&amp;quot;)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Previously, the trace stack for &lt;code&gt;{magrittr}&lt;/code&gt; was confusing and made it incredibly difficult to spot where the error came from. Let’s see how&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 %&amp;gt;&amp;gt;%
+  throw_error()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Error in throw_error(.): OH NO!&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;traceback()
+# 10: stop(&amp;quot;Why am I here?&amp;quot;) at #2
+#  9: throw_error(.)
+#  8: function_list[[k]](value)
+#  7: withVisible(function_list[[k]](value))
+#  6: freduce(value, `_function_list`)
+#  5: `_fseq`(`_lhs`)
+#  4: eval(quote(`_fseq`(`_lhs`)), env, env)
+#  3: eval(quote(`_fseq`(`_lhs`)), env, env)
+#  2: withVisible(eval(quote(`_fseq`(`_lhs`)), env, env))
+#  1: 1:10 %&amp;gt;&amp;gt;% throw_error()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Because of the structure of the old &lt;code&gt;{magrittr}&lt;/code&gt;, numbers 2 - 8 are functions that are called internally within the pipe and so as end-users, they mean nothing!&lt;/p&gt;
+&lt;p&gt;However, the new error handling, makes this much clearer without all the clutter:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 %&amp;gt;%
+  throw_error()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Error in throw_error(.): OH NO!&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;traceback()
+# 3: stop(&amp;quot;Why am I here?&amp;quot;) at #2
+# 2: throw_error(.)
+# 1: 1:10 %&amp;gt;% throw_error()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now let’s compare to the base pipe:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 |&amp;gt;
+  throw_error()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Error in throw_error(1:10): OH NO!&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;traceback()
+# 2: stop(&amp;quot;Why am I here?&amp;quot;) at #2
+# 1: throw_error(1:10)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The trace is even shorter. This is because in the &lt;code&gt;{magrittr}&lt;/code&gt; pipe, the actual pipe is considered to be a call, and so it appears first in the trace stack (bottom of the list), BUT the base pipe is not a call, and so it doesn’t appear there at all. Just like when capturing the expression, the values are already nested.&lt;/p&gt;
+&lt;p&gt;Unlike errors though, warnings can be suppressed and code can continue, this means we can use the &lt;code&gt;suppressWarnings()&lt;/code&gt; function to keep them quiet and just carry on. This is useful if you know about the warning beforehand, but is only recomended if you know &lt;em&gt;exactly&lt;/em&gt; why the warning is appearing and just want your code to ignore it and run smoothly.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;throw_warning &amp;lt;- function(x) {
+  warning(&amp;quot;oh no&amp;quot;)
+  x
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This warning handling was one of the complaints about the old &lt;code&gt;{magrittr}&lt;/code&gt; pipe,take the below which is instinctively what you would expect to do&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 %&amp;gt;&amp;gt;%
+  throw_warning() %&amp;gt;&amp;gt;%
+  suppressWarnings()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning in throw_warning(.): oh no&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It doesn’t work, instead you’d have to run&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;suppressWarnings(
+  1:10 %&amp;gt;&amp;gt;%
+    throw_warning()
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Which does not look pleasant and means going back to the beginning of your pipeline if you get to the point of wanting to suppress warnings.&lt;/p&gt;
+&lt;p&gt;The new &lt;code&gt;{magrittr}&lt;/code&gt; pipe and the &lt;code&gt;{base}&lt;/code&gt; pipe don’t have such qualms and they are evaluated exactly as you would expect them to:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 %&amp;gt;%
+  throw_warning() %&amp;gt;%
+  suppressWarnings()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 |&amp;gt;
+  throw_warning() |&amp;gt;
+  suppressWarnings()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     
