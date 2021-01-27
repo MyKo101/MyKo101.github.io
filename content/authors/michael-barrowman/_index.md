@@ -1,12 +1,12 @@
 ---
 authors:
 - admin
-bio: I am a Data Scientist, PhD candidate and Educator.
+bio: I am a Data Scientist, PhD candidate and R Developer.
 education:
   courses:
   - course: PhD in Medicine (pending)
     institution: University of Manchester
-    year: 2020
+    year: 2021
   - course: MSci in Mathematics
     institution: University of Lancaster
     year: 2013
@@ -14,12 +14,12 @@ email: "myko101ab@gmail.com"
 interests:
 - Clinical Prediction Modelling
 - Multi-State Models
-- Data Flow & Coding
+- Data Privacy & Protection
 organizations:
+- name: Mirador Analytics
+  url: "https://www.miradoranalytics.com/"
 - name: University of Manchester
   url: "https://www.herc.ac.uk/"
-- name: Liverpool John Moores University
-  url: "https://www.ljmu.ac.uk/microsites/library/skills-ljmu/maths-and-statistics"
 role: Data Scientist
 social:
 - icon: twitter
