@@ -27,12 +27,21 @@ date_format = "Jan 2006"
   description = "The goal of this PhD is to improve the academic knowledge surrounding Multi-State Clinical Prediction Models (MSCPMs). To accomplish this, I am writing articles to solve methodological issues that are yet to be addressed and applying these novel techniques (along with the present literature) to develop and validate an MSCPM to predict outcomes for Chronic Kidney Disease patients."
 
 [[experience]]
+  title = "Data Scientist"
+  company = "Mirador"
+  company_url = "https://www.miradoranalytics.com/"
+  location = "Melrose, Scottish Borders, UK"
+  date_start = "2021-01-04"
+  date_end = ""
+  description = "Focusing on health data compliance to ensure the privacy of individuals within the larger healthcare scope. Reporting on data deidentification with expert determinations of disclosure risk"
+
+[[experience]]
   title = "Maths, Stats & IT Tutor"
   company = "Liverpool John Moores University"
   company_url = "https://www.ljmu.ac.uk/microsites/library/skills-ljmu/maths-and-statistics"
   location = "Liverpool, UK"
   date_start = "2019-12-01"
-  date_end = ""
+  date_end = "2020-12-31"
   description = "Assisting undergraduate and postgraduate students with Mathematics, Statistics and IT issues relating to their university course, and extending this support to teaching and research staff. Writing and providing tutorial sessions on a variety of subjects and softwares including Microsoft Word, R for Statistics, nVivo for Qualitative Research and SPSS."
 
 [[experience]]

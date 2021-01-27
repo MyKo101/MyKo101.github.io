@@ -5,7 +5,7 @@
     <link>https://michaelbarrowman.co.uk/package/</link>
       <atom:link href="https://michaelbarrowman.co.uk/package/index.xml" rel="self" type="application/rss+xml" />
     <description>Packages</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2021</copyright><lastBuildDate>Tue, 21 Jul 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2021</copyright><lastBuildDate>Mon, 18 Jan 2021 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png</url>
       <title>Packages</title>
@@ -26,6 +26,14 @@
       <link>https://michaelbarrowman.co.uk/package/mutils/</link>
       <pubDate>Tue, 21 Jul 2020 00:00:00 +0000</pubDate>
       <guid>https://michaelbarrowman.co.uk/package/mutils/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>typos</title>
+      <link>https://michaelbarrowman.co.uk/package/rando/</link>
+      <pubDate>Mon, 18 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://michaelbarrowman.co.uk/package/rando/</guid>
       <description></description>
     </item>
     
