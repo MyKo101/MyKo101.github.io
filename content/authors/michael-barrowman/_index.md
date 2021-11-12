@@ -43,7 +43,7 @@ social:
   link: https://orcid.org/0000-0003-0718-4482
 - icon: file-alt
   icon_pack: far
-  link: https://michaelbarrowman.co.uk/CV/Michael%20Barrowman.pdf
+  link: https://michaelbarrowman.co.uk/CV/MichaelBarrowman.pdf
 - icon: envelope
   icon_pack: fas
   link: 'mailto:myko101ab@gmail.com'
