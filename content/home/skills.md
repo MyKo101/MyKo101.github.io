@@ -14,6 +14,23 @@ subtitle = ""
 # 
 # For available icons, see: https://sourcethemes.com/academic/docs/page-builder/#icons
 
+  
+[[feature]]
+  icon = "r-project"
+  icon_pack = "fab"
+  name = "R"
+  
+[[feature]]
+  icon = "database"
+  icon_pack = "fas"
+  name = "SQL"
+  
+[[feature]]
+  icon = "laptop-code"
+  icon_pack = "fas"
+  name = "C++"
+  
+  
 [[feature]]
   icon = "chart-line"
   icon_pack = "fas"
@@ -29,15 +46,11 @@ subtitle = ""
   icon_pack = "fas"
   name = "Data Visualisation"
   
-[[feature]]
-  icon = "r-project"
-  icon_pack = "fab"
-  name = "R"
   
 [[feature]]
-  icon = "git-alt"
-  icon_pack = "fab"
-  name = "git"
+  icon = "hashtag"
+  icon_pack = "fas"
+  name = "bash"
   
 [[feature]]
   icon = "code-branch"
@@ -45,39 +58,10 @@ subtitle = ""
   name = "CI"
   
 [[feature]]
-  icon = "spss"
-  icon_pack = "custom"
-  name = "SPSS"
-  
-[[feature]]
-  icon = "nvivo"
-  icon_pack = "custom"
-  name = "NVivo"
-  
-[[feature]]
-  icon = "database"
-  icon_pack = "fas"
-  name = "SQL"
-  
-[[feature]]
-  icon = "windows"
+  icon = "git-alt"
   icon_pack = "fab"
-  name = "Office"
-
-[[feature]]
-  icon = "table"
-  icon_pack = "fas"
-  name = "Excel/Sheets"
+  name = "git"
   
-[[feature]]
-  icon = "google"
-  icon_pack = "fab"
-  name = "G Suite"
-  
-[[feature]]
-  icon = "markdown"
-  icon_pack = "fab"
-  name = "Markdown"
   
 [[feature]]
   icon = "subscript"
@@ -87,7 +71,12 @@ subtitle = ""
 [[feature]]
   icon = "globe"
   icon_pack = "fas"
-  name = "HTML/CSS"
+  name = "HTML/CSS/JS"
+  
+[[feature]]
+  icon = "aws"
+  icon_pack = "fab"
+  name = "AWS"
 
 # Uncomment to use emoji icons.
 # [[feature]]

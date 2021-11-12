@@ -33,7 +33,7 @@ date_format = "Jan 2006"
   location = "Melrose, Scottish Borders, UK"
   date_start = "2021-01-04"
   date_end = ""
-  description = "Focusing on health data compliance to ensure the privacy of individuals within the larger healthcare scope. Reporting on data deidentification with expert determinations of disclosure risk"
+  description = "Focusing on health data compliance to ensure the privacy of individuals within the larger healthcare scope. Reporting on data risk of reidentification with expert determinations of disclosure risk and maintaining internal R packages, documentation and data sources."
 
 [[experience]]
   title = "Maths, Stats & IT Tutor"
