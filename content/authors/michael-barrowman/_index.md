@@ -17,8 +17,6 @@ interests:
 - Clinical Prediction Modelling
 - Multi-State Models
 organizations:
-- name: Mirador Analytics
-  url: "https://www.miradoranalytics.com/"
 - name: University of Manchester
   url: "https://www.herc.ac.uk/"
 role: Data Scientist
@@ -52,7 +50,7 @@ social:
   link: tel:+447467456803
 - icon: map-marker-alt
   icon_pack: fas
-  link: https://www.google.com/maps/place/Newton-le-Willows/@53.4584287,-2.6730042
+  link: https://www.google.com/maps/place/Newton-le-Willows/@53.4584287,-2.6730042,10z
 - icon: coffee
   icon_pack: fas
   link: https://ko-fi.com/myko101
@@ -66,15 +64,13 @@ user_groups:
 - Visitors
 ---
 
-Michael Barrowman is a Data Scientist working for Mirador Analytics providing disclosure risk analysis and Expert Determinations to ensure client data is viable under HIPAA regulations, and maintains an internal R package for the quantification of risk.
+Michael Barrowman is a Data Scientist providing independent statistical analysis. With a background in both the public and private sector and a wealth of experience working with medical and education datasets. He has produced stunning visualisations for previous clients as well as publication-ready reports and production ready scripts. He maintains several publicly available software packages for data analysis as well as internal client-based ones.
 
 He is currently finalising his Thesis on Multi-State Clinical Prediction Models in Renal Replacement Therapy as a PhD Candidate within the University of Manchester. His PhD project encompasses the development and validation of a multi-state clinical predication model, as well as the methodological advancements to produce such a model. This has led to multiple publications and the creation of software as a by-product.
 
-He has previously worked within both the public and private sector providing data analysis to many industries, particularly education and health. During this time, he has contributed to SAPs and SOPs for a pioneering pragmatic clinical trial and improved the efficiency of examination marking by over 10%. 
+He is interested in Data Science, particularly using R and RStudio to their fullest potential, encouraging others to do the same and is an advocate for neat and reproducible coding practices. He also enjoys learning new programming languages and has become adept at C++, Kotlin and Python.
 
-He is interested in Data Science, particularly using R and RStudio to their fullest potential, encouraging others to do the same and is an advocate for neat and reproducible coding practices. He also enjoys learning new programming languages and has become adept at C++, JavaScript and Java.
-
-He lives in Merseyside, UK with his two children and he enjoy walks down by the local canal, through nearby forested areas and trips to the park as often as possible as his daughter's favourite outdoor activity is "going on adventures".
+He lives in Merseyside, UK with his partner, two children and two step-children. He enjoys walks down by the local canal, through nearby forested areas and trips to the park as often as possible as his daughter's favourite outdoor activity is "going on adventures".
 
 
 

@@ -32,7 +32,7 @@ authors:
 - Glen Philip Martin
 - Matthew Sperrin
 date: "2019-07-31"
-doi: "https://doi.org/10.1186/s12874-019-0808-7"
+doi: "10.1186/s12874-019-0808-7"
 featured: false
 image:
   preview_only: false

@@ -41,7 +41,7 @@ authors:
 - Niels Peek
 - Predictive Healthcare Analtics Group
 date: "2020-07-26"
-doi: "https://doi.org/10.1016/j.jclinepi.2020.07.014"
+doi: "10.1016/j.jclinepi.2020.07.014"
 featured: false
 image:
   preview_only: false

@@ -18,13 +18,11 @@ date_format = "Jan 2006"
 #   Begin/end multi-line descriptions with 3 quotes `"""`.
 
 [[experience]]
-  title = "Data Scientist"
-  company = "Mirador"
-  company_url = "https://www.miradoranalytics.com/"
-  location = "Melrose, Scottish Borders, UK"
-  date_start = "2021-01-04"
+  title = "Freelance Data Scientist"
+  location = "Newton-Le-Willows, UK"
+  date_start = "2022-01-01"
   date_end = ""
-  description = "Focusing on health data compliance to ensure the privacy of individuals within the larger healthcare scope. Reporting on data deidentification with expert determinations of disclosure risk"
+  description = "Providing freelance statistical analysis, reporting and investigations into a wide variety of data problems. This includes Machine-Learning, business intelligence forecasting and Shiny application development."
 
 [[experience]]
   title = "PhD Candidate"

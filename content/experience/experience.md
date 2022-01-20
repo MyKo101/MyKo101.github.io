@@ -17,6 +17,14 @@ date_format = "Jan 2006"
 #   Required fields are `title`, `company`, and `date_start`.
 #   Leave `date_end` empty if it's your current employer.
 #   Begin/end multi-line descriptions with 3 quotes `"""`.
+
+[[experience]]
+  title = "Freelance Data Scientist"
+  location = "Newton-Le-Willows, UK"
+  date_start = "2022-01-01"
+  date_end = ""
+  description = "Providing freelance statistical analysis, reporting and investigations into a wide variety of data problems. This includes Machine-Learning, business intelligence forecasting and Shiny application development."
+
 [[experience]]
   title = "PhD Candidate"
   company = "University of Manchester"
@@ -32,7 +40,7 @@ date_format = "Jan 2006"
   company_url = "https://www.miradoranalytics.com/"
   location = "Melrose, Scottish Borders, UK"
   date_start = "2021-01-04"
-  date_end = ""
+  date_end = "2021-12-17"
   description = "Focusing on health data compliance to ensure the privacy of individuals within the larger healthcare scope. Reporting on data risk of reidentification with expert determinations of disclosure risk and maintaining internal R packages, documentation and data sources."
 
 [[experience]]

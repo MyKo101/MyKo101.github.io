@@ -14,6 +14,7 @@ subtitle = ""
 # 
 # For available icons, see: https://sourcethemes.com/academic/docs/page-builder/#icons
 
+# Line 1
   
 [[feature]]
   icon = "r-project"
@@ -30,6 +31,13 @@ subtitle = ""
   icon_pack = "fas"
   name = "C++"
   
+[[feature]]
+  icon = "hashtag"
+  icon_pack = "fas"
+  name = "bash"
+
+
+# Line 2
   
 [[feature]]
   icon = "chart-line"
@@ -46,11 +54,13 @@ subtitle = ""
   icon_pack = "fas"
   name = "Data Visualisation"
   
-  
 [[feature]]
-  icon = "hashtag"
+  icon = "subscript"
   icon_pack = "fas"
-  name = "bash"
+  name = "LaTeX"
+
+
+# Line 3
   
 [[feature]]
   icon = "code-branch"
@@ -61,12 +71,6 @@ subtitle = ""
   icon = "git-alt"
   icon_pack = "fab"
   name = "git"
-  
-  
-[[feature]]
-  icon = "subscript"
-  icon_pack = "fas"
-  name = "LaTeX"
   
 [[feature]]
   icon = "globe"
