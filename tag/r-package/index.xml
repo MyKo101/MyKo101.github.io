@@ -5,9 +5,9 @@
     <link>https://michaelbarrowman.co.uk/tag/r-package/</link>
       <atom:link href="https://michaelbarrowman.co.uk/tag/r-package/index.xml" rel="self" type="application/rss+xml" />
     <description>R Package</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2021</copyright><lastBuildDate>Mon, 18 Jan 2021 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2022</copyright><lastBuildDate>Mon, 18 Jan 2021 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_2.png</url>
+      <url>https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_3.png</url>
       <title>R Package</title>
       <link>https://michaelbarrowman.co.uk/tag/r-package/</link>
     </image>
@@ -17,8 +17,7 @@
       <link>https://michaelbarrowman.co.uk/package/mpipe/</link>
       <pubDate>Mon, 22 Jun 2020 00:00:00 +0000</pubDate>
       <guid>https://michaelbarrowman.co.uk/package/mpipe/</guid>
-      <description>&lt;p&gt;&lt;img src = &#34;featured.png&#34; /&gt;&lt;/p&gt;
-</description>
+      <description>&lt;img src = &#34;featured.png&#34; /&gt;</description>
     </item>
     
     <item>

@@ -1,0 +1,218 @@
+\documentclass[11pt]{article}
+
+
+% Allow blue font in text
+\usepackage[dvipsnames]{xcolor}
+\definecolor{MyBlue1}{RGB}{100,100,255}
+\newcommand{\blue}[1]{\textcolor{MyBlue1}{#1}}
+
+% Allow graphics for avatar
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[a4paper,top=2cm,bottom=2cm,left=6cm,right=1cm]{geometry}
+\usepackage{tikz}
+\usepackage{picture}
+\usetikzlibrary{shapes,arrows}
+\setlength{\unitlength}{1cm}
+
+% Remove header, footer & section numbers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\pagenumbering{gobble} %drops page number from header
+\fancyhf{} % clears headers
+\renewcommand{\headrulewidth}{0pt} %Removes horizontal line
+\setcounter{secnumdepth}{0} %No section numbers
+
+% Set default font to Helvetica (sans serif)
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+% Set paragraph style
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% Set gaps after section header
+\usepackage{titlesec}
+\titlespacing{\section}{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+
+% Use fontawesome for skills symbols
+\usepackage{fontawesome5}
+\usepackage{makecell}
+\newcommand{\fa}[2]{\blue{\makecell[b]{{\fontsize{50}{60}\selectfont \faIcon{#1}}\\#2}}}
+
+% Use tabularx for skills table
+\usepackage{tabularx}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\arraybackslash}X}
+
+% Allow links
+\usepackage{hyperref}
+
+\newcommand{\alink}[1]{\href{https://www.google.com/maps/place/Newton-le-Willows/@53.4584287,-2.6730042,10z}{#1}}
+\newcommand{\elink}[1]{\href{mailto:#1}{#1}}
+\newcommand{\tlink}[1]{\href{tel:#1}{#1}}
+
+
+
+
+
+
+\usepackage{lipsum}
+\begin{document}
+
+
+
+% Add in the LHS panel
+\newcommand\lhs{%
+
+%Place cursor in margin to draw the lhs panel
+\begin{picture}(0,0)
+\put(-5.25,-5.5){
+\begin{minipage}{4cm}
+
+% Place avatar in circle
+{\centering
+\begin{tikzpicture}
+\clip (0,0)  circle (2) ;
+\node[anchor=center] at (0,0) {
+
+\href{https://michaelbarrowman.co.uk}{\includegraphics[width=4cm]{imgs/avatar}}
+
+};
+%adjust this coordinate to move image
+\end{tikzpicture}
+
+\vspace{0.2cm}
+{\Large\blue{Data Scientist}}
+
+\vspace{0.2cm}
+{\Large\blue{Statistician}}
+
+\vspace{0.2cm}
+{\Large\blue{R Programmer}}
+
+}
+
+
+\vspace{0.8cm}
+
+% Contact details
+\begin{tabular}{r}
+\alink{1 The Crossings}\\
+\alink{Newton-Le-Willows}\\
+\alink{Merseyside}\\
+\alink{WA12 8NF}\\
+\elink{myko101ab@gmail.com}\\
+\tlink{+44 7467 456 803}
+\end{tabular}
+
+\end{minipage}
+}
+
+%Add vertical dots
+\multiput(-0.5,-0.5)(0,-0.3){85}{\circle{0.1}}
+
+\end{picture}%
+% Name at the top of each page
+\blue{\textbf{\Huge Michael Andrew Barrowman}}
+\thepage}
+\fancyhead[L]{\lhs}
+
+
+\section{Biography}
+
+Michael Barrowman is a Data Scientist providing independent statistical analysis. With a background in both the public and private sector and a wealth of experience working with medical and education datasets. He has produced stunning visualisations for previous clients as well as publication-ready reports and production ready scripts. He maintains several publicly available software packages for data analysis as well as internal client-based ones.
+
+He is currently finalising his Thesis on Multi-State Clinical Prediction Models in Renal Replacement Therapy as a PhD Candidate within the University of Manchester. His PhD project encompasses the development and validation of a multi-state clinical predication model, as well as the methodological advancements to produce such a model. This has led to multiple publications and the creation of software as a by-product.
+
+He is interested in Data Science, particularly using R and RStudio to their fullest potential, encouraging others to do the same and is an advocate for neat and reproducible coding practices. He also enjoys learning new programming languages and has become adept at C++, Kotlin and Python.
+
+He lives in Merseyside, UK with his partner, two children and two step-children. He enjoys walks down by the local canal, through nearby forested areas and trips to the park as often as possible as his daughter's favourite outdoor activity is ``going on adventures''.
+
+\section{Skills}
+
+\begin{tabularx}{1.05\textwidth}{*{4}{Y}}
+
+\fa{r-project}{R} &
+\fa{database}{SQL} &
+\fa{laptop-code}{C++} &
+\fa{hashtag}{bash} \\[0.5cm]
+\fa{chart-line}{Statistics} &
+\fa{chalkboard-teacher}{Communication} &
+\fa{chart-bar}{Data Visualisation} &
+\fa{subscript}{LaTeX} \\[0.5cm]
+\fa{code-branch}{CI} &
+\fa{git-alt}{git} &
+\fa{globe}{HTML/CSS} &
+\fa{aws}{AWS} 
+\end{tabularx}
+
+\newpage
+\section{Experience}
+
+% Formatting for experience
+\newcommand{\experience}[5]{
+\blue{\textbf{#1,} #2}\hfill\textbf{#3 - #4}\\
+\textit{#5}
+}
+
+\experience{PhD Candidate}{University of Manchester}{Oct 2016}{Present}{
+The goal of this PhD is to improve the academic knowledge surrounding Multi-State Clinical Prediction Models (MSCPMs). To accomplish this, I am writing articles to solve methodological issues that are yet to be addressed and applying these novel techniques (along with the present literature) to develop and validate an MSCPM to predict outcomes for Chronic Kidney Disease patients.}
+
+\experience{Data Scientist}{Mirador Analytics}{Jan 2021}{Dec 2021}{
+Focusing on health data compliance to ensure the privacy of individuals within the larger healthcare scope. Reporting on data risk of reidentification with expert determinations of disclosure risk and maintaining internal R packages, documentation
+and data sources.}
+
+\experience{Maths, Stats \& IT Tutor}{LJMU}{Dec 2019}{Dec 2020}{
+Assisting undergraduate and postgraduate students with Mathematics, Statistics and IT issues relating to their university course, and extending this support to teaching and research staff. Writing and providing tutorial sessions on a variety of subjects and softwares including Microsoft Word, R for Statistics, nVivo for Qualitative Research and SPSS.}
+
+\experience{Lead Statistician}{University of Manchester}{Jan 2017}{Feb 2019}{
+Working within the University of Manchester, we formed a team of statistical consultants to assist researchers from all levels of the university with their statistical needs, this included help on specific projects and tutorials on various statistical topics. Our efforts helped educate undergraduate students on basic methods to improve their coursework results and provided lecturers and professors with advice and mentoring to focus their research questions and process their results to produce viable academic outputs.}
+
+\experience{Research Assistant}{University of Manchester}{Nov 2015}{Sep 2016}{
+As part of the GetReal consortium, I worked within a multi-national team producing methodological techniques to assist in bridging the gap between efficacy and effectiveness in pragmatic clinical trials. Alongside this methodological work, I was involved in an applied study to assess the generalisability and the risk of a Hawthorn Effect in the Salford Lung Study (SLS), a real-world, pragmatic randomised controlled trial.}
+
+\experience{Data Analyst}{AQA}{May 2015}{Sep 2015}{
+Producing business insights and progress reports for examinations results. Coordinated with principal and senior examiners to set grade boundaries based on subject-level knowledge and data derived results. Reprised previous administrative responsibilities to assist other teams within the logistics and production group.}
+
+\experience{Assistant Statistician}{University of Manchester}{Aug 2014}{Apr 2015}{
+Primarily focused on the deliverables for the SLS. I produced standardised datasets for our pharmaceutical client, ad hoc data analyses and standard operating procedures for the clinical research group. I developed an algorithm utilising a probabilistic model for the merging of pharmacy data with electronic health records sourced from local primary and secondary care data and electronic case report forms provided by the onsite research nurses.}
+
+\section{Publications}
+\newcommand{\publication}[4]{
+\href{#4}{\blue{\textbf{#1 (#2)}}}, \textit{#3}
+}
+
+\publication{Toward a Framework for the Design, Implementation, and Reporting of Methodology Scoping Reviews}{2020}{GP Martin, DA Jenkins, L Bull, R Sisk, L Lin, W Hulme, A Wilson, W Wang, \textbf{MA Barrowman}, C Sammut-Powell, A Pate, M Sperrin, N Peek, Predictive Healthcare Analtics Group}{https://doi.org/10.1016/j.jclinepi.2020.07.014}
+
+\publication{How Unmeasured Confounding in a Competing Risks Setting Can Affect Treatment Effect Estimates in Observational Studies}{2019}{\textbf{MA Barrowman}, N Peek, M Lambie, GP Martin, M Sperrin}{https://doi.org/10.1186/s12874-019-0808-7}
+
+
+\publication{Study Investigating the Generalisability of a COPD Trial Based in Primary Care (Salford Lung Study) and the Presence of a Hawthorne Effect}{2018}{A Pate, \textbf{MA Barrowman}, D Webb, JM Pimenta, KJ Davies, R Williams, T van Staa, M Sperrin}{https://doi.org/10.1136/bmjresp-2018-000339}
+
+\section{Packages}
+
+\newcommand{\Lpackage}[3]{
+\begin{tabularx}{\textwidth}{m{2.2cm}Z}
+\includegraphics[width=2cm]{imgs/#1} &
+\href{#2}{\textbf{\blue{#1}}} #3
+\end{tabularx}
+}
+
+\newcommand{\Rpackage}[3]{
+\begin{tabularx}{\textwidth}{Zm{2.2cm}}
+\href{#2}{\textbf{\blue{#1}}} #3 &
+\includegraphics[width=2cm]{imgs/#1} 
+\end{tabularx}
+}
+
+\Lpackage{rando}{https://michaelbarrowman.co.uk/rando/}{The goal of rando is to provide easier generating of random numbers in a manner that is context aware, and reproducible}
+
+\Rpackage{mutils}{https://michaelbarrowman.co.uk/mutils/}{The goal of mutils is to provide useful functions to make data processing smoother. Most functions contained here are `nifty', rather than `innovative'}
+
+\Lpackage{mpipe}{https://michaelbarrowman.co.uk/mpipe/}{The mpipe package is designed to add extra functionality to the pipeline process in tidyverse style R usage}
+
+\Rpackage{typos}{https://michaelbarrowman.co.uk/typos/}{Small package to account for typing mistakes when coding in R by converting errors into warnings}
+
+
+\end{document}
