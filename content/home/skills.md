@@ -27,14 +27,15 @@ subtitle = ""
   name = "SQL"
   
 [[feature]]
+  icon = "python"
+  icon_pack = "fab"
+  name = "python"
+  
+[[feature]]
   icon = "laptop-code"
   icon_pack = "fas"
   name = "C++"
   
-[[feature]]
-  icon = "hashtag"
-  icon_pack = "fas"
-  name = "bash"
 
 
 # Line 2
