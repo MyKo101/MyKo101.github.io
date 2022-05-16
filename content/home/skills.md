@@ -69,9 +69,9 @@ subtitle = ""
   name = "CI"
   
 [[feature]]
-  icon = "git-alt"
+  icon = "windows"
   icon_pack = "fab"
-  name = "git"
+  name = "Power BI"
   
 [[feature]]
   icon = "globe"
