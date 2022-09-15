@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2022.4.1)  16 MAY 2022 16:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2022.4.1)  15 SEP 2022 18:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -8,8 +8,8 @@ LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2021-11-22>
 (C:\Program Files\MiKTeX\tex/latex/base\article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
-(C:\Program Files\MiKTeX\tex/latex/base\size11.clo
-File: size11.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
+(C:\Program Files\MiKTeX\tex/latex/base\size10.clo
+File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count183
 \c@section=\count184
@@ -22,7 +22,7 @@ File: size11.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
 \abovecaptionskip=\skip47
 \belowcaptionskip=\skip48
 \bibindent=\dimen138
-)
+) (header.tex
 (C:\Program Files\MiKTeX\tex/latex/xcolor\xcolor.sty
 Package: xcolor 2021/10/31 v2.13 LaTeX color extensions (UK)
 
@@ -647,53 +647,62 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 86.
 )
 \Hy@SectionHShift=\skip63
-) (C:\Users\myko1\AppData\Roaming\MiKTeX\tex/latex/lipsum\lipsum.sty
+) (C:\Users\myko1\AppData\Roaming\MiKTeX\tex/latex/xstring\xstring.sty
+(C:\Users\myko1\AppData\Roaming\MiKTeX\tex/generic/xstring\xstring.tex
+\integerpart=\count297
+\decimalpart=\count298
+)
+Package: xstring 2021/07/21 v1.84 String manipulations (CT)
+)
+(C:\Users\myko1\AppData\Roaming\MiKTeX\tex/latex/lipsum\lipsum.sty
 Package: lipsum 2021-09-20 v2.7 150 paragraphs of Lorem Ipsum dummy text
-\g__lipsum_par_int=\count297
-\l__lipsum_a_int=\count298
-\l__lipsum_b_int=\count299
+\g__lipsum_par_int=\count299
+\l__lipsum_a_int=\count300
+\l__lipsum_b_int=\count301
 
 (C:\Users\myko1\AppData\Roaming\MiKTeX\tex/latex/lipsum\lipsum.ltd.tex))
-LaTeX Font Info:    Trying to load font information for OT1+phv on input line 6
-9.
+(commands.tex
+\enitdp@explist=\count302
+))
+LaTeX Font Info:    Trying to load font information for OT1+phv on input line 5
+.
 
 (C:\Users\myko1\AppData\Roaming\MiKTeX\tex/latex/psnfss\ot1phv.fd
 File: ot1phv.fd 2020/03/25 scalable font definitions for OT1/phv.
 )
-(C:\Users\myko1\Documents\Websites\MyKo101.github.io\static\CV\auxfiles\Michael
-Barrowman.aux)
+No file MichaelBarrowman.aux.
 \openout1 = `MichaelBarrowman.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 69.
-LaTeX Font Info:    ... okay on input line 69.
- (C:\Program Files\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+(C:\Program Files\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count300
+\scratchcounter=\count303
 \scratchdimen=\dimen274
 \scratchbox=\box88
-\nofMPsegments=\count301
-\nofMParguments=\count302
+\nofMPsegments=\count304
+\nofMParguments=\count305
 \everyMPshowfont=\toks37
-\MPscratchCnt=\count303
+\MPscratchCnt=\count306
 \MPscratchDim=\dimen275
-\MPnumerator=\count304
-\makeMPintoPDFobject=\count305
+\MPnumerator=\count307
+\makeMPintoPDFobject=\count308
 \everyMPtoPDFconversion=\toks38
 ) (C:\Program Files\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -711,23 +720,23 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(170.71652pt, 398.33861pt, 28.45274pt)
-* v-part:(T,H,B)=(56.9055pt, 731.23584pt, 56.9055pt)
+* h-part:(L,W,R)=(184.9429pt, 384.11223pt, 28.45274pt)
+* v-part:(T,H,B)=(113.81102pt, 674.33032pt, 56.9055pt)
 * \paperwidth=597.50787pt
 * \paperheight=845.04684pt
-* \textwidth=398.33861pt
-* \textheight=731.23584pt
-* \oddsidemargin=98.44653pt
-* \evensidemargin=98.44653pt
-* \topmargin=-52.36449pt
+* \textwidth=384.11223pt
+* \textheight=674.33032pt
+* \oddsidemargin=112.67291pt
+* \evensidemargin=112.67291pt
+* \topmargin=4.54103pt
 * \headheight=12.0pt
 * \headsep=25.0pt
-* \topskip=11.0pt
+* \topskip=10.0pt
 * \footskip=30.0pt
-* \marginparwidth=59.0pt
-* \marginparsep=10.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
 * \columnsep=10.0pt
-* \skip\footins=10.0pt plus 4.0pt minus 2.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
 * \hoffset=0.0pt
 * \voffset=0.0pt
 * \mag=1000
@@ -737,7 +746,7 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 69.
+Package hyperref Info: Link coloring OFF on input line 5.
 (C:\Program Files\MiKTeX\tex/latex/hyperref\nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
 
@@ -748,195 +757,50 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 g.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count306
+\c@section@level=\count309
 )
-LaTeX Info: Redefining \ref on input line 69.
-LaTeX Info: Redefining \pageref on input line 69.
-LaTeX Info: Redefining \nameref on input line 69.
-
-(C:\Users\myko1\Documents\Websites\MyKo101.github.io\static\CV\auxfiles\Michael
-Barrowman.out)
-(C:\Users\myko1\Documents\Websites\MyKo101.github.io\static\CV\auxfiles\Michael
-Barrowman.out)
+LaTeX Info: Redefining \ref on input line 5.
+LaTeX Info: Redefining \pageref on input line 5.
+LaTeX Info: Redefining \nameref on input line 5.
 \@outlinefile=\write4
 \openout4 = `MichaelBarrowman.out'.
 
+LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <10> not available
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 23.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 140.
+(Font)              <7> on input line 23.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 140.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 140.
+(Font)              <5> on input line 23.
+ (LHS.tex) [1{C:/Users/myko1/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
 
-(C:\Users\myko1\AppData\Roaming\MiKTeX\tex/latex/fontawesome5\ufontawesomebrand
-s1.fd)
-(C:\Users\myko1\AppData\Roaming\MiKTeX\tex/latex/fontawesome5\ufontawesomefree0
-.fd)
-(C:\Users\myko1\AppData\Roaming\MiKTeX\tex/latex/fontawesome5\ufontawesomefree2
-.fd)
-(C:\Users\myko1\AppData\Roaming\MiKTeX\tex/latex/fontawesome5\ufontawesomefree3
-.fd)
-(C:\Users\myko1\AppData\Roaming\MiKTeX\tex/latex/fontawesome5\ufontawesomefree1
-.fd)
-(C:\Users\myko1\AppData\Roaming\MiKTeX\tex/latex/fontawesome5\ufontawesomebrand
-s0.fd)
-Overfull \hbox (19.91814pt too wide) in paragraph at lines 169--170
-[][] 
- []
-
-<imgs/avatar.jpg, id=27, 285.31593pt x 285.31593pt>
-File: imgs/avatar.jpg Graphic file (type jpg)
-<use imgs/avatar.jpg>
-Package pdftex.def Info: imgs/avatar.jpg  used on input line 171.
-(pdftex.def)             Requested size: 113.81102pt x 113.81088pt.
-
-Overfull \hbox (15.40771pt too wide) has occurred while \output is active
-[][] 
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 19.20984pt, for example:
-(fancyhdr)                \setlength{\headheight}{19.20984pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-7.20984pt}.
-
-[1{C:/Users/myko1/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
-
- <./imgs/avatar.jpg>]
-LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <10.95> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 181.
-File: imgs/avatar.jpg Graphic file (type jpg)
-<use imgs/avatar.jpg>
-Package pdftex.def Info: imgs/avatar.jpg  used on input line 204.
-(pdftex.def)             Requested size: 113.81102pt x 113.81088pt.
-
-Overfull \hbox (15.40771pt too wide) has occurred while \output is active
-[][] 
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 19.20984pt, for example:
-(fancyhdr)                \setlength{\headheight}{19.20984pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-7.20984pt}.
-
-
-pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
-een already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.204 \newpage
-               [2]
-LaTeX Font Info:    Font shape `OT1/phv/b/it' in size <10.95> not available
-(Font)              Font shape `OT1/phv/b/sl' tried instead on input line 210.
-
-Overfull \hbox (5.5856pt too wide) in paragraph at lines 210--211
-[][][]\OT1/phv/b/n/10.95 Toward a Frame-work for the De-sign, Im-ple-men-ta-tio
-n, and Re-port-ing of Method-
- []
-
-
-Overfull \hbox (2.51555pt too wide) in paragraph at lines 212--213
-[][][]\OT1/phv/b/n/10.95 How Un-mea-sured Con-found-ing in a Com-pet-ing Risks 
-Set-ting Can Af-fect Treat-
- []
-
-File: imgs/rando.png Graphic file (type png)
-<use imgs/rando.png>
-Package pdftex.def Info: imgs/rando.png  used on input line 233.
-(pdftex.def)             Requested size: 56.9055pt x 56.90556pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 233--234
-
- []
-
-File: imgs/mutils.png Graphic file (type png)
-<use imgs/mutils.png>
-Package pdftex.def Info: imgs/mutils.png  used on input line 235.
-(pdftex.def)             Requested size: 56.9055pt x 56.90465pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 235--236
-
- []
-
-File: imgs/mpipe.png Graphic file (type png)
-<use imgs/mpipe.png>
-Package pdftex.def Info: imgs/mpipe.png  used on input line 237.
-(pdftex.def)             Requested size: 56.9055pt x 56.90465pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 237--238
-
- []
-
-File: imgs/typos.png Graphic file (type png)
-<use imgs/typos.png>
-Package pdftex.def Info: imgs/typos.png  used on input line 239.
-(pdftex.def)             Requested size: 56.9055pt x 56.90465pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 239--240
-
- []
-
-File: imgs/avatar.jpg Graphic file (type jpg)
-<use imgs/avatar.jpg>
-Package pdftex.def Info: imgs/avatar.jpg  used on input line 242.
-(pdftex.def)             Requested size: 113.81102pt x 113.81088pt.
-
-Overfull \hbox (15.40771pt too wide) has occurred while \output is active
-[][] 
- []
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 19.20984pt, for example:
-(fancyhdr)                \setlength{\headheight}{19.20984pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-7.20984pt}.
-
-
-pdfTeX warning (ext4): destination with the same identifier (name{page.}) has b
-een already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.242 \end{document}
-                     [3 <./imgs/rando.png> <./imgs/mutils.png> <./imgs/mpipe.pn
-g> <./imgs/typos.png>]
+]
 (C:\Users\myko1\Documents\Websites\MyKo101.github.io\static\CV\auxfiles\Michael
 Barrowman.aux)
-Package rerunfilecheck Info: File `MichaelBarrowman.out' has not changed.
-(rerunfilecheck)             Checksum: B6209889C27173A7C2792B3BB55F5CD4;503.
+
+Package rerunfilecheck Warning: File `MichaelBarrowman.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `MichaelBarrowman.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 26455 strings out of 478659
- 533672 string characters out of 2855778
- 919174 words of memory out of 3000000
- 44106 multiletter control sequences out of 15000+600000
- 420611 words of font info for 57 fonts, out of 8000000 for 9000
+ 26530 strings out of 478659
+ 532392 string characters out of 2855778
+ 930594 words of memory out of 3000000
+ 44214 multiletter control sequences out of 15000+600000
+ 417734 words of font info for 44 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,21n,80p,576b,899s stack positions out of 5000i,500n,10000p,200000b,80000s
-{C:/Program Files/MiKTeX/fonts/enc/dvips/base/8r.enc}{C:/Users/myko1/AppData/
-Roaming/MiKTeX/fonts/enc/dvips/fontawesome5/fa5brands0.enc}{C:/Users/myko1/AppD
-ata/Roaming/MiKTeX/fonts/enc/dvips/fontawesome5/fa5free1.enc}{C:/Users/myko1/Ap
-pData/Roaming/MiKTeX/fonts/enc/dvips/fontawesome5/fa5free3.enc}{C:/Users/myko1/
-AppData/Roaming/MiKTeX/fonts/enc/dvips/fontawesome5/fa5free2.enc}{C:/Users/myko
-1/AppData/Roaming/MiKTeX/fonts/enc/dvips/fontawesome5/fa5free0.enc}{C:/Users/my
-ko1/AppData/Roaming/MiKTeX/fonts/enc/dvips/fontawesome5/fa5brands1.enc}<C:/User
-s/myko1/AppData/Roaming/MiKTeX/fonts/type1/public/fontawesome5/FontAwesome5Bran
-ds-Regular.pfb><C:/Users/myko1/AppData/Roaming/MiKTeX/fonts/type1/public/fontaw
-esome5/FontAwesome5Free-Solid.pfb><C:/Program Files/MiKTeX/fonts/type1/public/a
-msfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/latx
-font/lcircle1.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb>
-<C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvbo8a.pfb><C:/Program Files
-/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKTeX/fonts/type
-1/urw/helvetic/uhvro8a.pfb>
-Output written on MichaelBarrowman.pdf (3 pages, 269821 bytes).
+ 89i,16n,83p,438b,460s stack positions out of 5000i,500n,10000p,200000b,80000s
+{C:/Program Files/MiKTeX/fonts/enc/dvips/base/8r.enc}<C:/Program Files/MiKTeX
+/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX/fonts/type1
+/public/amsfonts/latxfont/lcircle1.pfb><C:/Program Files/MiKTeX/fonts/type1/urw
+/helvetic/uhvb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.p
+fb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvro8a.pfb>
+Output written on MichaelBarrowman.pdf (1 page, 50730 bytes).
 PDF statistics:
- 151 PDF objects out of 1000 (max. 8388607)
- 7 named destinations out of 1000 (max. 500000)
- 78 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 45 PDF objects out of 1000 (max. 8388607)
+ 2 named destinations out of 1000 (max. 500000)
+ 13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
