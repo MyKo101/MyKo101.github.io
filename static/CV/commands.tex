@@ -1,0 +1,136 @@
+
+%Define my shade of blue
+\definecolor{MyBlue1}{RGB}{100,100,255}
+\newcommand{\blue}[1]{\textcolor{MyBlue1}{#1}}
+
+
+
+
+
+%Command for Skills section
+\newcommand{\ic}[1]{
+	\IfStrEqCase	{#1}{
+	{R}{\faIcon{r-project}}
+	{C++}{\faIcon{laptop-code}}
+	{python}{\faIcon{python}}
+	{SQL}{\faIcon{database}}
+	{SAS}{S}
+	{PowerBI}{\faIcon{windows}}
+	{git}{\faIcon{code-branch}}
+	{LaTeX}{\faIcon{subscript}}
+	{Statistics}{\faIcon{chart-line}}
+	{Communication}{\faIcon{chalkboard-teacher}}
+	{Modelling}{\faIcon{redo}}
+	{Tech. Writ.}{\faIcon{file-code}}
+	{Technical\\Writing}{\faIcon{file-code}}
+	{Machine\\Learning}{\faIcon{robot}}
+	{ML}{\faIcon{robot}}
+	{AWS}{\faIcon{aws}}
+	{GCP}{\faIcon{google}}
+	{bash}{\faIcon{linux}}
+	{SPSS}{$\Sigma$}
+	{Cloud}{\faIcon{cloud}}
+	{XXX}{X}
+	}
+}
+
+\newcommand{\fa}[1]{
+	\blue{\makecell[b]{
+		{\fontsize{38}{38}\selectfont \!\!\ic{#1}}
+		\\[3mm]
+		{\fontsize{10}{12}\selectfont #1}
+	}}
+}
+
+
+%Commands for skills in experience
+\newcommand{\sk}[1]{
+	\blue{\makecell[b]{
+		{\fontsize{12}{14}\selectfont \!\ic{#1}}
+		\\
+		#1
+	}}
+\enspace}
+
+\newcommand{\bullIcon}[1]{
+	\blue{
+	\fontsize{14}{16}\selectfont \faIcon{#1}
+	}
+}
+
+
+
+
+%Commands for the left margin
+\newcommand{\alink}[1]{\href{https://www.google.com/maps/place/Newton-le-Willows/@53.4584287,-2.6730042,10z}{#1}}
+\newcommand{\elink}[1]{\href{mailto:#1}{#1}}
+\newcommand{\tlink}[1]{\href{tel:#1}{#1}}
+
+%Define the Left Margin:
+\newcommand{\lhs}{
+	\input{LHS.tex}
+	\thepage
+}
+
+\newcommand{\lhssection}[1]{
+	\vspace{0.5cm}
+	{\LARGE\blue{#1}}
+	\vspace{0.2cm}
+}
+
+\newcommand{\skhead}[1]{
+	\vspace{0.2cm}
+	\blue{#1}
+	%\vspace{0.1cm}
+}
+
+
+% Formatting for experience
+
+\setlength{\parskip}{0.1cm}
+
+\newlist{explist}{itemize}{1}
+\setlist[explist]{itemsep=0cm,itemindent=0.4cm,label=$\circ$}
+
+\newcommand{\experience}[6]{
+\blue{{\large\textbf{#1,}} #2}\hfill\textbf{#3 - #4}\\
+\vspace{-0.7cm}
+\textit{#5}
+}
+
+
+%Formatting for Publications
+\newcommand{\publication}[4]{
+\href{#4}{\blue{\textbf{#1 (#2)}}}, \textit{#3}
+}
+
+
+%Formatting for Packages
+
+\newcommand{\Lpackage}[3]{
+\begin{tabularx}{\textwidth}{m{2.2cm}Z}
+\includegraphics[width=2cm]{imgs/#1} &
+\href{#2}{\textbf{\blue{#1}}} #3
+\end{tabularx}
+}
+\newcommand{\Rpackage}[3]{
+\begin{tabularx}{\textwidth}{Zm{2.2cm}}
+\href{#2}{\textbf{\blue{#1}}} #3 &
+\includegraphics[width=2cm]{imgs/#1} 
+\end{tabularx}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,65 @@
+
+% Allow blue font in text
+\usepackage[dvipsnames]{xcolor}
+
+% Allow graphics for avatar
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[a4paper,top=4cm,bottom=2cm,left=6.5cm,right=1cm]{geometry}
+\usepackage{tikz}
+\usepackage{picture}
+\usetikzlibrary{shapes,arrows}
+\setlength{\unitlength}{1cm}
+
+% Remove header, footer & section numbers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\pagenumbering{gobble} %drops page number from header
+\fancyhf{} % clears headers
+\renewcommand{\headrulewidth}{0pt} %Removes horizontal line
+\setcounter{secnumdepth}{0} %No section numbers
+
+% Set default font to Helvetica (sans serif)
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+% Set paragraph style
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% Set list formatting
+\usepackage{enumitem}
+\setlist{leftmargin=4mm}
+\setlength\itemsep{0.1em}
+\renewcommand{\labelitemi}{\blue{$\circ$}}
+
+
+
+% Set gaps after section header
+\usepackage{titlesec}
+\titlespacing{\section}{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+
+% Use fontawesome for skills symbols
+\usepackage{fontawesome5}
+\usepackage{makecell}
+
+% Use tabularx for skills table
+\usepackage{tabularx}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcolumntype{Z}{>{\arraybackslash}X}
+
+% Allow links
+\usepackage{hyperref}
+
+
+\usepackage{xstring}
+
+
+
+
+
+
+
+\usepackage{lipsum}
+
+\input{commands.tex}
