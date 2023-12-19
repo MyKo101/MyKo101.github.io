@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2022.4.1)  15 SEP 2022 18:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 21.12) (preloaded format=pdflatex 2022.4.1)  19 DEC 2023 21:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -766,11 +766,11 @@ LaTeX Info: Redefining \nameref on input line 5.
 \openout4 = `MichaelBarrowman.out'.
 
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <10> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 23.
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 22.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 23.
+(Font)              <7> on input line 22.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 23.
+(Font)              <5> on input line 22.
  (LHS.tex) [1{C:/Users/myko1/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}
 
 ]
@@ -788,7 +788,7 @@ Package rerunfilecheck Info: Checksums for `MichaelBarrowman.out':
 Here is how much of TeX's memory you used:
  26530 strings out of 478659
  532392 string characters out of 2855778
- 930594 words of memory out of 3000000
+ 934594 words of memory out of 3000000
  44214 multiletter control sequences out of 15000+600000
  417734 words of font info for 44 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -798,7 +798,7 @@ Here is how much of TeX's memory you used:
 /public/amsfonts/latxfont/lcircle1.pfb><C:/Program Files/MiKTeX/fonts/type1/urw
 /helvetic/uhvb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.p
 fb><C:/Program Files/MiKTeX/fonts/type1/urw/helvetic/uhvro8a.pfb>
-Output written on MichaelBarrowman.pdf (1 page, 50730 bytes).
+Output written on MichaelBarrowman.pdf (1 page, 51344 bytes).
 PDF statistics:
  45 PDF objects out of 1000 (max. 8388607)
  2 named destinations out of 1000 (max. 500000)
