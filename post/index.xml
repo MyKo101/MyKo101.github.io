@@ -1,986 +1,896 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Posts | MyKo101</title>
-    <link>https://michaelbarrowman.co.uk/post/</link>
-      <atom:link href="https://michaelbarrowman.co.uk/post/index.xml" rel="self" type="application/rss+xml" />
-    <description>Posts</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2022</copyright><lastBuildDate>Sun, 06 Dec 2020 00:00:00 +0000</lastBuildDate>
-    <image>
-      <url>https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_3.png</url>
-      <title>Posts</title>
-      <link>https://michaelbarrowman.co.uk/post/</link>
-    </image>
-    
-    <item>
-      <title>The lapply() family</title>
-      <link>https://michaelbarrowman.co.uk/post/the-lapply-family/</link>
-      <pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate>
-      <guid>https://michaelbarrowman.co.uk/post/the-lapply-family/</guid>
-      <description>
-&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;&lt;a href=&#34;https://www.reddit.com/r/rstats/comments/l0gvh3/good_site_to_understand_the_apply_collection_of/&#34;&gt;This question on Reddit&lt;/a&gt;, got me thinking about the &lt;code&gt;lapply()&lt;/code&gt; family of functions, and how a beginner might want to learn about them. Here is my take&lt;/p&gt;
-&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;The easiest one to understand is &lt;code&gt;lapply()&lt;/code&gt;, I’ll work through that and then extend to the others. As an aside, the programmatic terminology is &lt;em&gt;vectorising&lt;/em&gt; as it allows us to perform an action over an entire &lt;em&gt;vector&lt;/em&gt; at once or &lt;em&gt;list&lt;/em&gt; in R.&lt;/p&gt;
-&lt;p&gt;Ignoring the dots, &lt;code&gt;lapply()&lt;/code&gt; takes two arguments &lt;code&gt;X&lt;/code&gt; and &lt;code&gt;FUN&lt;/code&gt;. &lt;code&gt;FUN&lt;/code&gt; is the name of the function, and &lt;code&gt;X&lt;/code&gt; is a list of objects. When I say list, this could be an actual, as created by the &lt;code&gt;list()&lt;/code&gt; function, or a vector such as &lt;code&gt;1:10&lt;/code&gt;. But if you try to put something more complicated in like a &lt;code&gt;data.frame()&lt;/code&gt;, you can get unexpected results (I’ll come back to this).&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;lists&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;lists&lt;/h1&gt;
-&lt;p&gt;So, let’s say we have&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X &amp;lt;- list(1:10,11:20,21:30)
-X&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
-##  [1]  1  2  3  4  5  6  7  8  9 10
-## 
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts | MyKo101</title><link>https://michaelbarrowman.co.uk/post/</link><atom:link href="https://michaelbarrowman.co.uk/post/index.xml" rel="self" type="application/rss+xml"/><description>Posts</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2023</copyright><lastBuildDate>Sun, 06 Dec 2020 00:00:00 +0000</lastBuildDate><image><url>https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_3.png</url><title>Posts</title><link>https://michaelbarrowman.co.uk/post/</link></image><item><title>The lapply() family</title><link>https://michaelbarrowman.co.uk/post/the-lapply-family/</link><pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate><guid>https://michaelbarrowman.co.uk/post/the-lapply-family/</guid><description>
+&lt;script src="https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js">&lt;/script>
+&lt;p>&lt;a href="https://www.reddit.com/r/rstats/comments/l0gvh3/good_site_to_understand_the_apply_collection_of/">This question on Reddit&lt;/a>, got me thinking about the &lt;code>lapply()&lt;/code> family of functions, and how a beginner might want to learn about them. Here is my take&lt;/p>
+&lt;div id="introduction" class="section level1">
+&lt;h1>Introduction&lt;/h1>
+&lt;p>The easiest one to understand is &lt;code>lapply()&lt;/code>, I’ll work through that and then extend to the others. As an aside, the programmatic terminology is &lt;em>vectorising&lt;/em> as it allows us to perform an action over an entire &lt;em>vector&lt;/em> at once or &lt;em>list&lt;/em> in R.&lt;/p>
+&lt;p>Ignoring the dots, &lt;code>lapply()&lt;/code> takes two arguments &lt;code>X&lt;/code> and &lt;code>FUN&lt;/code>. &lt;code>FUN&lt;/code> is the name of the function, and &lt;code>X&lt;/code> is a list of objects. When I say list, this could be an actual, as created by the &lt;code>list()&lt;/code> function, or a vector such as &lt;code>1:10&lt;/code>. But if you try to put something more complicated in like a &lt;code>data.frame()&lt;/code>, you can get unexpected results (I’ll come back to this).&lt;/p>
+&lt;/div>
+&lt;div id="lists" class="section level1">
+&lt;h1>lists&lt;/h1>
+&lt;p>So, let’s say we have&lt;/p>
+&lt;pre class="r">&lt;code>X &amp;lt;- list(1:10,11:20,21:30)
+X&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
+## [1] 1 2 3 4 5 6 7 8 9 10
+##
 ## [[2]]
-##  [1] 11 12 13 14 15 16 17 18 19 20
-## 
+## [1] 11 12 13 14 15 16 17 18 19 20
+##
 ## [[3]]
-##  [1] 21 22 23 24 25 26 27 28 29 30&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This list has three elements, and each element consists of a vector of 10 numbers. We can access them using &lt;code&gt;[[&lt;/code&gt;, where &lt;code&gt;X[[1]]&lt;/code&gt; will return the first element, the numbers 1 to 10:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X[[1]]&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;X[[2]]&lt;/code&gt; will return the second element, etc… This is &lt;em&gt;extraction&lt;/em&gt; as it extracts an element from a list. Extraction can only bring out a single element. We can also &lt;em&gt;subset&lt;/em&gt; using &lt;code&gt;[&lt;/code&gt; for example&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X[1:2]&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
-##  [1]  1  2  3  4  5  6  7  8  9 10
-## 
+## [1] 21 22 23 24 25 26 27 28 29 30&lt;/code>&lt;/pre>
+&lt;p>This list has three elements, and each element consists of a vector of 10 numbers. We can access them using &lt;code>[[&lt;/code>, where &lt;code>X[[1]]&lt;/code> will return the first element, the numbers 1 to 10:&lt;/p>
+&lt;pre class="r">&lt;code>X[[1]]&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 1 2 3 4 5 6 7 8 9 10&lt;/code>&lt;/pre>
+&lt;p>&lt;code>X[[2]]&lt;/code> will return the second element, etc… This is &lt;em>extraction&lt;/em> as it extracts an element from a list. Extraction can only bring out a single element. We can also &lt;em>subset&lt;/em> using &lt;code>[&lt;/code> for example&lt;/p>
+&lt;pre class="r">&lt;code>X[1:2]&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
+## [1] 1 2 3 4 5 6 7 8 9 10
+##
 ## [[2]]
-##  [1] 11 12 13 14 15 16 17 18 19 20&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This return the first and second elements. &lt;code&gt;X[1]&lt;/code&gt; will return a subset consisting of the first element.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X[1]&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
-##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;What’s the difference between &lt;code&gt;X[1]&lt;/code&gt; and &lt;code&gt;X[[1]]&lt;/code&gt;? Well, &lt;code&gt;X[1]&lt;/code&gt; returns a list, which is just 1 element long, that element being a vector of the numbers from 1 to 10. &lt;code&gt;X[[1]]&lt;/code&gt; returns the actual element at position 1.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;length(X[1])&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] 1&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;length(X[[1]])&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] 10&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;class(X[1])&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;list&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;class(X[[1]])&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;integer&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;So &lt;code&gt;X[1]&lt;/code&gt; is a list, just like &lt;code&gt;X&lt;/code&gt; but is shorter, a subset, just like how &lt;code&gt;X[1:2]&lt;/code&gt; is a subset with length 2. Whereas &lt;code&gt;X[[1]]&lt;/code&gt; &lt;em&gt;is&lt;/em&gt; the first element of &lt;code&gt;X&lt;/code&gt;. This is clearer if we try to add something to these two objects:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X[[1]] + 3&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##  [1]  4  5  6  7  8  9 10 11 12 13&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X[1] + 3&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Error in X[1] + 3: non-numeric argument to binary operator&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Again, to stress the point. &lt;code&gt;X[1]&lt;/code&gt; is &lt;em&gt;not&lt;/em&gt; a number, it is a list containing a single element. Since &lt;code&gt;X[1]&lt;/code&gt; is a list, we can therefore &lt;em&gt;extract&lt;/em&gt; that first element from it:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X[1][[1]]&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The difference between a list and a vector is that a vector has to all be of the same type (e.g. all characters as in &lt;code&gt;c(&#34;a&#34;,&#34;b&#34;,&#34;c&#34;)&lt;/code&gt; or all numbers as in &lt;code&gt;c(1,2,3)&lt;/code&gt;, the &lt;code&gt;c()&lt;/code&gt; function will &lt;em&gt;coerce&lt;/em&gt; them otherwise, so &lt;code&gt;c(1,&#34;2&#34;,3)&lt;/code&gt; will coerce to characters. But a list can all be different, so &lt;code&gt;list(&#34;hello&#34;,2,1:10)&lt;/code&gt; has three elements. In fact lists can contain lists (nested lists)&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Y &amp;lt;- list(&amp;quot;hello&amp;quot;,1:10,list(&amp;quot;one&amp;quot;,&amp;quot;two&amp;quot;,&amp;quot;three&amp;quot;))
-Y&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] 11 12 13 14 15 16 17 18 19 20&lt;/code>&lt;/pre>
+&lt;p>This return the first and second elements. &lt;code>X[1]&lt;/code> will return a subset consisting of the first element.&lt;/p>
+&lt;pre class="r">&lt;code>X[1]&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
+## [1] 1 2 3 4 5 6 7 8 9 10&lt;/code>&lt;/pre>
+&lt;p>What’s the difference between &lt;code>X[1]&lt;/code> and &lt;code>X[[1]]&lt;/code>? Well, &lt;code>X[1]&lt;/code> returns a list, which is just 1 element long, that element being a vector of the numbers from 1 to 10. &lt;code>X[[1]]&lt;/code> returns the actual element at position 1.&lt;/p>
+&lt;pre class="r">&lt;code>length(X[1])&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 1&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>length(X[[1]])&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 10&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>class(X[1])&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;list&amp;quot;&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>class(X[[1]])&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;integer&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>So &lt;code>X[1]&lt;/code> is a list, just like &lt;code>X&lt;/code> but is shorter, a subset, just like how &lt;code>X[1:2]&lt;/code> is a subset with length 2. Whereas &lt;code>X[[1]]&lt;/code> &lt;em>is&lt;/em> the first element of &lt;code>X&lt;/code>. This is clearer if we try to add something to these two objects:&lt;/p>
+&lt;pre class="r">&lt;code>X[[1]] + 3&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 4 5 6 7 8 9 10 11 12 13&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>X[1] + 3&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## Error in X[1] + 3: non-numeric argument to binary operator&lt;/code>&lt;/pre>
+&lt;p>Again, to stress the point. &lt;code>X[1]&lt;/code> is &lt;em>not&lt;/em> a number, it is a list containing a single element. Since &lt;code>X[1]&lt;/code> is a list, we can therefore &lt;em>extract&lt;/em> that first element from it:&lt;/p>
+&lt;pre class="r">&lt;code>X[1][[1]]&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 1 2 3 4 5 6 7 8 9 10&lt;/code>&lt;/pre>
+&lt;p>The difference between a list and a vector is that a vector has to all be of the same type (e.g. all characters as in &lt;code>c("a","b","c")&lt;/code> or all numbers as in &lt;code>c(1,2,3)&lt;/code>, the &lt;code>c()&lt;/code> function will &lt;em>coerce&lt;/em> them otherwise, so &lt;code>c(1,"2",3)&lt;/code> will coerce to characters. But a list can all be different, so &lt;code>list("hello",2,1:10)&lt;/code> has three elements. In fact lists can contain lists (nested lists)&lt;/p>
+&lt;pre class="r">&lt;code>Y &amp;lt;- list(&amp;quot;hello&amp;quot;,1:10,list(&amp;quot;one&amp;quot;,&amp;quot;two&amp;quot;,&amp;quot;three&amp;quot;))
+Y&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
 ## [1] &amp;quot;hello&amp;quot;
-## 
+##
 ## [[2]]
-##  [1]  1  2  3  4  5  6  7  8  9 10
-## 
+## [1] 1 2 3 4 5 6 7 8 9 10
+##
 ## [[3]]
 ## [[3]][[1]]
 ## [1] &amp;quot;one&amp;quot;
-## 
+##
 ## [[3]][[2]]
 ## [1] &amp;quot;two&amp;quot;
-## 
+##
 ## [[3]][[3]]
-## [1] &amp;quot;three&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;has three elements. If you &lt;em&gt;extract&lt;/em&gt; the third element,&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Y[[3]]&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] &amp;quot;three&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>has three elements. If you &lt;em>extract&lt;/em> the third element,&lt;/p>
+&lt;pre class="r">&lt;code>Y[[3]]&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
 ## [1] &amp;quot;one&amp;quot;
-## 
+##
 ## [[2]]
 ## [1] &amp;quot;two&amp;quot;
-## 
+##
 ## [[3]]
-## [1] &amp;quot;three&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;you get another list. If you &lt;em&gt;subset&lt;/em&gt; the third element,&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Y[3]&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] &amp;quot;three&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>you get another list. If you &lt;em>subset&lt;/em> the third element,&lt;/p>
+&lt;pre class="r">&lt;code>Y[3]&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
 ## [[1]][[1]]
 ## [1] &amp;quot;one&amp;quot;
-## 
+##
 ## [[1]][[2]]
 ## [1] &amp;quot;two&amp;quot;
-## 
+##
 ## [[1]][[3]]
-## [1] &amp;quot;three&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;you get a list with 1 element.&lt;/p&gt;
-&lt;p&gt;As far as nomenclature is concerned, a &lt;em&gt;vector&lt;/em&gt; is a type of &lt;em&gt;list&lt;/em&gt; which has the requirement that all entries be of the same type. You can even use extraction on a vector,&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x &amp;lt;- 1:10
-x[3]&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] 3&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x[[3]]&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] 3&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Although when dealing with a vector, the second version is much less common. The reason this works is that &lt;em&gt;extraction&lt;/em&gt; and &lt;em&gt;subsetting&lt;/em&gt; are essentially the same thing in a vector (because it will always return a vector, it just might be of length 1).&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;lapply&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;lapply()&lt;/h1&gt;
-&lt;p&gt;So, now that we know what a list is, we can look at what &lt;code&gt;lapply()&lt;/code&gt; does to that list. If we supply a function, &lt;code&gt;lapply()&lt;/code&gt; will run that function on every element in that list. The simplest example would be, using &lt;code&gt;X&lt;/code&gt; from above, &lt;code&gt;lapply(X,mean)&lt;/code&gt; will return a list with the &lt;code&gt;mean()&lt;/code&gt; of every element in &lt;code&gt;X&lt;/code&gt;.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lapply(X,mean)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] &amp;quot;three&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>you get a list with 1 element.&lt;/p>
+&lt;p>As far as nomenclature is concerned, a &lt;em>vector&lt;/em> is a type of &lt;em>list&lt;/em> which has the requirement that all entries be of the same type. You can even use extraction on a vector,&lt;/p>
+&lt;pre class="r">&lt;code>x &amp;lt;- 1:10
+x[3]&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 3&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>x[[3]]&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 3&lt;/code>&lt;/pre>
+&lt;p>Although when dealing with a vector, the second version is much less common. The reason this works is that &lt;em>extraction&lt;/em> and &lt;em>subsetting&lt;/em> are essentially the same thing in a vector (because it will always return a vector, it just might be of length 1).&lt;/p>
+&lt;/div>
+&lt;div id="lapply" class="section level1">
+&lt;h1>lapply()&lt;/h1>
+&lt;p>So, now that we know what a list is, we can look at what &lt;code>lapply()&lt;/code> does to that list. If we supply a function, &lt;code>lapply()&lt;/code> will run that function on every element in that list. The simplest example would be, using &lt;code>X&lt;/code> from above, &lt;code>lapply(X,mean)&lt;/code> will return a list with the &lt;code>mean()&lt;/code> of every element in &lt;code>X&lt;/code>.&lt;/p>
+&lt;pre class="r">&lt;code>lapply(X,mean)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
 ## [1] 5.5
-## 
+##
 ## [[2]]
 ## [1] 15.5
-## 
+##
 ## [[3]]
-## [1] 25.5&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Remember that the elements in &lt;code&gt;X&lt;/code&gt; are the vectors of numbers, &lt;code&gt;1:10&lt;/code&gt;, &lt;code&gt;11:20&lt;/code&gt; and &lt;code&gt;21:30&lt;/code&gt;. We’ve &lt;em&gt;applied&lt;/em&gt; the function to the &lt;em&gt;list&lt;/em&gt; a &lt;em&gt;list-apply&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;The function doesn’t have to be one that is named, and we can supply a function in-line&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lapply(X, function(x) mean(x-5.5))&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] 25.5&lt;/code>&lt;/pre>
+&lt;p>Remember that the elements in &lt;code>X&lt;/code> are the vectors of numbers, &lt;code>1:10&lt;/code>, &lt;code>11:20&lt;/code> and &lt;code>21:30&lt;/code>. We’ve &lt;em>applied&lt;/em> the function to the &lt;em>list&lt;/em> a &lt;em>list-apply&lt;/em>.&lt;/p>
+&lt;p>The function doesn’t have to be one that is named, and we can supply a function in-line&lt;/p>
+&lt;pre class="r">&lt;code>lapply(X, function(x) mean(x-5.5))&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
 ## [1] 0
-## 
+##
 ## [[2]]
 ## [1] 10
-## 
+##
 ## [[3]]
-## [1] 20&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This applies the function &lt;code&gt;function(x) mean(x-5.5)&lt;/code&gt; to every element in &lt;code&gt;X&lt;/code&gt;. You could define this function outside of the &lt;code&gt;lapply()&lt;/code&gt; function earlier, but there is no need if this is the only place we plan on using it.&lt;/p&gt;
-&lt;p&gt;For future, when the &lt;code&gt;R 4.1&lt;/code&gt; version is released, I believe this will be even easier with the shorthand &lt;code&gt;\()&lt;/code&gt; syntax.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;lapply(X, \(x) mean(x - 5.5))&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;So running &lt;code&gt;lapply(X,FUN)&lt;/code&gt; is the same as running the following &lt;code&gt;for()&lt;/code&gt; loop&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;output &amp;lt;- vector(&amp;quot;list&amp;quot;,length(X))
+## [1] 20&lt;/code>&lt;/pre>
+&lt;p>This applies the function &lt;code>function(x) mean(x-5.5)&lt;/code> to every element in &lt;code>X&lt;/code>. You could define this function outside of the &lt;code>lapply()&lt;/code> function earlier, but there is no need if this is the only place we plan on using it.&lt;/p>
+&lt;p>For future, when the &lt;code>R 4.1&lt;/code> version is released, I believe this will be even easier with the shorthand &lt;code>\()&lt;/code> syntax.&lt;/p>
+&lt;pre>&lt;code>lapply(X, \(x) mean(x - 5.5))&lt;/code>&lt;/pre>
+&lt;p>So running &lt;code>lapply(X,FUN)&lt;/code> is the same as running the following &lt;code>for()&lt;/code> loop&lt;/p>
+&lt;pre>&lt;code>output &amp;lt;- vector(&amp;quot;list&amp;quot;,length(X))
 for(i in 1:length(X)){
-  output[[i]] &amp;lt;- FUN(X[[i]])
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Compare the previous code to this:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;output &amp;lt;- vector(&amp;quot;list&amp;quot;,length(X))
+output[[i]] &amp;lt;- FUN(X[[i]])
+}&lt;/code>&lt;/pre>
+&lt;p>Compare the previous code to this:&lt;/p>
+&lt;pre class="r">&lt;code>output &amp;lt;- vector(&amp;quot;list&amp;quot;,length(X))
 for(i in 1:length(X)){
-  output[[i]] &amp;lt;- mean(X[[i]])
+output[[i]] &amp;lt;- mean(X[[i]])
 }
-output&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
+output&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
 ## [1] 5.5
-## 
+##
 ## [[2]]
 ## [1] 15.5
-## 
+##
 ## [[3]]
-## [1] 25.5&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Notice that I’ve defined the &lt;code&gt;output &amp;lt;- vector(&#34;list&#34;,length(X))&lt;/code&gt; before running the &lt;code&gt;for()&lt;/code&gt; loop. This line basically makes an empty list of the defined length. This will come up when we move on from &lt;code&gt;lapply()&lt;/code&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;dots&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;dots&lt;/h1&gt;
-&lt;p&gt;One part of &lt;code&gt;lapply()&lt;/code&gt; that I’ve ignored is the &lt;code&gt;...&lt;/code&gt; dots argument. These are basically other arguments that you want passed on to your function. Whatever is in the dots, will be passed to every call to &lt;code&gt;FUN&lt;/code&gt;, whether named or not:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lapply(c(&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;),paste,&amp;quot;2&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] 25.5&lt;/code>&lt;/pre>
+&lt;p>Notice that I’ve defined the &lt;code>output &amp;lt;- vector("list",length(X))&lt;/code> before running the &lt;code>for()&lt;/code> loop. This line basically makes an empty list of the defined length. This will come up when we move on from &lt;code>lapply()&lt;/code>&lt;/p>
+&lt;/div>
+&lt;div id="dots" class="section level1">
+&lt;h1>dots&lt;/h1>
+&lt;p>One part of &lt;code>lapply()&lt;/code> that I’ve ignored is the &lt;code>...&lt;/code> dots argument. These are basically other arguments that you want passed on to your function. Whatever is in the dots, will be passed to every call to &lt;code>FUN&lt;/code>, whether named or not:&lt;/p>
+&lt;pre class="r">&lt;code>lapply(c(&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;),paste,&amp;quot;2&amp;quot;)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
 ## [1] &amp;quot;a 2&amp;quot;
-## 
+##
 ## [[2]]
 ## [1] &amp;quot;b 2&amp;quot;
-## 
+##
 ## [[3]]
-## [1] &amp;quot;c 2&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lapply(list( 1:10, c(1,2,NA,4), 21:30), mean, na.rm=T)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] &amp;quot;c 2&amp;quot;&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>lapply(list( 1:10, c(1,2,NA,4), 21:30), mean, na.rm=T)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
 ## [1] 5.5
-## 
+##
 ## [[2]]
 ## [1] 2.333333
-## 
+##
 ## [[3]]
-## [1] 25.5&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Essentially, this runs the following loop:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X &amp;lt;- list( 1:10, c(1,2,NA,4), 21:30)
+## [1] 25.5&lt;/code>&lt;/pre>
+&lt;p>Essentially, this runs the following loop:&lt;/p>
+&lt;pre class="r">&lt;code>X &amp;lt;- list( 1:10, c(1,2,NA,4), 21:30)
 output &amp;lt;- vector(&amp;quot;list&amp;quot;,3)
 for(i in 1:3){
-  output[[i]] &amp;lt;- mean(X[[i]],na.rm=T)
+output[[i]] &amp;lt;- mean(X[[i]],na.rm=T)
 }
-output&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
+output&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
 ## [1] 5.5
-## 
+##
 ## [[2]]
 ## [1] 2.333333
-## 
+##
 ## [[3]]
-## [1] 25.5&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Hopefully that will be enough to understand &lt;code&gt;lapply()&lt;/code&gt;. One unusual case is using &lt;code&gt;lapply()&lt;/code&gt; on a &lt;code&gt;data.frame&lt;/code&gt;-like structure. Now, a &lt;code&gt;data.frame&lt;/code&gt; looks like a table, but it’s actually a list, but the list is counter intuitive. Each element of the list is a &lt;em&gt;column&lt;/em&gt; in the &lt;code&gt;data.frame&lt;/code&gt;. So, if you run the following, you would get a result that is only 4 elements long&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;iris0 &amp;lt;- iris[,1:4]
-lapply(iris0,mean)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## $Sepal.Length
+## [1] 25.5&lt;/code>&lt;/pre>
+&lt;p>Hopefully that will be enough to understand &lt;code>lapply()&lt;/code>. One unusual case is using &lt;code>lapply()&lt;/code> on a &lt;code>data.frame&lt;/code>-like structure. Now, a &lt;code>data.frame&lt;/code> looks like a table, but it’s actually a list, but the list is counter intuitive. Each element of the list is a &lt;em>column&lt;/em> in the &lt;code>data.frame&lt;/code>. So, if you run the following, you would get a result that is only 4 elements long&lt;/p>
+&lt;pre class="r">&lt;code>iris0 &amp;lt;- iris[,1:4]
+lapply(iris0,mean)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## $Sepal.Length
 ## [1] 5.843333
-## 
+##
 ## $Sepal.Width
 ## [1] 3.057333
-## 
+##
 ## $Petal.Length
 ## [1] 3.758
-## 
+##
 ## $Petal.Width
-## [1] 1.199333&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;You might think that this would work &lt;em&gt;across&lt;/em&gt; the rows of the &lt;code&gt;data.frame&lt;/code&gt;, but it works &lt;em&gt;down&lt;/em&gt; the columns. Also note that these outputs are now also named the same as the input list. This can be useful for keeping track of your inputs and outputs.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;apply&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;apply()&lt;/h1&gt;
-&lt;p&gt;This brings us only &lt;code&gt;apply()&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;The &lt;code&gt;apply()&lt;/code&gt; function does a similar job, however it doesn’t work on lists, it works on multi-dimensional objects, so matrices and arrays. It tries to collapse a multi-dimensional object down by one (or more) of its dimensions. So it turns a matrix into a vector (or an array into a smaller array). As well as &lt;code&gt;X&lt;/code&gt; (which must be multi-dimensional, so definitely &lt;em&gt;not&lt;/em&gt; a list) and &lt;code&gt;FUN&lt;/code&gt;, it also takes &lt;code&gt;MARGIN&lt;/code&gt; which tells &lt;code&gt;apply()&lt;/code&gt; which dimension(s) to collapse:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;M &amp;lt;- matrix(1:9,nrow=3)
-apply(M,1,mean) #takes the mean of each row&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] 4 5 6&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;apply(M,2,mean) #takes the mean of each column&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] 2 5 8&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The type returned is the same as the type we started with, and once again &lt;code&gt;apply()&lt;/code&gt; can take other arguments as dots. So this works quite well with character matrices:
-{&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;M &amp;lt;- matrix(letters[1:9],nrow=3)
-apply(M,1,paste0,collapse=&amp;quot;&amp;quot;) #pastes across the rows&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;adg&amp;quot; &amp;quot;beh&amp;quot; &amp;quot;cfi&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;apply(M,2,paste0,collapse=&amp;quot;&amp;quot;) #pastes down the columns&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;abc&amp;quot; &amp;quot;def&amp;quot; &amp;quot;ghi&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This means we can use &lt;code&gt;apply()&lt;/code&gt; on a &lt;code&gt;data.frame&lt;/code&gt; to work across the rows, rather than down the columns. In this case, ever though a &lt;code&gt;data.frame&lt;/code&gt; is a list, because it can be accessed in the same way as a matrix, it still works&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;apply(iris0,1,mean)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##   [1] 2.550 2.375 2.350 2.350 2.550 2.850 2.425 2.525 2.225 2.400 2.700 2.500
-##  [13] 2.325 2.125 2.800 3.000 2.750 2.575 2.875 2.675 2.675 2.675 2.350 2.650
-##  [25] 2.575 2.450 2.600 2.600 2.550 2.425 2.425 2.675 2.725 2.825 2.425 2.400
-##  [37] 2.625 2.500 2.225 2.550 2.525 2.100 2.275 2.675 2.800 2.375 2.675 2.350
-##  [49] 2.675 2.475 4.075 3.900 4.100 3.275 3.850 3.575 3.975 2.900 3.850 3.300
-##  [61] 2.875 3.650 3.300 3.775 3.350 3.900 3.650 3.400 3.600 3.275 3.925 3.550
-##  [73] 3.800 3.700 3.725 3.850 3.950 4.100 3.725 3.200 3.200 3.150 3.400 3.850
-##  [85] 3.600 3.875 4.000 3.575 3.500 3.325 3.425 3.775 3.400 2.900 3.450 3.525
-##  [97] 3.525 3.675 2.925 3.475 4.525 3.875 4.525 4.150 4.375 4.825 3.400 4.575
+## [1] 1.199333&lt;/code>&lt;/pre>
+&lt;p>You might think that this would work &lt;em>across&lt;/em> the rows of the &lt;code>data.frame&lt;/code>, but it works &lt;em>down&lt;/em> the columns. Also note that these outputs are now also named the same as the input list. This can be useful for keeping track of your inputs and outputs.&lt;/p>
+&lt;/div>
+&lt;div id="apply" class="section level1">
+&lt;h1>apply()&lt;/h1>
+&lt;p>This brings us only &lt;code>apply()&lt;/code>.&lt;/p>
+&lt;p>The &lt;code>apply()&lt;/code> function does a similar job, however it doesn’t work on lists, it works on multi-dimensional objects, so matrices and arrays. It tries to collapse a multi-dimensional object down by one (or more) of its dimensions. So it turns a matrix into a vector (or an array into a smaller array). As well as &lt;code>X&lt;/code> (which must be multi-dimensional, so definitely &lt;em>not&lt;/em> a list) and &lt;code>FUN&lt;/code>, it also takes &lt;code>MARGIN&lt;/code> which tells &lt;code>apply()&lt;/code> which dimension(s) to collapse:&lt;/p>
+&lt;pre class="r">&lt;code>M &amp;lt;- matrix(1:9,nrow=3)
+apply(M,1,mean) #takes the mean of each row&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 4 5 6&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>apply(M,2,mean) #takes the mean of each column&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 2 5 8&lt;/code>&lt;/pre>
+&lt;p>The type returned is the same as the type we started with, and once again &lt;code>apply()&lt;/code> can take other arguments as dots. So this works quite well with character matrices:
+{&lt;/p>
+&lt;pre class="r">&lt;code>M &amp;lt;- matrix(letters[1:9],nrow=3)
+apply(M,1,paste0,collapse=&amp;quot;&amp;quot;) #pastes across the rows&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;adg&amp;quot; &amp;quot;beh&amp;quot; &amp;quot;cfi&amp;quot;&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>apply(M,2,paste0,collapse=&amp;quot;&amp;quot;) #pastes down the columns&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;abc&amp;quot; &amp;quot;def&amp;quot; &amp;quot;ghi&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>This means we can use &lt;code>apply()&lt;/code> on a &lt;code>data.frame&lt;/code> to work across the rows, rather than down the columns. In this case, ever though a &lt;code>data.frame&lt;/code> is a list, because it can be accessed in the same way as a matrix, it still works&lt;/p>
+&lt;pre class="r">&lt;code>apply(iris0,1,mean)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 2.550 2.375 2.350 2.350 2.550 2.850 2.425 2.525 2.225 2.400 2.700 2.500
+## [13] 2.325 2.125 2.800 3.000 2.750 2.575 2.875 2.675 2.675 2.675 2.350 2.650
+## [25] 2.575 2.450 2.600 2.600 2.550 2.425 2.425 2.675 2.725 2.825 2.425 2.400
+## [37] 2.625 2.500 2.225 2.550 2.525 2.100 2.275 2.675 2.800 2.375 2.675 2.350
+## [49] 2.675 2.475 4.075 3.900 4.100 3.275 3.850 3.575 3.975 2.900 3.850 3.300
+## [61] 2.875 3.650 3.300 3.775 3.350 3.900 3.650 3.400 3.600 3.275 3.925 3.550
+## [73] 3.800 3.700 3.725 3.850 3.950 4.100 3.725 3.200 3.200 3.150 3.400 3.850
+## [85] 3.600 3.875 4.000 3.575 3.500 3.325 3.425 3.775 3.400 2.900 3.450 3.525
+## [97] 3.525 3.675 2.925 3.475 4.525 3.875 4.525 4.150 4.375 4.825 3.400 4.575
 ## [109] 4.200 4.850 4.200 4.075 4.350 3.800 4.025 4.300 4.200 5.100 4.875 3.675
 ## [121] 4.525 3.825 4.800 3.925 4.450 4.550 3.900 3.950 4.225 4.400 4.550 5.025
 ## [133] 4.250 3.925 3.925 4.775 4.425 4.200 3.900 4.375 4.450 4.350 3.875 4.550
-## [145] 4.550 4.300 3.925 4.175 4.325 3.950&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;now gives a vector of the averages of each row.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;rest-of-the-family&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Rest of the family&lt;/h1&gt;
-&lt;p&gt;Now for &lt;code&gt;lapply()&lt;/code&gt;’s sisters:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;vapply()&lt;/code&gt; takes an extra argument, which is of the same type as what you want your outcome to be. This is the one that I use most often. You can think of it like a &lt;code&gt;lapply()&lt;/code&gt; that will output something other than a list. I usually give &lt;code&gt;FUN.VALUE&lt;/code&gt; as something like &lt;code&gt;integer(1)&lt;/code&gt; or &lt;code&gt;character(1)&lt;/code&gt;. These functions generate empty vectors of that type, they are wrappers around things like &lt;code&gt;vector(&#34;integer&#34;,1)&lt;/code&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X &amp;lt;- list(1:10,11:20,21:30)
-vapply(X,mean,numeric(1))&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1]  5.5 15.5 25.5&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This time, we get a numeric vector, rather than a list like we would with &lt;code&gt;lapply()&lt;/code&gt;. I find this much easier to ensure I’m working with the correct type of data.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sapply()&lt;/code&gt; tries to simplify your output, So if &lt;code&gt;lapply()&lt;/code&gt; outputs a list of vectors that are all the same length, instead of a list, it’ll return a matrix&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X &amp;lt;- list(1:5, 6:10, 11:15)
-sapply(X,range)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##      [,1] [,2] [,3]
-## [1,]    1    6   11
-## [2,]    5   10   15&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Each column in this result is the same as one of the elements of the list &lt;code&gt;lapply(X,range)&lt;/code&gt;. They’ve just been &lt;code&gt;cbind&lt;/code&gt;’d together. The use of &lt;code&gt;sapply()&lt;/code&gt; is &lt;em&gt;not&lt;/em&gt; common as the output can be inconsistent. `&lt;code&gt;vapply()&lt;/code&gt; is much prefered as it gives more control over the output. The above can be replicated with &lt;code&gt;vapply()&lt;/code&gt; and will throw an error if the output is unexpected:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X &amp;lt;- list(1:5, 6:10, 11:15)
-vapply(X,range,numeric(2))&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##      [,1] [,2] [,3]
-## [1,]    1    6   11
-## [2,]    5   10   15&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;tapply()&lt;/code&gt; is more complicated as it subsets the &lt;code&gt;X&lt;/code&gt; based on the &lt;code&gt;INDEX&lt;/code&gt;. It describes this as a &lt;em&gt;“Ragged Array”&lt;/em&gt;. I have &lt;em&gt;never&lt;/em&gt; used this directly, as I will usually do the subsetting manually using &lt;code&gt;split()&lt;/code&gt;, but that is essentialy what &lt;code&gt;tapply()&lt;/code&gt; does behind the scenes. &lt;code&gt;tapply()&lt;/code&gt; also comes with a &lt;code&gt;simplify&lt;/code&gt; argument, which decides whether R will try and simplify the results, like in &lt;code&gt;sapply()&lt;/code&gt; or not, by default it will try and invoke this simplification. The following are therefore (roughly) equivalent&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;tapply(X, INDEX, FUN, simplify=FALSE)
-
-lapply(split(X,INDEX), FUN)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;split()&lt;/code&gt; creates a list where the first vector is split into groups based on the second argument.&lt;/p&gt;
-&lt;p&gt;So we can compare using both a &lt;code&gt;lapply()&lt;/code&gt; and a &lt;code&gt;vapply()&lt;/code&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x &amp;lt;- 1:10
+## [145] 4.550 4.300 3.925 4.175 4.325 3.950&lt;/code>&lt;/pre>
+&lt;p>now gives a vector of the averages of each row.&lt;/p>
+&lt;/div>
+&lt;div id="rest-of-the-family" class="section level1">
+&lt;h1>Rest of the family&lt;/h1>
+&lt;p>Now for &lt;code>lapply()&lt;/code>’s sisters:&lt;/p>
+&lt;p>&lt;code>vapply()&lt;/code> takes an extra argument, which is of the same type as what you want your outcome to be. This is the one that I use most often. You can think of it like a &lt;code>lapply()&lt;/code> that will output something other than a list. I usually give &lt;code>FUN.VALUE&lt;/code> as something like &lt;code>integer(1)&lt;/code> or &lt;code>character(1)&lt;/code>. These functions generate empty vectors of that type, they are wrappers around things like &lt;code>vector("integer",1)&lt;/code>&lt;/p>
+&lt;pre class="r">&lt;code>X &amp;lt;- list(1:10,11:20,21:30)
+vapply(X,mean,numeric(1))&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 5.5 15.5 25.5&lt;/code>&lt;/pre>
+&lt;p>This time, we get a numeric vector, rather than a list like we would with &lt;code>lapply()&lt;/code>. I find this much easier to ensure I’m working with the correct type of data.&lt;/p>
+&lt;p>&lt;code>sapply()&lt;/code> tries to simplify your output, So if &lt;code>lapply()&lt;/code> outputs a list of vectors that are all the same length, instead of a list, it’ll return a matrix&lt;/p>
+&lt;pre class="r">&lt;code>X &amp;lt;- list(1:5, 6:10, 11:15)
+sapply(X,range)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [,1] [,2] [,3]
+## [1,] 1 6 11
+## [2,] 5 10 15&lt;/code>&lt;/pre>
+&lt;p>Each column in this result is the same as one of the elements of the list &lt;code>lapply(X,range)&lt;/code>. They’ve just been &lt;code>cbind&lt;/code>’d together. The use of &lt;code>sapply()&lt;/code> is &lt;em>not&lt;/em> common as the output can be inconsistent. `&lt;code>vapply()&lt;/code> is much prefered as it gives more control over the output. The above can be replicated with &lt;code>vapply()&lt;/code> and will throw an error if the output is unexpected:&lt;/p>
+&lt;pre class="r">&lt;code>X &amp;lt;- list(1:5, 6:10, 11:15)
+vapply(X,range,numeric(2))&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [,1] [,2] [,3]
+## [1,] 1 6 11
+## [2,] 5 10 15&lt;/code>&lt;/pre>
+&lt;p>&lt;code>tapply()&lt;/code> is more complicated as it subsets the &lt;code>X&lt;/code> based on the &lt;code>INDEX&lt;/code>. It describes this as a &lt;em>“Ragged Array”&lt;/em>. I have &lt;em>never&lt;/em> used this directly, as I will usually do the subsetting manually using &lt;code>split()&lt;/code>, but that is essentialy what &lt;code>tapply()&lt;/code> does behind the scenes. &lt;code>tapply()&lt;/code> also comes with a &lt;code>simplify&lt;/code> argument, which decides whether R will try and simplify the results, like in &lt;code>sapply()&lt;/code> or not, by default it will try and invoke this simplification. The following are therefore (roughly) equivalent&lt;/p>
+&lt;pre>&lt;code>tapply(X, INDEX, FUN, simplify=FALSE)
+lapply(split(X,INDEX), FUN)&lt;/code>&lt;/pre>
+&lt;p>&lt;code>split()&lt;/code> creates a list where the first vector is split into groups based on the second argument.&lt;/p>
+&lt;p>So we can compare using both a &lt;code>lapply()&lt;/code> and a &lt;code>vapply()&lt;/code>&lt;/p>
+&lt;pre class="r">&lt;code>x &amp;lt;- 1:10
 grp &amp;lt;- c(1,1,1,2,2,3,3,3,4,5)
-tapply(x,grp,sum,simplify=FALSE)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## $`1`
+tapply(x,grp,sum,simplify=FALSE)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## $`1`
 ## [1] 6
-## 
+##
 ## $`2`
 ## [1] 9
-## 
+##
 ## $`3`
 ## [1] 21
-## 
+##
 ## $`4`
 ## [1] 9
-## 
+##
 ## $`5`
-## [1] 10&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;lapply(split(x,grp),sum)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## $`1`
+## [1] 10&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>lapply(split(x,grp),sum)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## $`1`
 ## [1] 6
-## 
+##
 ## $`2`
 ## [1] 9
-## 
+##
 ## $`3`
 ## [1] 21
-## 
+##
 ## $`4`
 ## [1] 9
-## 
+##
 ## $`5`
-## [1] 10&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tapply(x,grp,sum)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##  1  2  3  4  5 
-##  6  9 21  9 10&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;vapply(split(x,grp),sum,numeric(1))&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##  1  2  3  4  5 
-##  6  9 21  9 10&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The other member of the &lt;code&gt;lapply()&lt;/code&gt; family is &lt;code&gt;mapply()&lt;/code&gt;. This is even more powerful as it allows you to &lt;em&gt;vectorise&lt;/em&gt; over multiple arguments, rather than just the first. Syntactically, the difference here is that the dots are the vectorised arguments, and the non-vectorised arguments go into the &lt;code&gt;MoreArgs&lt;/code&gt; argument.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;X &amp;lt;- list(&amp;quot;one&amp;quot;,&amp;quot;two&amp;quot;,c(&amp;quot;three&amp;quot;, &amp;quot;four&amp;quot;))
+## [1] 10&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>tapply(x,grp,sum)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## 1 2 3 4 5
+## 6 9 21 9 10&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>vapply(split(x,grp),sum,numeric(1))&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## 1 2 3 4 5
+## 6 9 21 9 10&lt;/code>&lt;/pre>
+&lt;p>The other member of the &lt;code>lapply()&lt;/code> family is &lt;code>mapply()&lt;/code>. This is even more powerful as it allows you to &lt;em>vectorise&lt;/em> over multiple arguments, rather than just the first. Syntactically, the difference here is that the dots are the vectorised arguments, and the non-vectorised arguments go into the &lt;code>MoreArgs&lt;/code> argument.&lt;/p>
+&lt;pre class="r">&lt;code>X &amp;lt;- list(&amp;quot;one&amp;quot;,&amp;quot;two&amp;quot;,c(&amp;quot;three&amp;quot;, &amp;quot;four&amp;quot;))
 Y &amp;lt;- list(&amp;quot;A&amp;quot;,&amp;quot;B&amp;quot;,c(&amp;quot;C&amp;quot;,&amp;quot;D&amp;quot;))
-mapply(paste,X,Y)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
+mapply(paste,X,Y)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
 ## [1] &amp;quot;one A&amp;quot;
-## 
+##
 ## [[2]]
 ## [1] &amp;quot;two B&amp;quot;
-## 
+##
 ## [[3]]
-## [1] &amp;quot;three C&amp;quot; &amp;quot;four D&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This is the same as doing:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;list(
-  paste(X[[1]],Y[[1]]),
-  paste(X[[2]],Y[[2]]),
-  paste(X[[3]],Y[[3]])
-)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] &amp;quot;three C&amp;quot; &amp;quot;four D&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>This is the same as doing:&lt;/p>
+&lt;pre class="r">&lt;code>list(
+paste(X[[1]],Y[[1]]),
+paste(X[[2]],Y[[2]]),
+paste(X[[3]],Y[[3]])
+)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
 ## [1] &amp;quot;one A&amp;quot;
-## 
+##
 ## [[2]]
 ## [1] &amp;quot;two B&amp;quot;
-## 
+##
 ## [[3]]
-## [1] &amp;quot;three C&amp;quot; &amp;quot;four D&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Here is one final example using &lt;code&gt;rep()&lt;/code&gt;, which repeats the first argument a specific number of times&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;  X &amp;lt;- letters[1:4]
-  Y &amp;lt;- 1:4
-  mapply(rep,X,Y)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## $a
+## [1] &amp;quot;three C&amp;quot; &amp;quot;four D&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>Here is one final example using &lt;code>rep()&lt;/code>, which repeats the first argument a specific number of times&lt;/p>
+&lt;pre class="r">&lt;code> X &amp;lt;- letters[1:4]
+Y &amp;lt;- 1:4
+mapply(rep,X,Y)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## $a
 ## [1] &amp;quot;a&amp;quot;
-## 
+##
 ## $b
 ## [1] &amp;quot;b&amp;quot; &amp;quot;b&amp;quot;
-## 
+##
 ## $c
 ## [1] &amp;quot;c&amp;quot; &amp;quot;c&amp;quot; &amp;quot;c&amp;quot;
-## 
+##
 ## $d
-## [1] &amp;quot;d&amp;quot; &amp;quot;d&amp;quot; &amp;quot;d&amp;quot; &amp;quot;d&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>The New Base Pipe</title>
-      <link>https://michaelbarrowman.co.uk/post/the-new-base-pipe/</link>
-      <pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate>
-      <guid>https://michaelbarrowman.co.uk/post/the-new-base-pipe/</guid>
-      <description>
-&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/anchor-sections/anchor-sections.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/anchor-sections/anchor-sections.js&#34;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;Here, we’re going to take a quick look at the new pipe introduced in the development version of &lt;a href=&#34;https://cran.r-project.org/bin/windows/base/rdevel.html&#34;&gt;R 4.1.0&lt;/a&gt;, and compare it to the well-known &lt;code&gt;%&amp;gt;%&lt;/code&gt; pipe from the &lt;code&gt;{magrittr}&lt;/code&gt; package that is used throughout the &lt;code&gt;{tidyverse}&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;There was a recent update to &lt;code&gt;{magrittr}&lt;/code&gt; which switched to implementing the bulk of the piping in the C language rather than directly in R. Because of this, as well as showing some features of the new base pipe, &lt;code&gt;|&amp;gt;&lt;/code&gt;, I’m going to compare it to both the new &lt;code&gt;{magrittr}&lt;/code&gt; pipe, &lt;code&gt;%&amp;gt;%&lt;/code&gt; and the old version, which I am going to style as &lt;code&gt;%&amp;gt;&amp;gt;%&lt;/code&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;install.packages(&amp;quot;magrittr&amp;quot;)
-remotes::install_github(&amp;quot;Myko101/magrittrclassic&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;If you want to install the classic &lt;code&gt;{magrittr}&lt;/code&gt; without this updated &lt;code&gt;%&amp;gt;&amp;gt;%&lt;/code&gt; pipe then run &lt;code&gt;remotes::install_github(&#34;Myko101/magrittrclassic@classic&#34;)&lt;/code&gt; to have it loaded as a package called &lt;code&gt;{magrittrclassic}&lt;/code&gt; or &lt;code&gt;remotes::install_github(&#34;tidyverse/magrittr@v1.5)&lt;/code&gt; to have it overwrite your current &lt;code&gt;{magrittr}&lt;/code&gt; package. Note that this is prone to errors, particularly if &lt;code&gt;{magrittr}&lt;/code&gt; or any packages that depend on it are loaded.&lt;/p&gt;
-&lt;p&gt;The first thing to inspect is the &lt;em&gt;speed&lt;/em&gt; of this new pipe in a simple situation. Let’s create a simple function and see how it goes in the &lt;code&gt;bench::mark()&lt;/code&gt; function&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;doubler &amp;lt;- function(val) 2*val
+## [1] &amp;quot;d&amp;quot; &amp;quot;d&amp;quot; &amp;quot;d&amp;quot; &amp;quot;d&amp;quot;&lt;/code>&lt;/pre>
+&lt;/div></description></item><item><title>The New Base Pipe</title><link>https://michaelbarrowman.co.uk/post/the-new-base-pipe/</link><pubDate>Sun, 06 Dec 2020 00:00:00 +0000</pubDate><guid>https://michaelbarrowman.co.uk/post/the-new-base-pipe/</guid><description>
+&lt;script src="https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js">&lt;/script>
+&lt;link href="https://michaelbarrowman.co.uk/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+&lt;script src="https://michaelbarrowman.co.uk/rmarkdown-libs/anchor-sections/anchor-sections.js">&lt;/script>
+&lt;p>Here, we’re going to take a quick look at the new pipe introduced in the development version of &lt;a href="https://cran.r-project.org/bin/windows/base/rdevel.html">R 4.1.0&lt;/a>, and compare it to the well-known &lt;code>%&amp;gt;%&lt;/code> pipe from the &lt;code>{magrittr}&lt;/code> package that is used throughout the &lt;code>{tidyverse}&lt;/code>.&lt;/p>
+&lt;p>There was a recent update to &lt;code>{magrittr}&lt;/code> which switched to implementing the bulk of the piping in the C language rather than directly in R. Because of this, as well as showing some features of the new base pipe, &lt;code>|&amp;gt;&lt;/code>, I’m going to compare it to both the new &lt;code>{magrittr}&lt;/code> pipe, &lt;code>%&amp;gt;%&lt;/code> and the old version, which I am going to style as &lt;code>%&amp;gt;&amp;gt;%&lt;/code>&lt;/p>
+&lt;pre class="r">&lt;code>install.packages(&amp;quot;magrittr&amp;quot;)
+remotes::install_github(&amp;quot;Myko101/magrittrclassic&amp;quot;)&lt;/code>&lt;/pre>
+&lt;p>If you want to install the classic &lt;code>{magrittr}&lt;/code> without this updated &lt;code>%&amp;gt;&amp;gt;%&lt;/code> pipe then run &lt;code>remotes::install_github("Myko101/magrittrclassic@classic")&lt;/code> to have it loaded as a package called &lt;code>{magrittrclassic}&lt;/code> or &lt;code>remotes::install_github("tidyverse/magrittr@v1.5)&lt;/code> to have it overwrite your current &lt;code>{magrittr}&lt;/code> package. Note that this is prone to errors, particularly if &lt;code>{magrittr}&lt;/code> or any packages that depend on it are loaded.&lt;/p>
+&lt;p>The first thing to inspect is the &lt;em>speed&lt;/em> of this new pipe in a simple situation. Let’s create a simple function and see how it goes in the &lt;code>bench::mark()&lt;/code> function&lt;/p>
+&lt;pre class="r">&lt;code>doubler &amp;lt;- function(val) 2*val
 x &amp;lt;- 1:10
 bm &amp;lt;- bench::mark(
-  standard = doubler(x),
-  magrittrclassic = x %&amp;gt;&amp;gt;% doubler(),
-  magrittr = x %&amp;gt;% doubler(),
-  base = x |&amp;gt; doubler()
+standard = doubler(x),
+magrittrclassic = x %&amp;gt;&amp;gt;% doubler(),
+magrittr = x %&amp;gt;% doubler(),
+base = x |&amp;gt; doubler()
 )
-ggplot2::autoplot(bm)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/benchsimple-1.png&#34; width=&#34;672&#34; /&gt;
-Note that the `bench::mark()`` function by default also checks whether the results we get are the same.&lt;/p&gt;
-&lt;p&gt;The first thing that jumps out is just how &lt;em&gt;slow&lt;/em&gt; the old &lt;code&gt;{magrittr}&lt;/code&gt; implementation is and how fast the base/standard versions are. The time scale on the plot is logarithmic, which shows that the old &lt;code&gt;{magrittr}&lt;/code&gt; function is almost 2 orders of magnitude slower (800ns vs 72.5 us), that’s nearly 100x slower!&lt;/p&gt;
-&lt;p&gt;Why is this? Firstly, the old &lt;code&gt;{magrittr}&lt;/code&gt; pipe builds functions in R and then applies them to data turn by turn. However, the new &lt;code&gt;{magrittr}&lt;/code&gt; pipe does all this in C. How is the base version so much faster? Well it is a syntax rather than an infix operator or a call.&lt;/p&gt;
-&lt;p&gt;This means that &lt;code&gt;x %&amp;gt;% f()&lt;/code&gt; builds functions and performs actions to produce output which is identical to &lt;code&gt;f(x)&lt;/code&gt;. However, &lt;code&gt;x |&amp;gt; f()&lt;/code&gt; &lt;em&gt;is&lt;/em&gt; the same as &lt;code&gt;f(x)&lt;/code&gt;, it’s just a different way of writing it. Think of using a single quote, &lt;code&gt;&#39;&lt;/code&gt; or a double quote &lt;code&gt;&#34;&lt;/code&gt; to create a string, the command you’re giving to R is different, but the result is parsed identically before any actual R code is ran. Similarly, when you run &lt;code&gt;2 + 3 + 4&lt;/code&gt;, R will parse that as &lt;code&gt;( (2+3) + 4 )&lt;/code&gt;because the addition operator can only run on two objects so R has to divvy them up appropriately (left to right).&lt;/p&gt;
-&lt;p&gt;This can be evidenced by capturing the calls using the &lt;code&gt;rlang::exprs()&lt;/code&gt; function&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rlang::exprs(
-  standard = doubler(x),
-  magrittrclassic = x %&amp;gt;&amp;gt;% doubler(),
-  magrittr = x %&amp;gt;% doubler(),
-  base = x |&amp;gt; doubler()
-)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## $standard
+ggplot2::autoplot(bm)&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/benchsimple-1.png" width="672" />
+Note that the `bench::mark()`` function by default also checks whether the results we get are the same.&lt;/p>
+&lt;p>The first thing that jumps out is just how &lt;em>slow&lt;/em> the old &lt;code>{magrittr}&lt;/code> implementation is and how fast the base/standard versions are. The time scale on the plot is logarithmic, which shows that the old &lt;code>{magrittr}&lt;/code> function is almost 2 orders of magnitude slower (800ns vs 72.5 us), that’s nearly 100x slower!&lt;/p>
+&lt;p>Why is this? Firstly, the old &lt;code>{magrittr}&lt;/code> pipe builds functions in R and then applies them to data turn by turn. However, the new &lt;code>{magrittr}&lt;/code> pipe does all this in C. How is the base version so much faster? Well it is a syntax rather than an infix operator or a call.&lt;/p>
+&lt;p>This means that &lt;code>x %&amp;gt;% f()&lt;/code> builds functions and performs actions to produce output which is identical to &lt;code>f(x)&lt;/code>. However, &lt;code>x |&amp;gt; f()&lt;/code> &lt;em>is&lt;/em> the same as &lt;code>f(x)&lt;/code>, it’s just a different way of writing it. Think of using a single quote, &lt;code>'&lt;/code> or a double quote &lt;code>"&lt;/code> to create a string, the command you’re giving to R is different, but the result is parsed identically before any actual R code is ran. Similarly, when you run &lt;code>2 + 3 + 4&lt;/code>, R will parse that as &lt;code>( (2+3) + 4 )&lt;/code>because the addition operator can only run on two objects so R has to divvy them up appropriately (left to right).&lt;/p>
+&lt;p>This can be evidenced by capturing the calls using the &lt;code>rlang::exprs()&lt;/code> function&lt;/p>
+&lt;pre class="r">&lt;code>rlang::exprs(
+standard = doubler(x),
+magrittrclassic = x %&amp;gt;&amp;gt;% doubler(),
+magrittr = x %&amp;gt;% doubler(),
+base = x |&amp;gt; doubler()
+)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## $standard
 ## doubler(x)
-## 
+##
 ## $magrittrclassic
 ## x %&amp;gt;&amp;gt;% doubler()
-## 
+##
 ## $magrittr
 ## x %&amp;gt;% doubler()
-## 
+##
 ## $base
-## doubler(x)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;See the last one there? &lt;code&gt;x |&amp;gt; doubler()&lt;/code&gt; is &lt;em&gt;exactly&lt;/em&gt; &lt;code&gt;doubler(x)&lt;/code&gt;. There’s no transforming in R here, it just &lt;em&gt;is&lt;/em&gt; the same thing.&lt;/p&gt;
-&lt;p&gt;This functionality is added to by the introduction of a new lambda function creation shortcut, let’s compare it to the &lt;code&gt;{magrittr}&lt;/code&gt; implementation(s) of anonymous functions, using the dot notation:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;bm2 &amp;lt;- bench::mark(
-  standard = (function(y) 2*y)(x),
-  magrittrclassic = x %&amp;gt;&amp;gt;% {2*.},
-  magrittr = x %&amp;gt;% {2*.},
-  base = x |&amp;gt; \(y) 2*y
+## doubler(x)&lt;/code>&lt;/pre>
+&lt;p>See the last one there? &lt;code>x |&amp;gt; doubler()&lt;/code> is &lt;em>exactly&lt;/em> &lt;code>doubler(x)&lt;/code>. There’s no transforming in R here, it just &lt;em>is&lt;/em> the same thing.&lt;/p>
+&lt;p>This functionality is added to by the introduction of a new lambda function creation shortcut, let’s compare it to the &lt;code>{magrittr}&lt;/code> implementation(s) of anonymous functions, using the dot notation:&lt;/p>
+&lt;pre class="r">&lt;code>bm2 &amp;lt;- bench::mark(
+standard = (function(y) 2*y)(x),
+magrittrclassic = x %&amp;gt;&amp;gt;% {2*.},
+magrittr = x %&amp;gt;% {2*.},
+base = x |&amp;gt; \(y) 2*y
 )
-ggplot2::autoplot(bm2)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/anon-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Timings are very similar to the previous one, especially when only looking relatively. The slow down is probably due to the creation of a function in each use, which also explains why they are all around the same amount slower. What do these piped lambda functions look like?&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rlang::exprs(
-  standard = (function(y) 2*y)(x),
-  magrittrclassic = x %&amp;gt;&amp;gt;% {2*.},
-  magrittr = x %&amp;gt;% {2*.},
-  base = x |&amp;gt; \(y) 2*y
-)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## $standard
+ggplot2::autoplot(bm2)&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/anon-1.png" width="672" />&lt;/p>
+&lt;p>Timings are very similar to the previous one, especially when only looking relatively. The slow down is probably due to the creation of a function in each use, which also explains why they are all around the same amount slower. What do these piped lambda functions look like?&lt;/p>
+&lt;pre class="r">&lt;code>rlang::exprs(
+standard = (function(y) 2*y)(x),
+magrittrclassic = x %&amp;gt;&amp;gt;% {2*.},
+magrittr = x %&amp;gt;% {2*.},
+base = x |&amp;gt; \(y) 2*y
+)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## $standard
 ## (function(y) 2 * y)(x)
-## 
+##
 ## $magrittrclassic
 ## x %&amp;gt;&amp;gt;% {
-##     2 * .
+## 2 * .
 ## }
-## 
+##
 ## $magrittr
 ## x %&amp;gt;% {
-##     2 * .
+## 2 * .
 ## }
-## 
+##
 ## $base
-## (function(y) 2 * y)(x)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Again the standard and base versions are parsed the same.&lt;/p&gt;
-&lt;p&gt;One final critic of the new pipe is that you can only pass an object to the &lt;em&gt;first&lt;/em&gt; argument in a function. This is a limitation in a lot of cases, particularly because most &lt;code&gt;{base}&lt;/code&gt; functions don’t follow the convention of passing the current data as the first argument. In &lt;code&gt;{magrittr}&lt;/code&gt;, we can use a &lt;code&gt;.&lt;/code&gt; to represent the piped data for other arguments, and if it appears at the top level (i.e. a direct argument) &lt;code&gt;{magrittr}&lt;/code&gt; won’t also ut it i as the first argument. But using the lambda &lt;code&gt;\()&lt;/code&gt; syntax, we can get around this. We can also pass named arguments in the same way we usually would when calling a function. Let’s try it and time it&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;multiplier &amp;lt;- function(a,val) a*val
+## (function(y) 2 * y)(x)&lt;/code>&lt;/pre>
+&lt;p>Again the standard and base versions are parsed the same.&lt;/p>
+&lt;p>One final critic of the new pipe is that you can only pass an object to the &lt;em>first&lt;/em> argument in a function. This is a limitation in a lot of cases, particularly because most &lt;code>{base}&lt;/code> functions don’t follow the convention of passing the current data as the first argument. In &lt;code>{magrittr}&lt;/code>, we can use a &lt;code>.&lt;/code> to represent the piped data for other arguments, and if it appears at the top level (i.e. a direct argument) &lt;code>{magrittr}&lt;/code> won’t also ut it i as the first argument. But using the lambda &lt;code>\()&lt;/code> syntax, we can get around this. We can also pass named arguments in the same way we usually would when calling a function. Let’s try it and time it&lt;/p>
+&lt;pre class="r">&lt;code>multiplier &amp;lt;- function(a,val) a*val
 bm3 &amp;lt;- bench::mark(
-  standard = multiplier(2,x),
-  magrittrclassic = x %&amp;gt;&amp;gt;% multiplier(2,.),
-  magrittr = x %&amp;gt;% multiplier(2,.),
-  base_named = x |&amp;gt; multiplier(a=2),
-  base_lambda = x |&amp;gt; \(y) multiplier(2,y)
+standard = multiplier(2,x),
+magrittrclassic = x %&amp;gt;&amp;gt;% multiplier(2,.),
+magrittr = x %&amp;gt;% multiplier(2,.),
+base_named = x |&amp;gt; multiplier(a=2),
+base_lambda = x |&amp;gt; \(y) multiplier(2,y)
 )
-ggplot2::autoplot(bm3)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/multiargs-1.png&#34; width=&#34;672&#34; /&gt;
-Clearly, the lambda version of the base packages takes more time, again because it is creating the function in the middle, whereas the named version does not have to do this. Let’s capture them to check that this is true&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rlang::exprs(
-  standard = multiplier(2,x),
-  magrittrclassic = x %&amp;gt;&amp;gt;% multiplier(2,.),
-  magrittr = x %&amp;gt;% multiplier(2,.),
-  base_lambda = x |&amp;gt; \(y) multiplier(2,y),
-  base_named = x |&amp;gt; multiplier(a=2)
-)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## $standard
+ggplot2::autoplot(bm3)&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/multiargs-1.png" width="672" />
+Clearly, the lambda version of the base packages takes more time, again because it is creating the function in the middle, whereas the named version does not have to do this. Let’s capture them to check that this is true&lt;/p>
+&lt;pre class="r">&lt;code>rlang::exprs(
+standard = multiplier(2,x),
+magrittrclassic = x %&amp;gt;&amp;gt;% multiplier(2,.),
+magrittr = x %&amp;gt;% multiplier(2,.),
+base_lambda = x |&amp;gt; \(y) multiplier(2,y),
+base_named = x |&amp;gt; multiplier(a=2)
+)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## $standard
 ## multiplier(2, x)
-## 
+##
 ## $magrittrclassic
 ## x %&amp;gt;&amp;gt;% multiplier(2, .)
-## 
+##
 ## $magrittr
 ## x %&amp;gt;% multiplier(2, .)
-## 
+##
 ## $base_lambda
 ## (function(y) multiplier(2, y))(x)
-## 
+##
 ## $base_named
-## multiplier(x, a = 2)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;One final thing to look at is the lambda function part of this whole process. While the &lt;code&gt;{tidyverse}&lt;/code&gt; doesn’t provide a general shortcut to produce these, they can be created within other functions. For example, the above syntax &lt;code&gt;{2*.}&lt;/code&gt; only works within the context of a pipe and wouldn’t work as a piece of code on it’s own.&lt;/p&gt;
-&lt;p&gt;The other major way in which lambda functions are declared is through the &lt;code&gt;{purrr}&lt;/code&gt; package. The &lt;code&gt;{purrr}&lt;/code&gt; package provides methods of functional programming (to an extent), and so within a &lt;code&gt;{purrr}&lt;/code&gt; function, we can define a function using the &lt;code&gt;~&lt;/code&gt; symbol and, like the previous &lt;code&gt;{tidyverse}&lt;/code&gt; lambda, using the &lt;code&gt;.&lt;/code&gt; as the value being passed to the function. Let’s compare it to the &lt;code&gt;\()&lt;/code&gt; syntax, remember, this is again a syntax and not a function/call!&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(purrr,warn.conflicts=F)
+## multiplier(x, a = 2)&lt;/code>&lt;/pre>
+&lt;p>One final thing to look at is the lambda function part of this whole process. While the &lt;code>{tidyverse}&lt;/code> doesn’t provide a general shortcut to produce these, they can be created within other functions. For example, the above syntax &lt;code>{2*.}&lt;/code> only works within the context of a pipe and wouldn’t work as a piece of code on it’s own.&lt;/p>
+&lt;p>The other major way in which lambda functions are declared is through the &lt;code>{purrr}&lt;/code> package. The &lt;code>{purrr}&lt;/code> package provides methods of functional programming (to an extent), and so within a &lt;code>{purrr}&lt;/code> function, we can define a function using the &lt;code>~&lt;/code> symbol and, like the previous &lt;code>{tidyverse}&lt;/code> lambda, using the &lt;code>.&lt;/code> as the value being passed to the function. Let’s compare it to the &lt;code>\()&lt;/code> syntax, remember, this is again a syntax and not a function/call!&lt;/p>
+&lt;pre class="r">&lt;code>library(purrr,warn.conflicts=F)
 bm4 &amp;lt;- bench::mark(
-  standard = {
-    res &amp;lt;- vector(&amp;quot;list&amp;quot;,10)
-    for(i in 1:10) res[[i]] &amp;lt;- mean(1:i)
-    res
-  },
-  purrr = map(1:10,~mean(1:.)),
-  base = lapply(1:10,\(i) mean(1:i))
+standard = {
+res &amp;lt;- vector(&amp;quot;list&amp;quot;,10)
+for(i in 1:10) res[[i]] &amp;lt;- mean(1:i)
+res
+},
+purrr = map(1:10,~mean(1:.)),
+base = lapply(1:10,\(i) mean(1:i))
 )
-ggplot2::autoplot(bm4)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/lambda-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Again due to the lack of overheads for the &lt;code&gt;\()&lt;/code&gt; syntax, speed is definitely on it’s side. We could just as easily use the &lt;code&gt;lapply()&lt;/code&gt; function here and declare the &lt;code&gt;FUN&lt;/code&gt; argument using &lt;code&gt;function(i) mean(1:i)&lt;/code&gt;, but writing &lt;code&gt;\()&lt;/code&gt; is much quicker/easier.&lt;/p&gt;
-&lt;p&gt;One last thing to inspect is how these functions handle errors.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;throw_error &amp;lt;- function(x){
-  stop(&amp;quot;OH NO!&amp;quot;)
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Previously, the trace stack for &lt;code&gt;{magrittr}&lt;/code&gt; was confusing and made it incredibly difficult to spot where the error came from. Let’s see how&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 %&amp;gt;&amp;gt;%
-  throw_error()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Error in throw_error(.): OH NO!&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;traceback()
+ggplot2::autoplot(bm4)&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="https://michaelbarrowman.co.uk/post/2020-12-06-the-new-base-pipe_files/figure-html/lambda-1.png" width="672" />&lt;/p>
+&lt;p>Again due to the lack of overheads for the &lt;code>\()&lt;/code> syntax, speed is definitely on it’s side. We could just as easily use the &lt;code>lapply()&lt;/code> function here and declare the &lt;code>FUN&lt;/code> argument using &lt;code>function(i) mean(1:i)&lt;/code>, but writing &lt;code>\()&lt;/code> is much quicker/easier.&lt;/p>
+&lt;p>One last thing to inspect is how these functions handle errors.&lt;/p>
+&lt;pre class="r">&lt;code>throw_error &amp;lt;- function(x){
+stop(&amp;quot;OH NO!&amp;quot;)
+}&lt;/code>&lt;/pre>
+&lt;p>Previously, the trace stack for &lt;code>{magrittr}&lt;/code> was confusing and made it incredibly difficult to spot where the error came from. Let’s see how&lt;/p>
+&lt;pre class="r">&lt;code>1:10 %&amp;gt;&amp;gt;%
+throw_error()&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## Error in throw_error(.): OH NO!&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>traceback()
 # 10: stop(&amp;quot;Why am I here?&amp;quot;) at #2
-#  9: throw_error(.)
-#  8: function_list[[k]](value)
-#  7: withVisible(function_list[[k]](value))
-#  6: freduce(value, `_function_list`)
-#  5: `_fseq`(`_lhs`)
-#  4: eval(quote(`_fseq`(`_lhs`)), env, env)
-#  3: eval(quote(`_fseq`(`_lhs`)), env, env)
-#  2: withVisible(eval(quote(`_fseq`(`_lhs`)), env, env))
-#  1: 1:10 %&amp;gt;&amp;gt;% throw_error()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Because of the structure of the old &lt;code&gt;{magrittr}&lt;/code&gt;, numbers 2 - 8 are functions that are called internally within the pipe and so as end-users, they mean nothing!&lt;/p&gt;
-&lt;p&gt;However, the new error handling, makes this much clearer without all the clutter:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 %&amp;gt;%
-  throw_error()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Error in throw_error(.): OH NO!&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;traceback()
+# 9: throw_error(.)
+# 8: function_list[[k]](value)
+# 7: withVisible(function_list[[k]](value))
+# 6: freduce(value, `_function_list`)
+# 5: `_fseq`(`_lhs`)
+# 4: eval(quote(`_fseq`(`_lhs`)), env, env)
+# 3: eval(quote(`_fseq`(`_lhs`)), env, env)
+# 2: withVisible(eval(quote(`_fseq`(`_lhs`)), env, env))
+# 1: 1:10 %&amp;gt;&amp;gt;% throw_error()&lt;/code>&lt;/pre>
+&lt;p>Because of the structure of the old &lt;code>{magrittr}&lt;/code>, numbers 2 - 8 are functions that are called internally within the pipe and so as end-users, they mean nothing!&lt;/p>
+&lt;p>However, the new error handling, makes this much clearer without all the clutter:&lt;/p>
+&lt;pre class="r">&lt;code>1:10 %&amp;gt;%
+throw_error()&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## Error in throw_error(.): OH NO!&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>traceback()
 # 3: stop(&amp;quot;Why am I here?&amp;quot;) at #2
 # 2: throw_error(.)
-# 1: 1:10 %&amp;gt;% throw_error()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Now let’s compare to the base pipe:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 |&amp;gt;
-  throw_error()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Error in throw_error(1:10): OH NO!&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;traceback()
+# 1: 1:10 %&amp;gt;% throw_error()&lt;/code>&lt;/pre>
+&lt;p>Now let’s compare to the base pipe:&lt;/p>
+&lt;pre class="r">&lt;code>1:10 |&amp;gt;
+throw_error()&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## Error in throw_error(1:10): OH NO!&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>traceback()
 # 2: stop(&amp;quot;Why am I here?&amp;quot;) at #2
-# 1: throw_error(1:10)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The trace is even shorter. This is because in the &lt;code&gt;{magrittr}&lt;/code&gt; pipe, the actual pipe is considered to be a call, and so it appears first in the trace stack (bottom of the list), BUT the base pipe is not a call, and so it doesn’t appear there at all. Just like when capturing the expression, the values are already nested.&lt;/p&gt;
-&lt;p&gt;Unlike errors though, warnings can be suppressed and code can continue, this means we can use the &lt;code&gt;suppressWarnings()&lt;/code&gt; function to keep them quiet and just carry on. This is useful if you know about the warning beforehand, but is only recomended if you know &lt;em&gt;exactly&lt;/em&gt; why the warning is appearing and just want your code to ignore it and run smoothly.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;throw_warning &amp;lt;- function(x) {
-  warning(&amp;quot;oh no&amp;quot;)
-  x
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This warning handling was one of the complaints about the old &lt;code&gt;{magrittr}&lt;/code&gt; pipe,take the below which is instinctively what you would expect to do&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 %&amp;gt;&amp;gt;%
-  throw_warning() %&amp;gt;&amp;gt;%
-  suppressWarnings()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Warning in throw_warning(.): oh no&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;It doesn’t work, instead you’d have to run&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;suppressWarnings(
-  1:10 %&amp;gt;&amp;gt;%
-    throw_warning()
-)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Which does not look pleasant and means going back to the beginning of your pipeline if you get to the point of wanting to suppress warnings.&lt;/p&gt;
-&lt;p&gt;The new &lt;code&gt;{magrittr}&lt;/code&gt; pipe and the &lt;code&gt;{base}&lt;/code&gt; pipe don’t have such qualms and they are evaluated exactly as you would expect them to:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 %&amp;gt;%
-  throw_warning() %&amp;gt;%
-  suppressWarnings()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;1:10 |&amp;gt;
-  throw_warning() |&amp;gt;
-  suppressWarnings()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;##  [1]  1  2  3  4  5  6  7  8  9 10&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Convert all Character variables to Factors</title>
-      <link>https://michaelbarrowman.co.uk/post/convert-all-character-variables-to-factors/</link>
-      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
-      <guid>https://michaelbarrowman.co.uk/post/convert-all-character-variables-to-factors/</guid>
-      <description>
-&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-
-
-&lt;div id=&#34;introduction&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;First, let’s load up what we need!&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;set.seed(15102020)
+# 1: throw_error(1:10)&lt;/code>&lt;/pre>
+&lt;p>The trace is even shorter. This is because in the &lt;code>{magrittr}&lt;/code> pipe, the actual pipe is considered to be a call, and so it appears first in the trace stack (bottom of the list), BUT the base pipe is not a call, and so it doesn’t appear there at all. Just like when capturing the expression, the values are already nested.&lt;/p>
+&lt;p>Unlike errors though, warnings can be suppressed and code can continue, this means we can use the &lt;code>suppressWarnings()&lt;/code> function to keep them quiet and just carry on. This is useful if you know about the warning beforehand, but is only recomended if you know &lt;em>exactly&lt;/em> why the warning is appearing and just want your code to ignore it and run smoothly.&lt;/p>
+&lt;pre class="r">&lt;code>throw_warning &amp;lt;- function(x) {
+warning(&amp;quot;oh no&amp;quot;)
+x
+}&lt;/code>&lt;/pre>
+&lt;p>This warning handling was one of the complaints about the old &lt;code>{magrittr}&lt;/code> pipe,take the below which is instinctively what you would expect to do&lt;/p>
+&lt;pre class="r">&lt;code>1:10 %&amp;gt;&amp;gt;%
+throw_warning() %&amp;gt;&amp;gt;%
+suppressWarnings()&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## Warning in throw_warning(.): oh no&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 1 2 3 4 5 6 7 8 9 10&lt;/code>&lt;/pre>
+&lt;p>It doesn’t work, instead you’d have to run&lt;/p>
+&lt;pre class="r">&lt;code>suppressWarnings(
+1:10 %&amp;gt;&amp;gt;%
+throw_warning()
+)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 1 2 3 4 5 6 7 8 9 10&lt;/code>&lt;/pre>
+&lt;p>Which does not look pleasant and means going back to the beginning of your pipeline if you get to the point of wanting to suppress warnings.&lt;/p>
+&lt;p>The new &lt;code>{magrittr}&lt;/code> pipe and the &lt;code>{base}&lt;/code> pipe don’t have such qualms and they are evaluated exactly as you would expect them to:&lt;/p>
+&lt;pre class="r">&lt;code>1:10 %&amp;gt;%
+throw_warning() %&amp;gt;%
+suppressWarnings()&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 1 2 3 4 5 6 7 8 9 10&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>1:10 |&amp;gt;
+throw_warning() |&amp;gt;
+suppressWarnings()&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 1 2 3 4 5 6 7 8 9 10&lt;/code>&lt;/pre></description></item><item><title>Convert all Character variables to Factors</title><link>https://michaelbarrowman.co.uk/post/convert-all-character-variables-to-factors/</link><pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate><guid>https://michaelbarrowman.co.uk/post/convert-all-character-variables-to-factors/</guid><description>
+&lt;script src="https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js">&lt;/script>
+&lt;div id="introduction" class="section level1">
+&lt;h1>Introduction&lt;/h1>
+&lt;p>First, let’s load up what we need!&lt;/p>
+&lt;pre class="r">&lt;code>set.seed(15102020)
 library(tidyverse) #We&amp;#39;ll use tidyverse functions
 library(magrittr) #A few extra pipes from magrittr
-library(lexicon) #For a word dictionary&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;When dealing wth complex datasets, it is common that a variable may be stored as a &lt;em&gt;character&lt;/em&gt; variable, when in reality what you want is a &lt;em&gt;factor&lt;/em&gt; variable. On the surface, these two constructs look very similar:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;eg_df &amp;lt;- tibble(
-  c_var = c(&amp;quot;Cat&amp;quot;,&amp;quot;Dog&amp;quot;,&amp;quot;Cat&amp;quot;,&amp;quot;Mouse&amp;quot;,&amp;quot;Mouse&amp;quot;),
-  f_var = factor(c(&amp;quot;Cat&amp;quot;,&amp;quot;Dog&amp;quot;,&amp;quot;Cat&amp;quot;,&amp;quot;Mouse&amp;quot;,&amp;quot;Mouse&amp;quot;))
+library(lexicon) #For a word dictionary&lt;/code>&lt;/pre>
+&lt;p>When dealing wth complex datasets, it is common that a variable may be stored as a &lt;em>character&lt;/em> variable, when in reality what you want is a &lt;em>factor&lt;/em> variable. On the surface, these two constructs look very similar:&lt;/p>
+&lt;pre class="r">&lt;code>eg_df &amp;lt;- tibble(
+c_var = c(&amp;quot;Cat&amp;quot;,&amp;quot;Dog&amp;quot;,&amp;quot;Cat&amp;quot;,&amp;quot;Mouse&amp;quot;,&amp;quot;Mouse&amp;quot;),
+f_var = factor(c(&amp;quot;Cat&amp;quot;,&amp;quot;Dog&amp;quot;,&amp;quot;Cat&amp;quot;,&amp;quot;Mouse&amp;quot;,&amp;quot;Mouse&amp;quot;))
 )
-eg_df&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 5 x 2
-##   c_var f_var
-##   &amp;lt;chr&amp;gt; &amp;lt;fct&amp;gt;
-## 1 Cat   Cat  
-## 2 Dog   Dog  
-## 3 Cat   Cat  
+eg_df&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## # A tibble: 5 x 2
+## c_var f_var
+## &amp;lt;chr&amp;gt; &amp;lt;fct&amp;gt;
+## 1 Cat Cat
+## 2 Dog Dog
+## 3 Cat Cat
 ## 4 Mouse Mouse
-## 5 Mouse Mouse&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;However, underneath they are treated quite differently. Behind the scenes, the factors are actually stored as integers with a special lookup table called their &lt;em&gt;levels&lt;/em&gt;, which can be seen if we print the variable individually:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;eg_df$f_var&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] Cat   Dog   Cat   Mouse Mouse
-## Levels: Cat Dog Mouse&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;We can also see the hidden numbers by converting this to numeric:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;as.numeric(eg_df$f_var)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] 1 2 1 3 3&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The first element, &lt;code&gt;Cat&lt;/code&gt; is associated with the first level, so it is stored as a &lt;code&gt;1&lt;/code&gt;, the third element is also &lt;code&gt;Cat&lt;/code&gt;, so it is also stored as a &lt;code&gt;1&lt;/code&gt;. The fourth &amp;amp; fifth are both &lt;code&gt;Mouse&lt;/code&gt; and so they’re stored as &lt;code&gt;3&lt;/code&gt;, indicating to use the third level.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;why-factors&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Why factors?&lt;/h1&gt;
-&lt;p&gt;Most statistical operations within R that can act on a &lt;em&gt;character&lt;/em&gt; variable will essentially convert to a &lt;em&gt;factor&lt;/em&gt; first. So, it’s more efficient to convert characters to factors before passing them into these kinds of functions. This also gives us more control over what we’re going to get.&lt;/p&gt;
-&lt;p&gt;This conversion makes many processes that work with characters a bit slow. If you’re wanting to do 20 functions on a data set and each one needs to convert your characters to factors internally before doing what it needs to, it’s clearly much faster to manually convert &lt;em&gt;once&lt;/em&gt; before using these functions.&lt;/p&gt;
-&lt;p&gt;Factors also take up slightly less space in your system’s memory. In R, this is approximately half the space of a character, however the way R stores this kind of data is surprisingly efficient. It’s definitely a good habit to get into if you ever want to move onto less efficient storage methods.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;converting&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Converting&lt;/h1&gt;
-&lt;p&gt;Above, I used the &lt;code&gt;factor()&lt;/code&gt; function to quickly convert a single character variable to a factor variable. But what about if you’ve got a large dataset with many, many character variables that you want to convert to factors. What’s the smoothest way to do this?&lt;/p&gt;
-&lt;div id=&#34;example-random-dataset&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;Example random dataset&lt;/h2&gt;
-&lt;p&gt;First, let’s create a large dataset, we’ll loop through a bunch of columns. We’ll use Fry’s 1000 Most Commonly Use English Words, as found in the &lt;code&gt;sw_fry_1000&lt;/code&gt; dataset from the &lt;code&gt;{lexicon}&lt;/code&gt; package to choose random words for each variable. We’ll also throw in some numeric variables to make things harder:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df &amp;lt;- tibble(id=1:1000) #declare a tibble with just an id variable
+## 5 Mouse Mouse&lt;/code>&lt;/pre>
+&lt;p>However, underneath they are treated quite differently. Behind the scenes, the factors are actually stored as integers with a special lookup table called their &lt;em>levels&lt;/em>, which can be seen if we print the variable individually:&lt;/p>
+&lt;pre class="r">&lt;code>eg_df$f_var&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] Cat Dog Cat Mouse Mouse
+## Levels: Cat Dog Mouse&lt;/code>&lt;/pre>
+&lt;p>We can also see the hidden numbers by converting this to numeric:&lt;/p>
+&lt;pre class="r">&lt;code>as.numeric(eg_df$f_var)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] 1 2 1 3 3&lt;/code>&lt;/pre>
+&lt;p>The first element, &lt;code>Cat&lt;/code> is associated with the first level, so it is stored as a &lt;code>1&lt;/code>, the third element is also &lt;code>Cat&lt;/code>, so it is also stored as a &lt;code>1&lt;/code>. The fourth &amp;amp; fifth are both &lt;code>Mouse&lt;/code> and so they’re stored as &lt;code>3&lt;/code>, indicating to use the third level.&lt;/p>
+&lt;/div>
+&lt;div id="why-factors" class="section level1">
+&lt;h1>Why factors?&lt;/h1>
+&lt;p>Most statistical operations within R that can act on a &lt;em>character&lt;/em> variable will essentially convert to a &lt;em>factor&lt;/em> first. So, it’s more efficient to convert characters to factors before passing them into these kinds of functions. This also gives us more control over what we’re going to get.&lt;/p>
+&lt;p>This conversion makes many processes that work with characters a bit slow. If you’re wanting to do 20 functions on a data set and each one needs to convert your characters to factors internally before doing what it needs to, it’s clearly much faster to manually convert &lt;em>once&lt;/em> before using these functions.&lt;/p>
+&lt;p>Factors also take up slightly less space in your system’s memory. In R, this is approximately half the space of a character, however the way R stores this kind of data is surprisingly efficient. It’s definitely a good habit to get into if you ever want to move onto less efficient storage methods.&lt;/p>
+&lt;/div>
+&lt;div id="converting" class="section level1">
+&lt;h1>Converting&lt;/h1>
+&lt;p>Above, I used the &lt;code>factor()&lt;/code> function to quickly convert a single character variable to a factor variable. But what about if you’ve got a large dataset with many, many character variables that you want to convert to factors. What’s the smoothest way to do this?&lt;/p>
+&lt;div id="example-random-dataset" class="section level2">
+&lt;h2>Example random dataset&lt;/h2>
+&lt;p>First, let’s create a large dataset, we’ll loop through a bunch of columns. We’ll use Fry’s 1000 Most Commonly Use English Words, as found in the &lt;code>sw_fry_1000&lt;/code> dataset from the &lt;code>{lexicon}&lt;/code> package to choose random words for each variable. We’ll also throw in some numeric variables to make things harder:&lt;/p>
+&lt;pre class="r">&lt;code>df &amp;lt;- tibble(id=1:1000) #declare a tibble with just an id variable
 for(i in 1:10)
 {
-  #How many distinct words should this variable have?
-  distinct_words &amp;lt;- round(rexp(1,1/20)) +1
-  
-  #What words can we choose from for this variable?
-  these_words &amp;lt;- sample(sw_fry_1000,distinct_words)
-  
-  #What&amp;#39;s the name of this variable?
-  this_name &amp;lt;- paste0(&amp;quot;var_&amp;quot;,ncol(df) + 1)
-  
-  #Generate the variable
-  this_variable &amp;lt;- sample(these_words,1000,replace=T)
-  
-  #Store it in the tibble
-  df[[this_name]] &amp;lt;- this_variable
-  
-  #Approximated 1/3 of the time, we&amp;#39;ll add a numeric variable
-  if(rbinom(1,1,1/3) == 1){
-    this_name &amp;lt;- paste0(&amp;quot;var_&amp;quot;,ncol(df)+1)
-    
-    df[[this_name]] &amp;lt;- rnorm(1000)
-  }
-  
+#How many distinct words should this variable have?
+distinct_words &amp;lt;- round(rexp(1,1/20)) +1
+#What words can we choose from for this variable?
+these_words &amp;lt;- sample(sw_fry_1000,distinct_words)
+#What&amp;#39;s the name of this variable?
+this_name &amp;lt;- paste0(&amp;quot;var_&amp;quot;,ncol(df) + 1)
+#Generate the variable
+this_variable &amp;lt;- sample(these_words,1000,replace=T)
+#Store it in the tibble
+df[[this_name]] &amp;lt;- this_variable
+#Approximated 1/3 of the time, we&amp;#39;ll add a numeric variable
+if(rbinom(1,1,1/3) == 1){
+this_name &amp;lt;- paste0(&amp;quot;var_&amp;quot;,ncol(df)+1)
+df[[this_name]] &amp;lt;- rnorm(1000)
 }
-df&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 1,000 x 14
-##       id var_2   var_3 var_4 var_5 var_6 var_7 var_8 var_9 var_10  var_11 var_12
-##    &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt;   &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;    &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt; 
-##  1     1 prop~  1.83   row   gove~ gene~ cow   else  women length  0.249  home  
-##  2     2 four  -0.225  wind~ reas~ speak cow   squa~ gold  exerc~  0.688  numer~
-##  3     3 leave  0.367  gold  plant came  cow   egg   human exerc~ -0.517  tell  
-##  4     4 rock   0.919  that  meat  gene~ cow   leave human skill  -0.280  fill  
-##  5     5 favor -1.01   mile  nine  tree  cow   very  hand  has    -0.0302 left  
-##  6     6 shop   1.14   hunt  drink speak cow   take  meat  hit     0.908  over  
-##  7     7 end    0.0427 engi~ seas~ gene~ cow   art   women exerc~  0.0395 unit  
-##  8     8 favor -0.647  body  drink gene~ cow   diff~ doll~ most   -0.458  people
-##  9     9 earth -2.47   fight nine  tree  cow   deci~ air   king    0.0182 child 
-## 10    10 end    1.35   prot~ drink speak cow   carry women grand  -0.978  conti~
-## # ... with 990 more rows, and 2 more variables: var_13 &amp;lt;chr&amp;gt;, var_14 &amp;lt;dbl&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The generation of this data is actually rather clunky as it’s using a loop, and we’re going to avoid that. Instead, we’re going to turn all these characters into factors in a single line. Here’s the line of code which will update the dataset, followed by the explanation:&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;the-solution&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;The solution&lt;/h1&gt;
-&lt;p&gt;With &lt;code&gt;{tidyverse}&lt;/code&gt; processes, the key thing we’re trying to do is build a “sentence” explaining what we’re doing. Here’s our expression, followed by the English sentence equivalent&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df %&amp;lt;&amp;gt;% mutate(across(where(is.character),as_factor))
+}
+df&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## # A tibble: 1,000 x 14
+## id var_2 var_3 var_4 var_5 var_6 var_7 var_8 var_9 var_10 var_11 var_12
+## &amp;lt;int&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;chr&amp;gt;
+## 1 1 prop~ 1.83 row gove~ gene~ cow else women length 0.249 home
+## 2 2 four -0.225 wind~ reas~ speak cow squa~ gold exerc~ 0.688 numer~
+## 3 3 leave 0.367 gold plant came cow egg human exerc~ -0.517 tell
+## 4 4 rock 0.919 that meat gene~ cow leave human skill -0.280 fill
+## 5 5 favor -1.01 mile nine tree cow very hand has -0.0302 left
+## 6 6 shop 1.14 hunt drink speak cow take meat hit 0.908 over
+## 7 7 end 0.0427 engi~ seas~ gene~ cow art women exerc~ 0.0395 unit
+## 8 8 favor -0.647 body drink gene~ cow diff~ doll~ most -0.458 people
+## 9 9 earth -2.47 fight nine tree cow deci~ air king 0.0182 child
+## 10 10 end 1.35 prot~ drink speak cow carry women grand -0.978 conti~
+## # ... with 990 more rows, and 2 more variables: var_13 &amp;lt;chr&amp;gt;, var_14 &amp;lt;dbl&amp;gt;&lt;/code>&lt;/pre>
+&lt;p>The generation of this data is actually rather clunky as it’s using a loop, and we’re going to avoid that. Instead, we’re going to turn all these characters into factors in a single line. Here’s the line of code which will update the dataset, followed by the explanation:&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div id="the-solution" class="section level1">
+&lt;h1>The solution&lt;/h1>
+&lt;p>With &lt;code>{tidyverse}&lt;/code> processes, the key thing we’re trying to do is build a “sentence” explaining what we’re doing. Here’s our expression, followed by the English sentence equivalent&lt;/p>
+&lt;pre class="r">&lt;code>df %&amp;lt;&amp;gt;% mutate(across(where(is.character),as_factor))
 #Update the df by mutating it across variables where it is a
-#   character by performing as_factor on them
-
-df&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## # A tibble: 1,000 x 14
-##       id var_2   var_3 var_4 var_5 var_6 var_7 var_8 var_9 var_10  var_11 var_12
-##    &amp;lt;int&amp;gt; &amp;lt;fct&amp;gt;   &amp;lt;dbl&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt;    &amp;lt;dbl&amp;gt; &amp;lt;fct&amp;gt; 
-##  1     1 prop~  1.83   row   gove~ gene~ cow   else  women length  0.249  home  
-##  2     2 four  -0.225  wind~ reas~ speak cow   squa~ gold  exerc~  0.688  numer~
-##  3     3 leave  0.367  gold  plant came  cow   egg   human exerc~ -0.517  tell  
-##  4     4 rock   0.919  that  meat  gene~ cow   leave human skill  -0.280  fill  
-##  5     5 favor -1.01   mile  nine  tree  cow   very  hand  has    -0.0302 left  
-##  6     6 shop   1.14   hunt  drink speak cow   take  meat  hit     0.908  over  
-##  7     7 end    0.0427 engi~ seas~ gene~ cow   art   women exerc~  0.0395 unit  
-##  8     8 favor -0.647  body  drink gene~ cow   diff~ doll~ most   -0.458  people
-##  9     9 earth -2.47   fight nine  tree  cow   deci~ air   king    0.0182 child 
-## 10    10 end    1.35   prot~ drink speak cow   carry women grand  -0.978  conti~
-## # ... with 990 more rows, and 2 more variables: var_13 &amp;lt;fct&amp;gt;, var_14 &amp;lt;dbl&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;And as if by magic, all of the characters are now factors (note the &lt;code&gt;&amp;lt;fct&amp;gt;&lt;/code&gt; under the variable names).&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;the-explanation&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;The Explanation&lt;/h1&gt;
-&lt;p&gt;The above code uses five functions, and an operation to perform the action. We’ll dig down into the functions and then climb back out as their results are processed:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;%&amp;lt;&amp;gt;%&lt;/code&gt; grabs the tibble on it’s left hand side and passes it to the function on the right. At this point, it works exactly like the regular &lt;code&gt;%&amp;gt;%&lt;/code&gt; operator
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;mutate()&lt;/code&gt; means we are creating or updating a variable inside the tibble
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;across()&lt;/code&gt; allows us perform a function &lt;em&gt;across&lt;/em&gt; many variables within the tibble
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;where()&lt;/code&gt; allows us to specify &lt;em&gt;where&lt;/em&gt; we want &lt;code&gt;across()&lt;/code&gt; to perform the function
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;is.character()&lt;/code&gt;, in the above line, we don’t use the brackets for &lt;code&gt;is.character()&lt;/code&gt; because we’re not applying it, we’re referencing it. We’re telling the &lt;code&gt;where()&lt;/code&gt; function to use this when checking where we want the function to be applied. The &lt;code&gt;is.character()&lt;/code&gt; function returned &lt;code&gt;TRUE&lt;/code&gt; when the variable is a character and &lt;code&gt;FALSE&lt;/code&gt; when it isn’t (e.g. a numeric)&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;where()&lt;/code&gt; therefore applies this function to every variable in &lt;code&gt;df&lt;/code&gt; and returns a vector of &lt;code&gt;TRUE&lt;/code&gt; and &lt;code&gt;FALSE&lt;/code&gt; to &lt;code&gt;across()&lt;/code&gt; to indicate which variables in the tibble we want &lt;code&gt;across()&lt;/code&gt; to act on&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;as_factor()&lt;/code&gt; converts things (e.g. characters) into factors.&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;across()&lt;/code&gt; has now been passed a logical vector telling it which columns to apply a function and a function that it needs to apply. So it does just that and outputs another tibble&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;mutate()&lt;/code&gt; has then been passed a tibble for it’s first argument (&lt;code&gt;df&lt;/code&gt; via the &lt;code&gt;%&amp;lt;&amp;gt;%&lt;/code&gt; pipe) and another tibble as the output of &lt;code&gt;across()&lt;/code&gt;. It stitches these together, if there are any names in common, it overwrites those in &lt;code&gt;df&lt;/code&gt; with those from &lt;code&gt;across()&lt;/code&gt;. All the variables in &lt;code&gt;across()&lt;/code&gt; will also appear in &lt;code&gt;df&lt;/code&gt; because that’s where they came from, so the old values are overwritten with the new ones&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;%&amp;lt;&amp;gt;%&lt;/code&gt; then receives this new tibble from &lt;code&gt;mutate()&lt;/code&gt; and stores it back into the &lt;code&gt;df&lt;/code&gt; tibble that we originally passed to it. This is essentially saying that &lt;code&gt;df %&amp;lt;&amp;gt;% f()&lt;/code&gt; is the same as &lt;code&gt;df &amp;lt;- df %&amp;gt;% f()&lt;/code&gt;, that’s why this is called the &lt;em&gt;assignment pipe&lt;/em&gt; or &lt;em&gt;updating pipe&lt;/em&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Getting a variable name in a pipeline</title>
-      <link>https://michaelbarrowman.co.uk/post/getting-a-variable-name-in-a-pipeline/</link>
-      <pubDate>Fri, 24 Jul 2020 00:00:00 +0000</pubDate>
-      <guid>https://michaelbarrowman.co.uk/post/getting-a-variable-name-in-a-pipeline/</guid>
-      <description>
-&lt;script src=&#34;https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;There is no greater staple of the &lt;code&gt;{tidyverse}&lt;/code&gt; than the pipe, &lt;code&gt;%&amp;gt;%&lt;/code&gt;, however not a lot of people understand what’s going on “under-the-bonnet” of the pipe. To be fair, not many people have to worry about it. Until you start trying to do a bit of meta-programming. Then things can get difficult.&lt;/p&gt;
-&lt;p&gt;Recently, a &lt;a href=&#34;https://community.rstudio.com/t/getting-argument-name-when-passed-via-i-keep-getting/74086&#34;&gt;question&lt;/a&gt; posed by user &lt;a href=&#34;https://community.rstudio.com/u/preposterior&#34;&gt;preposterior&lt;/a&gt; on RStudio Community embodied an issue that can happen when trying to extract the name of a variable.&lt;/p&gt;
-&lt;p&gt;When using the &lt;code&gt;{rlang}&lt;/code&gt; package, we can get the name of a variable passed into a function using the following:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;simple_get_name &amp;lt;- function(x){
-  x_sym &amp;lt;- ensym(x)
-  as_name(x_sym)
+# character by performing as_factor on them
+df&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## # A tibble: 1,000 x 14
+## id var_2 var_3 var_4 var_5 var_6 var_7 var_8 var_9 var_10 var_11 var_12
+## &amp;lt;int&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;fct&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;fct&amp;gt;
+## 1 1 prop~ 1.83 row gove~ gene~ cow else women length 0.249 home
+## 2 2 four -0.225 wind~ reas~ speak cow squa~ gold exerc~ 0.688 numer~
+## 3 3 leave 0.367 gold plant came cow egg human exerc~ -0.517 tell
+## 4 4 rock 0.919 that meat gene~ cow leave human skill -0.280 fill
+## 5 5 favor -1.01 mile nine tree cow very hand has -0.0302 left
+## 6 6 shop 1.14 hunt drink speak cow take meat hit 0.908 over
+## 7 7 end 0.0427 engi~ seas~ gene~ cow art women exerc~ 0.0395 unit
+## 8 8 favor -0.647 body drink gene~ cow diff~ doll~ most -0.458 people
+## 9 9 earth -2.47 fight nine tree cow deci~ air king 0.0182 child
+## 10 10 end 1.35 prot~ drink speak cow carry women grand -0.978 conti~
+## # ... with 990 more rows, and 2 more variables: var_13 &amp;lt;fct&amp;gt;, var_14 &amp;lt;dbl&amp;gt;&lt;/code>&lt;/pre>
+&lt;p>And as if by magic, all of the characters are now factors (note the &lt;code>&amp;lt;fct&amp;gt;&lt;/code> under the variable names).&lt;/p>
+&lt;/div>
+&lt;div id="the-explanation" class="section level1">
+&lt;h1>The Explanation&lt;/h1>
+&lt;p>The above code uses five functions, and an operation to perform the action. We’ll dig down into the functions and then climb back out as their results are processed:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>%&amp;lt;&amp;gt;%&lt;/code> grabs the tibble on it’s left hand side and passes it to the function on the right. At this point, it works exactly like the regular &lt;code>%&amp;gt;%&lt;/code> operator
+&lt;ul>
+&lt;li>&lt;code>mutate()&lt;/code> means we are creating or updating a variable inside the tibble
+&lt;ul>
+&lt;li>&lt;code>across()&lt;/code> allows us perform a function &lt;em>across&lt;/em> many variables within the tibble
+&lt;ul>
+&lt;li>&lt;code>where()&lt;/code> allows us to specify &lt;em>where&lt;/em> we want &lt;code>across()&lt;/code> to perform the function
+&lt;ul>
+&lt;li>&lt;code>is.character()&lt;/code>, in the above line, we don’t use the brackets for &lt;code>is.character()&lt;/code> because we’re not applying it, we’re referencing it. We’re telling the &lt;code>where()&lt;/code> function to use this when checking where we want the function to be applied. The &lt;code>is.character()&lt;/code> function returned &lt;code>TRUE&lt;/code> when the variable is a character and &lt;code>FALSE&lt;/code> when it isn’t (e.g. a numeric)&lt;/li>
+&lt;/ul>&lt;/li>
+&lt;li>&lt;code>where()&lt;/code> therefore applies this function to every variable in &lt;code>df&lt;/code> and returns a vector of &lt;code>TRUE&lt;/code> and &lt;code>FALSE&lt;/code> to &lt;code>across()&lt;/code> to indicate which variables in the tibble we want &lt;code>across()&lt;/code> to act on&lt;/li>
+&lt;li>&lt;code>as_factor()&lt;/code> converts things (e.g. characters) into factors.&lt;/li>
+&lt;/ul>&lt;/li>
+&lt;li>&lt;code>across()&lt;/code> has now been passed a logical vector telling it which columns to apply a function and a function that it needs to apply. So it does just that and outputs another tibble&lt;/li>
+&lt;/ul>&lt;/li>
+&lt;li>&lt;code>mutate()&lt;/code> has then been passed a tibble for it’s first argument (&lt;code>df&lt;/code> via the &lt;code>%&amp;lt;&amp;gt;%&lt;/code> pipe) and another tibble as the output of &lt;code>across()&lt;/code>. It stitches these together, if there are any names in common, it overwrites those in &lt;code>df&lt;/code> with those from &lt;code>across()&lt;/code>. All the variables in &lt;code>across()&lt;/code> will also appear in &lt;code>df&lt;/code> because that’s where they came from, so the old values are overwritten with the new ones&lt;/li>
+&lt;/ul>&lt;/li>
+&lt;li>&lt;code>%&amp;lt;&amp;gt;%&lt;/code> then receives this new tibble from &lt;code>mutate()&lt;/code> and stores it back into the &lt;code>df&lt;/code> tibble that we originally passed to it. This is essentially saying that &lt;code>df %&amp;lt;&amp;gt;% f()&lt;/code> is the same as &lt;code>df &amp;lt;- df %&amp;gt;% f()&lt;/code>, that’s why this is called the &lt;em>assignment pipe&lt;/em> or &lt;em>updating pipe&lt;/em>.&lt;/li>
+&lt;/ul>
+&lt;/div></description></item><item><title>Getting a variable name in a pipeline</title><link>https://michaelbarrowman.co.uk/post/getting-a-variable-name-in-a-pipeline/</link><pubDate>Fri, 24 Jul 2020 00:00:00 +0000</pubDate><guid>https://michaelbarrowman.co.uk/post/getting-a-variable-name-in-a-pipeline/</guid><description>
+&lt;script src="https://michaelbarrowman.co.uk/rmarkdown-libs/header-attrs/header-attrs.js">&lt;/script>
+&lt;p>There is no greater staple of the &lt;code>{tidyverse}&lt;/code> than the pipe, &lt;code>%&amp;gt;%&lt;/code>, however not a lot of people understand what’s going on “under-the-bonnet” of the pipe. To be fair, not many people have to worry about it. Until you start trying to do a bit of meta-programming. Then things can get difficult.&lt;/p>
+&lt;p>Recently, a &lt;a href="https://community.rstudio.com/t/getting-argument-name-when-passed-via-i-keep-getting/74086">question&lt;/a> posed by user &lt;a href="https://community.rstudio.com/u/preposterior">preposterior&lt;/a> on RStudio Community embodied an issue that can happen when trying to extract the name of a variable.&lt;/p>
+&lt;p>When using the &lt;code>{rlang}&lt;/code> package, we can get the name of a variable passed into a function using the following:&lt;/p>
+&lt;pre class="r">&lt;code>simple_get_name &amp;lt;- function(x){
+x_sym &amp;lt;- ensym(x)
+as_name(x_sym)
 }
-
 my_variable &amp;lt;- 1
-
-simple_get_name(my_variable)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;my_variable&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;However, when we try to use this with a pipe, it goes wrong:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_variable %&amp;gt;% simple_get_name()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;.&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;What is this!? Where did that dot come from? Well, that’s why you’re here. The &lt;code&gt;.&lt;/code&gt; can actually be used as a variable name in R, it’s perfectly syntactic, although ill-advised. Many functions (particularly &lt;code&gt;{tidyverse}&lt;/code&gt; ones) use the &lt;code&gt;.&lt;/code&gt; as a filler for other purposes, the pipe is a big example, but it is also prominent in the &lt;code&gt;map()&lt;/code&gt; family of functions in &lt;code&gt;{purrr}&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;The reason we get this output is because the pipe actually turns your pipeline of functions into a chain of new functions defined something like this:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;function(.)
-simple_get_name(.)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;So, it’s a chain of wrapper functions around your pipeline’d functions. The functions are direct copies of what you use in your pipeline. For example, if you have a few arguments, the &lt;code&gt;.&lt;/code&gt; will be inserted as the first argument. This makes sense as this is what the pipe does (passes your input into the first agrument, unless told otherwise).&lt;/p&gt;
-&lt;p&gt;Once the pipe has this chain of functions, it uses the &lt;code&gt;freduce()&lt;/code&gt; function to apply the functions in order to the output of the previous one. You already knew what a pipeline did, know you’ve got a little insight into how.&lt;/p&gt;
-&lt;p&gt;So how do we pull out that &lt;code&gt;my_variable&lt;/code&gt; name from within a piped function? Well the problem is that, within the context of that function, that variable is lost. It’s value has been put into the variable &lt;code&gt;.&lt;/code&gt;, but that original name is long gone.&lt;/p&gt;
-&lt;p&gt;We can, however, look back over the call-stack where the current function is being evaluated (which is what error-finding functions like &lt;code&gt;traceback()&lt;/code&gt; do). Within the pipe, it actually creates a relatively deeply nested set of calls (about 9 calls deep). However, the &lt;code&gt;sys.calls()&lt;/code&gt; function can return this stack. Compare for example the following two outputs:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;stack_fun &amp;lt;- function(x){
-  sys.calls()
+simple_get_name(my_variable)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;my_variable&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>However, when we try to use this with a pipe, it goes wrong:&lt;/p>
+&lt;pre class="r">&lt;code>my_variable %&amp;gt;% simple_get_name()&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;.&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>What is this!? Where did that dot come from? Well, that’s why you’re here. The &lt;code>.&lt;/code> can actually be used as a variable name in R, it’s perfectly syntactic, although ill-advised. Many functions (particularly &lt;code>{tidyverse}&lt;/code> ones) use the &lt;code>.&lt;/code> as a filler for other purposes, the pipe is a big example, but it is also prominent in the &lt;code>map()&lt;/code> family of functions in &lt;code>{purrr}&lt;/code>.&lt;/p>
+&lt;p>The reason we get this output is because the pipe actually turns your pipeline of functions into a chain of new functions defined something like this:&lt;/p>
+&lt;pre class="r">&lt;code>function(.)
+simple_get_name(.)&lt;/code>&lt;/pre>
+&lt;p>So, it’s a chain of wrapper functions around your pipeline’d functions. The functions are direct copies of what you use in your pipeline. For example, if you have a few arguments, the &lt;code>.&lt;/code> will be inserted as the first argument. This makes sense as this is what the pipe does (passes your input into the first agrument, unless told otherwise).&lt;/p>
+&lt;p>Once the pipe has this chain of functions, it uses the &lt;code>freduce()&lt;/code> function to apply the functions in order to the output of the previous one. You already knew what a pipeline did, know you’ve got a little insight into how.&lt;/p>
+&lt;p>So how do we pull out that &lt;code>my_variable&lt;/code> name from within a piped function? Well the problem is that, within the context of that function, that variable is lost. It’s value has been put into the variable &lt;code>.&lt;/code>, but that original name is long gone.&lt;/p>
+&lt;p>We can, however, look back over the call-stack where the current function is being evaluated (which is what error-finding functions like &lt;code>traceback()&lt;/code> do). Within the pipe, it actually creates a relatively deeply nested set of calls (about 9 calls deep). However, the &lt;code>sys.calls()&lt;/code> function can return this stack. Compare for example the following two outputs:&lt;/p>
+&lt;pre class="r">&lt;code>stack_fun &amp;lt;- function(x){
+sys.calls()
 }
 stack_fun(my_variable)
-my_variable %&amp;gt;% stack_fun&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
-## stack_fun(my_variable)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [[1]]
+my_variable %&amp;gt;% stack_fun&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
+## stack_fun(my_variable)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [[1]]
 ## my_variable %&amp;gt;% stack_fun
-## 
+##
 ## [[2]]
 ## withVisible(eval(quote(`_fseq`(`_lhs`)), env, env))
-## 
+##
 ## [[3]]
 ## eval(quote(`_fseq`(`_lhs`)), env, env)
-## 
+##
 ## [[4]]
 ## eval(quote(`_fseq`(`_lhs`)), env, env)
-## 
+##
 ## [[5]]
 ## `_fseq`(`_lhs`)
-## 
+##
 ## [[6]]
 ## freduce(value, `_function_list`)
-## 
+##
 ## [[7]]
 ## withVisible(function_list[[k]](value))
-## 
+##
 ## [[8]]
 ## function_list[[k]](value)
-## 
+##
 ## [[9]]
-## stack_fun(.)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The first element of this stack will be the initial call, in this case &lt;code&gt;my_variable %&amp;gt;% stack_fun()&lt;/code&gt;. This will be a &lt;code&gt;call&lt;/code&gt; object and so we can pull out the left-hand side by extracting the second element (the &lt;code&gt;%&amp;gt;%&lt;/code&gt; is the first element, and &lt;code&gt;stack_fun&lt;/code&gt; is the third). Therefore, the previous function can be written as:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;stacked_get_name &amp;lt;- function(x){
-  first_call &amp;lt;- sys.calls()[[1]] #get the first entry on the call stack
-  lhs &amp;lt;- first_call[[2]] #get the second element of this entry
-  z &amp;lt;- rlang::as_name(lhs)
-  print(z)
+## stack_fun(.)&lt;/code>&lt;/pre>
+&lt;p>The first element of this stack will be the initial call, in this case &lt;code>my_variable %&amp;gt;% stack_fun()&lt;/code>. This will be a &lt;code>call&lt;/code> object and so we can pull out the left-hand side by extracting the second element (the &lt;code>%&amp;gt;%&lt;/code> is the first element, and &lt;code>stack_fun&lt;/code> is the third). Therefore, the previous function can be written as:&lt;/p>
+&lt;pre class="r">&lt;code>stacked_get_name &amp;lt;- function(x){
+first_call &amp;lt;- sys.calls()[[1]] #get the first entry on the call stack
+lhs &amp;lt;- first_call[[2]] #get the second element of this entry
+z &amp;lt;- rlang::as_name(lhs)
+print(z)
 }
-
-my_variable %&amp;gt;% stacked_get_name()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;my_variable&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;It worked! Brilliant!&lt;/p&gt;
-&lt;p&gt;But, that’s not the end of our tale!&lt;/p&gt;
-&lt;p&gt;This is just looking for the initial call, and isn’t strictly going to seek out where there is a pipe. For example, it wouldn’t work with the following function, since &lt;code&gt;wrap_stacked_get_name()&lt;/code&gt; would be at the top of the stack:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;wrap_stacked_get_name &amp;lt;- function(wrapped_var){
-  this_variable &amp;lt;- wrapped_var+1
-  this_variable %&amp;gt;% stacked_get_name
+my_variable %&amp;gt;% stacked_get_name()&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;my_variable&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>It worked! Brilliant!&lt;/p>
+&lt;p>But, that’s not the end of our tale!&lt;/p>
+&lt;p>This is just looking for the initial call, and isn’t strictly going to seek out where there is a pipe. For example, it wouldn’t work with the following function, since &lt;code>wrap_stacked_get_name()&lt;/code> would be at the top of the stack:&lt;/p>
+&lt;pre class="r">&lt;code>wrap_stacked_get_name &amp;lt;- function(wrapped_var){
+this_variable &amp;lt;- wrapped_var+1
+this_variable %&amp;gt;% stacked_get_name
 }
-
-wrap_stacked_get_name(my_variable)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;my_variable&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This should return &lt;code&gt;this_variable&lt;/code&gt;, but since it’s looking at the initial call, it looks too far back up the call-stack and misses this variable.&lt;/p&gt;
-&lt;p&gt;However, by inspecting the entire stack for a pipe, we can pull out the most recent (i.e. the lowest) entry that is a pipe, and grab the left-hand side of that call.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;get_lhs &amp;lt;- function(){
-  calls &amp;lt;- sys.calls()
-  
-  #pull out the function or operator (e.g. the `%&amp;gt;%`)
-  call_firsts &amp;lt;- lapply(calls,`[[`,1) 
-  
-  #check which ones are equal to the pipe
-  pipe_calls &amp;lt;- vapply(call_firsts,identical,logical(1),quote(`%&amp;gt;%`))
-  
-  #if we have no pipes, then get_lhs() was called incorrectly
-  if(all(!pipe_calls)){
-    NULL
-  } else {
-    #Get the most recent pipe, lowest on the 
-    pipe_calls &amp;lt;- which(pipe_calls)
-    pipe_calls &amp;lt;- pipe_calls[length(pipe_calls)]
-    
-    #Get the second element of the pipe call
-    this_call &amp;lt;- calls[[c(pipe_calls,2)]]
-    
-    #We need to dig down into the call to find the original
-    while(is.call(this_call) &amp;amp;&amp;amp; identical(this_call[[1]],quote(`%&amp;gt;%`))){
-      this_call &amp;lt;- this_call[[2]]
-    }
-    this_call
-    
-  }
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Once we have the call, getting the lhs of it requires digging down. If we have pipeline, then it’s actually a nested sequence of operators. For example, &lt;code&gt;2+3+4&lt;/code&gt; makes sense to us, but R can’t add like this, it breaks this down by calculating from left to right, basically it does this &lt;code&gt;(2 + 3) + 4&lt;/code&gt;, which is the same as &lt;code&gt;add(add(2,3),4)&lt;/code&gt;. R does this with the pipe too.&lt;/p&gt;
-&lt;p&gt;If we’re piping a few things together, we write this: &lt;code&gt;my_variable %&amp;gt;% fun1 %&amp;gt;% fun2 %&amp;gt;% fun3&lt;/code&gt;, R reads it as this: &lt;code&gt;((my_variable %&amp;gt;% fun1) %&amp;gt;% fun2) %&amp;gt;% fun3&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;So we repeatedly check that the current function/operator/call name is a pipe, if it is, grab the second entry (which is what is being piped into the current pipe). If it isn’t, we’ve dug down far enough.&lt;/p&gt;
-&lt;p&gt;So, now that we have that little function, we can re-write our function to check for this first:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;get_name &amp;lt;- function(x){
-  lhs &amp;lt;- get_lhs()
-  if(is.null(lhs)){
-    lhs &amp;lt;- rlang::ensym(x)
-  }
-  as_name(lhs)
+wrap_stacked_get_name(my_variable)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;my_variable&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>This should return &lt;code>this_variable&lt;/code>, but since it’s looking at the initial call, it looks too far back up the call-stack and misses this variable.&lt;/p>
+&lt;p>However, by inspecting the entire stack for a pipe, we can pull out the most recent (i.e. the lowest) entry that is a pipe, and grab the left-hand side of that call.&lt;/p>
+&lt;pre class="r">&lt;code>get_lhs &amp;lt;- function(){
+calls &amp;lt;- sys.calls()
+#pull out the function or operator (e.g. the `%&amp;gt;%`)
+call_firsts &amp;lt;- lapply(calls,`[[`,1)
+#check which ones are equal to the pipe
+pipe_calls &amp;lt;- vapply(call_firsts,identical,logical(1),quote(`%&amp;gt;%`))
+#if we have no pipes, then get_lhs() was called incorrectly
+if(all(!pipe_calls)){
+NULL
+} else {
+#Get the most recent pipe, lowest on the
+pipe_calls &amp;lt;- which(pipe_calls)
+pipe_calls &amp;lt;- pipe_calls[length(pipe_calls)]
+#Get the second element of the pipe call
+this_call &amp;lt;- calls[[c(pipe_calls,2)]]
+#We need to dig down into the call to find the original
+while(is.call(this_call) &amp;amp;&amp;amp; identical(this_call[[1]],quote(`%&amp;gt;%`))){
+this_call &amp;lt;- this_call[[2]]
 }
-get_name(my_variable)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;my_variable&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_variable %&amp;gt;% get_name&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;my_variable&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Eureka! Now, let’s check the wrapper function:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;wrap_get_name &amp;lt;- function(wrapped_var){
-  this_variable &amp;lt;- wrapped_var+1
-  this_variable %&amp;gt;% get_name
+this_call
 }
-
-wrap_get_name(my_variable)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;this_variable&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_variable %&amp;gt;% wrap_get_name&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;this_variable&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This function acts a little strange around &lt;code&gt;fseq&lt;/code&gt; functions. But, the results make sense when you think about it.&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fseq_get_name &amp;lt;- . %&amp;gt;% get_name&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This method of creating a function, where the initial starting value of the pipeline is actually that previously discussed &lt;code&gt;.&lt;/code&gt;, this is essentially the same as the previous, &lt;code&gt;wrap_get_name()&lt;/code&gt; function:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fseq_get_name_dummy &amp;lt;- function(.){
-  . %&amp;gt;% get_name
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;As usual, we can use this function in one of two ways, either as a regular function with brackets or as a piped function&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;fseq_get_name(my_variable)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;.&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Looking at the alternate definition above, this makes sense as a result. The pipeline starts with a &lt;code&gt;.&lt;/code&gt;&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_variable %&amp;gt;% fseq_get_name&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;my_variable&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;What? This time, it’s returned the value being piped in. But, if we imagine a &lt;code&gt;fseq&lt;/code&gt;-style as sticking the pipelines together, then the actual start of this pipeline &lt;em&gt;is&lt;/em&gt; the &lt;code&gt;my_variable&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;And there we go. You’ve now got a bit more of an understanding of the &lt;code&gt;sys.calls()&lt;/code&gt; function and can extract the name of a variable being passed into a pipeline. This is a very basic way of doing it, it doesn’t do nearly enough checks as a function in-production would have to do, but it’s a good start. You could also extract any part of that original pipeline call.&lt;/p&gt;
-&lt;p style=&#34;font-size: calc(100% - 6px);&#34;&gt;
-Sidenote for the pro’s out there. This page is written in &lt;code&gt;{rmarkdown}&lt;/code&gt; and rendered using &lt;code&gt;{blogdown}&lt;/code&gt;. This meant that when I used the &lt;code&gt;sys.calls()&lt;/code&gt; function, I actually got a much deeper nesting of calls when rendering in these than in my RStudio application. This is because when rendering, each code chunk is evaluated &lt;em&gt;within another call&lt;/em&gt;. For the local render with &lt;code&gt;{rmarkdown}&lt;/code&gt;, I had to remove the first 18 calls before the “first” call was the one actually used above. For the &lt;code&gt;{blogdown}&lt;/code&gt; render, it is 24. This page has a bunch of hidden code chunks (using &lt;code&gt;eval=F&lt;/code&gt; and &lt;code&gt;echo=F&lt;/code&gt;) to make the code and the output look seamless.
-&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Deploy to GitHub Pages</title>
-      <link>https://michaelbarrowman.co.uk/post/deploy-to-github-pages/</link>
-      <pubDate>Wed, 22 Jul 2020 00:00:00 +0000</pubDate>
-      <guid>https://michaelbarrowman.co.uk/post/deploy-to-github-pages/</guid>
-      <description>&lt;p&gt;Within &lt;code&gt;git&lt;/code&gt;, the default branch is usually named &lt;code&gt;master&lt;/code&gt;, however in recent times, the negative connotations of that word are coming to the forefront of a lot of people&amp;rsquo;s minds, and so they are wishing to diverge away from that kind of terminology. The simplest change that we can make is to default to the &lt;code&gt;HEAD&lt;/code&gt; branch of a repo, which will point towards whatever the actual default branch is for a the repo, whether that is &lt;code&gt;master&lt;/code&gt;, &lt;code&gt;main&lt;/code&gt; or &lt;code&gt;Captain&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Unfortunately, this change can be slow, and although resources like GitHub have expressed interest in switching away from the default &lt;code&gt;master&lt;/code&gt;, some things are still hardcoded. One of which is the limitations of GitHub Pages deployment. Users can currently choose from one of three options:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Build website from the &lt;code&gt;master&lt;/code&gt; branch&lt;/li&gt;
-&lt;li&gt;Build website from the &lt;code&gt;docs&lt;/code&gt; folder in the &lt;code&gt;master&lt;/code&gt; branch&lt;/li&gt;
-&lt;li&gt;Build website from the &lt;code&gt;gh-pages&lt;/code&gt; branch&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The use of &lt;code&gt;master&lt;/code&gt; here is hardcoded, and many users currently choose to use the &lt;code&gt;docs&lt;/code&gt; folder in the &lt;code&gt;master&lt;/code&gt; branch as the location to store their website. Depending on workflows, the other two options might not be possible, or would require huge restructuring of your workflow if you wish to switch from &lt;code&gt;master&lt;/code&gt;. For User pages (repos that are &lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;), they can only be built from the &lt;code&gt;master&lt;/code&gt; branch; hopefully this will change soon (see 
-&lt;a href=&#34;#User-repos&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;For example, this blog is written using &lt;code&gt;blogdown&lt;/code&gt;, a package for &lt;code&gt;R&lt;/code&gt;, which helps to create blogs. In doing so, it creates a static site in a subdirectory called &lt;code&gt;public&lt;/code&gt; (by default). You do your work in the parent folder, it generates content in this subfolder. If you wish to use GitHub Pages to publish your site, the 
-&lt;a href=&#34;https://bookdown.org/yihui/blogdown/github-pages.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;recommendations&lt;/a&gt; by 
-&lt;a href=&#34;https://yihui.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;yihui&lt;/a&gt;, the package autho, are to set up your &lt;code&gt;git&lt;/code&gt; directory inside this subdirectory. This has the limitation of meaning the content of your parent folder is not backed up to GitHub, and is only stored locally.&lt;/p&gt;
-&lt;p&gt;However, thanks to GitHub user 
-&lt;a href=&#34;https://github.com/s0&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;s0&lt;/code&gt;&lt;/a&gt; and their GitHub Action, it&amp;rsquo;s possible to keep your work inside the &lt;code&gt;doc&lt;/code&gt; folder on your &lt;code&gt;default&lt;/code&gt; branch (whatever it&amp;rsquo;s name may be) and have that folder automatically pushed to the &lt;code&gt;gh-pages&lt;/code&gt; branch.&lt;/p&gt;
-&lt;p&gt;For those who don&amp;rsquo;t know, GitHub Actions allows automation when certain events (triggers) occur within your repo. You can try to write your own complicated commands, or use those created by other users within a relatively simple skeleton. We&amp;rsquo;re going to use one of these simple skeletons to utilise &lt;code&gt;s0&lt;/code&gt;&amp;rsquo;s work, thus allowing us to use the &lt;code&gt;main&lt;/code&gt; branch, rather than the &lt;code&gt;master&lt;/code&gt; branch on our repo. In order to use GitHub Actions, we need to add a 
-&lt;a href=&#34;https://en.wikipedia.org/wiki/YAML&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;.yaml&lt;/code&gt;&lt;/a&gt; file (stands for YAML Ain&amp;rsquo;t Markup Language) within our repo.&lt;/p&gt;
-&lt;h2 id=&#34;rename-the-branch&#34;&gt;Rename the branch&lt;/h2&gt;
-&lt;p&gt;The first step in this process would be to actually change the name of our &lt;code&gt;master&lt;/code&gt; branch to &lt;code&gt;main&lt;/code&gt; (or whatever you choose).&lt;/p&gt;
-&lt;h3 id=&#34;directly-on-github&#34;&gt;Directly on GitHub&lt;/h3&gt;
-&lt;p&gt;GitHub doesn&amp;rsquo;t directly support renaming of branches (as far as I know). So, what we need to do is to create a new branch for our repository by clicking on the branches button at the top left of our repo Code page (probably says &lt;code&gt;master&lt;/code&gt; right now).&lt;/p&gt;
-&lt;p&gt;And then type in the name of the new branch (e.g. &lt;code&gt;main&lt;/code&gt;). If this branch doesn&amp;rsquo;t exist, you&amp;rsquo;ll be given the option to &lt;code&gt;Create branch: main from &#39;master&#39;&lt;/code&gt;. Click on Settings then Branches and you can change your default branch to the new &lt;code&gt;main&lt;/code&gt; branch.&lt;/p&gt;
-&lt;p&gt;You can then delete your &lt;code&gt;master&lt;/code&gt; branch, although it might be worth holding on to it for a little while, in case anybody downstream from you is using it, or as a back-up in case something goes wrong!&lt;/p&gt;
-&lt;h3 id=&#34;git-bash&#34;&gt;Git Bash&lt;/h3&gt;
-&lt;p&gt;If you have a local copy of your repo, you can run the following in command line to rename it:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git branch -m master main
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;If you want to rename the current branch, you can simplify this to be:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git branch -m main
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Note you will have to use &lt;code&gt;-M&lt;/code&gt; instead of &lt;code&gt;-m&lt;/code&gt; if you are renaming a branch and only changing captalisation, e.g. from &lt;code&gt;main&lt;/code&gt; to &lt;code&gt;Main&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;A common error when running this command is the following (or something to this effect):&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;error: refname refs/heads/HEAD not found
+}&lt;/code>&lt;/pre>
+&lt;p>Once we have the call, getting the lhs of it requires digging down. If we have pipeline, then it’s actually a nested sequence of operators. For example, &lt;code>2+3+4&lt;/code> makes sense to us, but R can’t add like this, it breaks this down by calculating from left to right, basically it does this &lt;code>(2 + 3) + 4&lt;/code>, which is the same as &lt;code>add(add(2,3),4)&lt;/code>. R does this with the pipe too.&lt;/p>
+&lt;p>If we’re piping a few things together, we write this: &lt;code>my_variable %&amp;gt;% fun1 %&amp;gt;% fun2 %&amp;gt;% fun3&lt;/code>, R reads it as this: &lt;code>((my_variable %&amp;gt;% fun1) %&amp;gt;% fun2) %&amp;gt;% fun3&lt;/code>.&lt;/p>
+&lt;p>So we repeatedly check that the current function/operator/call name is a pipe, if it is, grab the second entry (which is what is being piped into the current pipe). If it isn’t, we’ve dug down far enough.&lt;/p>
+&lt;p>So, now that we have that little function, we can re-write our function to check for this first:&lt;/p>
+&lt;pre class="r">&lt;code>get_name &amp;lt;- function(x){
+lhs &amp;lt;- get_lhs()
+if(is.null(lhs)){
+lhs &amp;lt;- rlang::ensym(x)
+}
+as_name(lhs)
+}
+get_name(my_variable)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;my_variable&amp;quot;&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>my_variable %&amp;gt;% get_name&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;my_variable&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>Eureka! Now, let’s check the wrapper function:&lt;/p>
+&lt;pre class="r">&lt;code>wrap_get_name &amp;lt;- function(wrapped_var){
+this_variable &amp;lt;- wrapped_var+1
+this_variable %&amp;gt;% get_name
+}
+wrap_get_name(my_variable)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;this_variable&amp;quot;&lt;/code>&lt;/pre>
+&lt;pre class="r">&lt;code>my_variable %&amp;gt;% wrap_get_name&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;this_variable&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>This function acts a little strange around &lt;code>fseq&lt;/code> functions. But, the results make sense when you think about it.&lt;/p>
+&lt;pre class="r">&lt;code>fseq_get_name &amp;lt;- . %&amp;gt;% get_name&lt;/code>&lt;/pre>
+&lt;p>This method of creating a function, where the initial starting value of the pipeline is actually that previously discussed &lt;code>.&lt;/code>, this is essentially the same as the previous, &lt;code>wrap_get_name()&lt;/code> function:&lt;/p>
+&lt;pre class="r">&lt;code>fseq_get_name_dummy &amp;lt;- function(.){
+. %&amp;gt;% get_name
+}&lt;/code>&lt;/pre>
+&lt;p>As usual, we can use this function in one of two ways, either as a regular function with brackets or as a piped function&lt;/p>
+&lt;pre class="r">&lt;code>fseq_get_name(my_variable)&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;.&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>Looking at the alternate definition above, this makes sense as a result. The pipeline starts with a &lt;code>.&lt;/code>&lt;/p>
+&lt;pre class="r">&lt;code>my_variable %&amp;gt;% fseq_get_name&lt;/code>&lt;/pre>
+&lt;pre>&lt;code>## [1] &amp;quot;my_variable&amp;quot;&lt;/code>&lt;/pre>
+&lt;p>What? This time, it’s returned the value being piped in. But, if we imagine a &lt;code>fseq&lt;/code>-style as sticking the pipelines together, then the actual start of this pipeline &lt;em>is&lt;/em> the &lt;code>my_variable&lt;/code>.&lt;/p>
+&lt;p>And there we go. You’ve now got a bit more of an understanding of the &lt;code>sys.calls()&lt;/code> function and can extract the name of a variable being passed into a pipeline. This is a very basic way of doing it, it doesn’t do nearly enough checks as a function in-production would have to do, but it’s a good start. You could also extract any part of that original pipeline call.&lt;/p>
+&lt;p style="font-size: calc(100% - 6px);">
+Sidenote for the pro’s out there. This page is written in &lt;code>{rmarkdown}&lt;/code> and rendered using &lt;code>{blogdown}&lt;/code>. This meant that when I used the &lt;code>sys.calls()&lt;/code> function, I actually got a much deeper nesting of calls when rendering in these than in my RStudio application. This is because when rendering, each code chunk is evaluated &lt;em>within another call&lt;/em>. For the local render with &lt;code>{rmarkdown}&lt;/code>, I had to remove the first 18 calls before the “first” call was the one actually used above. For the &lt;code>{blogdown}&lt;/code> render, it is 24. This page has a bunch of hidden code chunks (using &lt;code>eval=F&lt;/code> and &lt;code>echo=F&lt;/code>) to make the code and the output look seamless.
+&lt;/p></description></item><item><title>Deploy to GitHub Pages</title><link>https://michaelbarrowman.co.uk/post/deploy-to-github-pages/</link><pubDate>Wed, 22 Jul 2020 00:00:00 +0000</pubDate><guid>https://michaelbarrowman.co.uk/post/deploy-to-github-pages/</guid><description>&lt;p>Within &lt;code>git&lt;/code>, the default branch is usually named &lt;code>master&lt;/code>, however in recent times, the negative connotations of that word are coming to the forefront of a lot of people&amp;rsquo;s minds, and so they are wishing to diverge away from that kind of terminology. The simplest change that we can make is to default to the &lt;code>HEAD&lt;/code> branch of a repo, which will point towards whatever the actual default branch is for a the repo, whether that is &lt;code>master&lt;/code>, &lt;code>main&lt;/code> or &lt;code>Captain&lt;/code>.&lt;/p>
+&lt;p>Unfortunately, this change can be slow, and although resources like GitHub have expressed interest in switching away from the default &lt;code>master&lt;/code>, some things are still hardcoded. One of which is the limitations of GitHub Pages deployment. Users can currently choose from one of three options:&lt;/p>
+&lt;ul>
+&lt;li>Build website from the &lt;code>master&lt;/code> branch&lt;/li>
+&lt;li>Build website from the &lt;code>docs&lt;/code> folder in the &lt;code>master&lt;/code> branch&lt;/li>
+&lt;li>Build website from the &lt;code>gh-pages&lt;/code> branch&lt;/li>
+&lt;/ul>
+&lt;p>The use of &lt;code>master&lt;/code> here is hardcoded, and many users currently choose to use the &lt;code>docs&lt;/code> folder in the &lt;code>master&lt;/code> branch as the location to store their website. Depending on workflows, the other two options might not be possible, or would require huge restructuring of your workflow if you wish to switch from &lt;code>master&lt;/code>. For User pages (repos that are &lt;code>&amp;lt;username&amp;gt;.github.io&lt;/code>), they can only be built from the &lt;code>master&lt;/code> branch; hopefully this will change soon (see
+&lt;a href="#User-repos">here&lt;/a>).&lt;/p>
+&lt;p>For example, this blog is written using &lt;code>blogdown&lt;/code>, a package for &lt;code>R&lt;/code>, which helps to create blogs. In doing so, it creates a static site in a subdirectory called &lt;code>public&lt;/code> (by default). You do your work in the parent folder, it generates content in this subfolder. If you wish to use GitHub Pages to publish your site, the
+&lt;a href="https://bookdown.org/yihui/blogdown/github-pages.html" target="_blank" rel="noopener">recommendations&lt;/a> by
+&lt;a href="https://yihui.org/" target="_blank" rel="noopener">yihui&lt;/a>, the package autho, are to set up your &lt;code>git&lt;/code> directory inside this subdirectory. This has the limitation of meaning the content of your parent folder is not backed up to GitHub, and is only stored locally.&lt;/p>
+&lt;p>However, thanks to GitHub user
+&lt;a href="https://github.com/s0" target="_blank" rel="noopener">&lt;code>s0&lt;/code>&lt;/a> and their GitHub Action, it&amp;rsquo;s possible to keep your work inside the &lt;code>doc&lt;/code> folder on your &lt;code>default&lt;/code> branch (whatever it&amp;rsquo;s name may be) and have that folder automatically pushed to the &lt;code>gh-pages&lt;/code> branch.&lt;/p>
+&lt;p>For those who don&amp;rsquo;t know, GitHub Actions allows automation when certain events (triggers) occur within your repo. You can try to write your own complicated commands, or use those created by other users within a relatively simple skeleton. We&amp;rsquo;re going to use one of these simple skeletons to utilise &lt;code>s0&lt;/code>&amp;rsquo;s work, thus allowing us to use the &lt;code>main&lt;/code> branch, rather than the &lt;code>master&lt;/code> branch on our repo. In order to use GitHub Actions, we need to add a
+&lt;a href="https://en.wikipedia.org/wiki/YAML" target="_blank" rel="noopener">&lt;code>.yaml&lt;/code>&lt;/a> file (stands for YAML Ain&amp;rsquo;t Markup Language) within our repo.&lt;/p>
+&lt;h2 id="rename-the-branch">Rename the branch&lt;/h2>
+&lt;p>The first step in this process would be to actually change the name of our &lt;code>master&lt;/code> branch to &lt;code>main&lt;/code> (or whatever you choose).&lt;/p>
+&lt;h3 id="directly-on-github">Directly on GitHub&lt;/h3>
+&lt;p>GitHub doesn&amp;rsquo;t directly support renaming of branches (as far as I know). So, what we need to do is to create a new branch for our repository by clicking on the branches button at the top left of our repo Code page (probably says &lt;code>master&lt;/code> right now).&lt;/p>
+&lt;p>And then type in the name of the new branch (e.g. &lt;code>main&lt;/code>). If this branch doesn&amp;rsquo;t exist, you&amp;rsquo;ll be given the option to &lt;code>Create branch: main from 'master'&lt;/code>. Click on Settings then Branches and you can change your default branch to the new &lt;code>main&lt;/code> branch.&lt;/p>
+&lt;p>You can then delete your &lt;code>master&lt;/code> branch, although it might be worth holding on to it for a little while, in case anybody downstream from you is using it, or as a back-up in case something goes wrong!&lt;/p>
+&lt;h3 id="git-bash">Git Bash&lt;/h3>
+&lt;p>If you have a local copy of your repo, you can run the following in command line to rename it:&lt;/p>
+&lt;pre>&lt;code>git branch -m master main
+&lt;/code>&lt;/pre>
+&lt;p>If you want to rename the current branch, you can simplify this to be:&lt;/p>
+&lt;pre>&lt;code>git branch -m main
+&lt;/code>&lt;/pre>
+&lt;p>Note you will have to use &lt;code>-M&lt;/code> instead of &lt;code>-m&lt;/code> if you are renaming a branch and only changing captalisation, e.g. from &lt;code>main&lt;/code> to &lt;code>Main&lt;/code>.&lt;/p>
+&lt;p>A common error when running this command is the following (or something to this effect):&lt;/p>
+&lt;pre>&lt;code>error: refname refs/heads/HEAD not found
 fatal: Branch rename failed
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This means you don&amp;rsquo;t have a branch checked out, and so you&amp;rsquo;ll have to create a new branch, but when doing so, you can name it whatever you want&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git checkout -b main
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;After you&amp;rsquo;ve done this locally, you&amp;rsquo;ll have to &lt;code&gt;git push&lt;/code&gt; your repo up to GitHub again. However, you&amp;rsquo;ll probably get an error telling you to run the following instead&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git push --set-upstream origin main
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This will just ensure your new &lt;code&gt;main&lt;/code&gt; branch is upstream of the previous &lt;code&gt;master&lt;/code&gt; branch.&lt;/p&gt;
-&lt;p&gt;Then you&amp;rsquo;ll have to change GitHub&amp;rsquo;s default branch to your new one in the Settings as above.&lt;/p&gt;
-&lt;h2 id=&#34;github-workflows&#34;&gt;GitHub Workflows&lt;/h2&gt;
-&lt;p&gt;GitHub Action files are stored in a special directory in your repo, the &lt;code&gt;.github/workflow&lt;/code&gt; directory. All we have to do is create a file in this directory, name it something useful and give it the &lt;code&gt;.yaml&lt;/code&gt; extension. Sounds simple, and for most people it is. The only limitation is that sometimes, we can&amp;rsquo;t create folders with the &lt;code&gt;.&lt;/code&gt; at the start (particularly on Windows). Or at least, we can&amp;rsquo;t create them in the usual Right Click &amp;gt; New &amp;gt; Folder method in Windows Explorer. The simple way is to use Command Line to do it.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;mkdir .github
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The &lt;code&gt;mkdir&lt;/code&gt; command makes directories. It&amp;rsquo;s as simple as that.&lt;/p&gt;
-&lt;p&gt;Alternatively, you can create this directly on GitHub in the usual manner. Just remember that you will have to &lt;code&gt;git pull&lt;/code&gt; any changes you make this way.&lt;/p&gt;
-&lt;h2 id=&#34;the-yaml&#34;&gt;The YAML&lt;/h2&gt;
-&lt;p&gt;The YAML file that we create will look like this:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;name: &#39;Deploy to gh-pages&#39;
+&lt;/code>&lt;/pre>
+&lt;p>This means you don&amp;rsquo;t have a branch checked out, and so you&amp;rsquo;ll have to create a new branch, but when doing so, you can name it whatever you want&lt;/p>
+&lt;pre>&lt;code>git checkout -b main
+&lt;/code>&lt;/pre>
+&lt;p>After you&amp;rsquo;ve done this locally, you&amp;rsquo;ll have to &lt;code>git push&lt;/code> your repo up to GitHub again. However, you&amp;rsquo;ll probably get an error telling you to run the following instead&lt;/p>
+&lt;pre>&lt;code>git push --set-upstream origin main
+&lt;/code>&lt;/pre>
+&lt;p>This will just ensure your new &lt;code>main&lt;/code> branch is upstream of the previous &lt;code>master&lt;/code> branch.&lt;/p>
+&lt;p>Then you&amp;rsquo;ll have to change GitHub&amp;rsquo;s default branch to your new one in the Settings as above.&lt;/p>
+&lt;h2 id="github-workflows">GitHub Workflows&lt;/h2>
+&lt;p>GitHub Action files are stored in a special directory in your repo, the &lt;code>.github/workflow&lt;/code> directory. All we have to do is create a file in this directory, name it something useful and give it the &lt;code>.yaml&lt;/code> extension. Sounds simple, and for most people it is. The only limitation is that sometimes, we can&amp;rsquo;t create folders with the &lt;code>.&lt;/code> at the start (particularly on Windows). Or at least, we can&amp;rsquo;t create them in the usual Right Click &amp;gt; New &amp;gt; Folder method in Windows Explorer. The simple way is to use Command Line to do it.&lt;/p>
+&lt;pre>&lt;code>mkdir .github
+&lt;/code>&lt;/pre>
+&lt;p>The &lt;code>mkdir&lt;/code> command makes directories. It&amp;rsquo;s as simple as that.&lt;/p>
+&lt;p>Alternatively, you can create this directly on GitHub in the usual manner. Just remember that you will have to &lt;code>git pull&lt;/code> any changes you make this way.&lt;/p>
+&lt;h2 id="the-yaml">The YAML&lt;/h2>
+&lt;p>The YAML file that we create will look like this:&lt;/p>
+&lt;pre>&lt;code>name: 'Deploy to gh-pages'
 on:
-  push:	
-    branches:
-      - main
-    paths:	
-      - &#39;docs/**&#39;
-      
+push:
+branches:
+- main
+paths:
+- 'docs/**'
 jobs:
-  deploy:
-    name: Push docs to gh-pages
-    runs-on: ubuntu-latest    
-    steps:
-    - uses: actions/checkout@main
-
-    - name: Deploy
-      uses: s0/git-publish-subdir-action@develop
-      env:
-        REPO: self
-        BRANCH: gh-pages
-        FOLDER: docs
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Feel free to copy the above directly. If you&amp;rsquo;re using RStudio to manage your repo, you can create a New Text File, save it with the extension &lt;code&gt;.yaml&lt;/code&gt; and RStudio will conveniently colour code the file. Otherwise, you can do it in notepad (just make sure the extension sticks).&lt;/p&gt;
-&lt;p&gt;What does this file do? I don&amp;rsquo;t think it&amp;rsquo;s too important to go into great details here, there is plenty of 
-&lt;a href=&#34;https://docs.github.com/en/actions&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;reading to be done&lt;/a&gt; on GitHub Actions. So, just a quick look at the important bits, in case you want to change something. Apart from the &lt;code&gt;name:&lt;/code&gt; line, it&amp;rsquo;s split into two parts, the &lt;code&gt;on:&lt;/code&gt; and the &lt;code&gt;jobs:&lt;/code&gt; parts. Note that in YAML files, whitespace is important, and gives structure: &lt;code&gt;push:&lt;/code&gt; is a child of &lt;code&gt;on:&lt;/code&gt; and &lt;code&gt;jobs:&lt;/code&gt; is the parent of &lt;code&gt;deploy:&lt;/code&gt;, but &lt;code&gt;on:&lt;/code&gt; and &lt;code&gt;jobs:&lt;/code&gt; are siblings.&lt;/p&gt;
-&lt;h3 id=&#34;the-triggers&#34;&gt;The Triggers&lt;/h3&gt;
-&lt;p&gt;The &lt;code&gt;on:&lt;/code&gt; part contains information on what events will trigger the event. Here, we&amp;rsquo;re telling GitHub that we want this Action to run when we push our repo to the &lt;code&gt;main&lt;/code&gt; branch, only if something has changed in the &lt;code&gt;docs&lt;/code&gt; folder (or path). This means that any pushes that happen to other branches will be ignored, and any pushes that don&amp;rsquo;t change our &lt;code&gt;docs&lt;/code&gt; folder will also be ignored. The syntax for &lt;code&gt;paths:&lt;/code&gt; actually allows you to check for changes to anything that matches this string, so by using &lt;code&gt;&#39;docs/**&#39;&lt;/code&gt;, we match anything that starts with &lt;code&gt;&#39;docs/&#39;&lt;/code&gt;, i.e. anything within the &lt;code&gt;docs&lt;/code&gt; folder. This is useful because we&amp;rsquo;re building our &lt;code&gt;gh-pages&lt;/code&gt; branch based solely on what&amp;rsquo;s in &lt;code&gt;docs&lt;/code&gt;. If something changes elsewhere in the repo, it doesn&amp;rsquo;t matter (even if you are accessing data in your repo, but outside of your site because those changes will still be pushed to your repo, just don&amp;rsquo;t need to trigger a site rebuild). It also doesn&amp;rsquo;t matter what happens on other branches (such as a &lt;code&gt;development&lt;/code&gt; branch) because we&amp;rsquo;re not wanting to build our GitHub pages from them.&lt;/p&gt;
-&lt;h3 id=&#34;the-actions&#34;&gt;The Actions&lt;/h3&gt;
-&lt;p&gt;The &lt;code&gt;jobs:&lt;/code&gt; part contains the actual actions that occurs. You can have many Actions and jobs within he same file, but here we only have one job, which consists of two tasks. &lt;code&gt;deploy:&lt;/code&gt; is just the formal name for the job that we&amp;rsquo;re running. If we want more jobs to run, we can give them different names and place them at the same hierarchical starting point as &lt;code&gt;deploy:&lt;/code&gt; (i.e. with two spaces in front). Different jobs will run in parallel, each individual job will run in order.&lt;/p&gt;
-&lt;p&gt;We then give a bit of information about the job, first it&amp;rsquo;s name &lt;code&gt;Push docs to gh-pages&lt;/code&gt; (more like a title), followed by what operating system we want GitHub Actions to use to implement it. Finally, we have the &lt;code&gt;steps:&lt;/code&gt;, which is where we put the list of tasks that need to be run (in order).&lt;/p&gt;
-&lt;p&gt;This Action only has two steps and they are both &lt;code&gt;uses:&lt;/code&gt; steps, which basically means we&amp;rsquo;re going to be using Actions that are properly defined elsewhere. We could write an action directly here in quotes and supply the name of what application we want it to be run in (at a Command Line level), but we don&amp;rsquo;t have to since these Actions are defined for us. Each task starts with a &lt;code&gt;-&lt;/code&gt; followed by the information for that task.&lt;/p&gt;
-&lt;h4 id=&#34;checkout&#34;&gt;Checkout&lt;/h4&gt;
-&lt;p&gt;The first task is simple &lt;code&gt;- uses: actions/checkout@master&lt;/code&gt;. You may recognise the format of this as it comes up a lot within GitHub, it is &lt;code&gt;&amp;lt;user&amp;gt;/&amp;lt;repo&amp;gt;@&amp;lt;branch&amp;gt;&lt;/code&gt;. This is because all Actions created by other users, are actually repos. So what we&amp;rsquo;re doing here is saying we want to &lt;code&gt;use&lt;/code&gt; the Action defined within the &lt;code&gt;main&lt;/code&gt; branch of the &lt;code&gt;checkout&lt;/code&gt; repo made by the user &lt;code&gt;actions&lt;/code&gt; and we can actually view that repo 
-&lt;a href=&#34;https://github.com/actions/checkout&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;, or since it is an Action, we can view it on the Actions Marketplace 
-&lt;a href=&#34;https://github.com/marketplace/actions/checkout&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;This Action essentially runs a &lt;code&gt;git checkout&lt;/code&gt; command on your repo so that it&amp;rsquo;s files can be accessed by your workflow. Actions that change your repo in some way will typically start with this. They will usually also end with something that &lt;code&gt;commits&lt;/code&gt; and &lt;code&gt;pushes&lt;/code&gt; the results back onto your repo. We don&amp;rsquo;t need to do this part because it is covered by the second task&lt;/p&gt;
-&lt;h4 id=&#34;deploy&#34;&gt;Deploy&lt;/h4&gt;
-&lt;p&gt;Task number two is where the magic happens. There&amp;rsquo;s a lot more here than in the first task&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;- name: Deploy
-  uses: s0/git-publish-subdir-action@develop
-  env:
-    REPO: self
-    BRANCH: gh-pages
-    FOLDER: docs
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;We have three children within this task, &lt;code&gt;name:&lt;/code&gt;, &lt;code&gt;uses:&lt;/code&gt; and &lt;code&gt;env:&lt;/code&gt; and &lt;code&gt;env:&lt;/code&gt; even has some children of it&amp;rsquo;s own. Firstly, we&amp;rsquo;re giving this task a name, &lt;code&gt;Deploy&lt;/code&gt;; this isn&amp;rsquo;t necessary, but it looks a little neater and makes it clearer what this task is doing (useful if you&amp;rsquo;re running a lot of tasks in a single job).&lt;/p&gt;
-&lt;p&gt;The next child is the same as previously, &lt;code&gt;uses: s0/git-publish-subdir-action@develop&lt;/code&gt;. We&amp;rsquo;re going to run the action on the &lt;code&gt;develop&lt;/code&gt; branch of the &lt;code&gt;git-publish-subdir-action&lt;/code&gt; repo by the user &lt;code&gt;s0&lt;/code&gt;. Once again, you can view this repo 
-&lt;a href=&#34;https://github.com/s0/git-publish-subdir-action&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt; or as an Action on the Marketplace 
-&lt;a href=&#34;https://github.com/marketplace/actions/push-git-subdirectory-as-branch&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;. This is main part of what we&amp;rsquo;re doing. This Action does the actual copying of the subdirectory and pushes it to a new branch.&lt;/p&gt;
-&lt;p&gt;The last child is &lt;code&gt;env:&lt;/code&gt; and this is where you might have to change things depending on your use-case. This has four children, which are actually variables. Just like in most programming, we work within an environment that contains variables, well here we&amp;rsquo;re going to define some for the &lt;code&gt;git-publish-subdir-action&lt;/code&gt; to use.&lt;/p&gt;
-&lt;p&gt;You don&amp;rsquo;t need to worry about &lt;code&gt;REPO&lt;/code&gt; and &lt;code&gt;GITHUB_TOKEN&lt;/code&gt;, these just mean that the action is going to run on the current repo (&lt;code&gt;REPO: self&lt;/code&gt;) and provides authentication that it&amp;rsquo;s really us doing the changes (by generating a &lt;code&gt;GITHUB_TOKEN&lt;/code&gt; to use as an auth token). The other two variables are important, it&amp;rsquo;s telling the Action what directory we want to copy, which by default (if you&amp;rsquo;re been running your GitHub Pages using the &lt;code&gt;master/docs&lt;/code&gt; form) is currently set to be &lt;code&gt;docs&lt;/code&gt;, but this can be any other folder (or sub-folder) in your repo, e.g &lt;code&gt;public/home&lt;/code&gt;, &lt;code&gt;my-gh-pages-site&lt;/code&gt; or &lt;code&gt;&amp;quot;My Homepage&amp;quot;&lt;/code&gt; (don&amp;rsquo;t forget the quotes). Then finally, the name of the branch we want to put it on. If you&amp;rsquo;re looking here with the intention of using a GitHub Page, then this will have to be &lt;code&gt;gh-pages&lt;/code&gt; (unless using a 
-&lt;a href=&#34;#User-repos&#34;&gt;User account&lt;/a&gt;), but can be any name you want your new branch to be.&lt;/p&gt;
-&lt;h2 id=&#34;check-it-works&#34;&gt;Check it works&lt;/h2&gt;
-&lt;p&gt;Finally, once we&amp;rsquo;ve done all this, we can &lt;code&gt;git push&lt;/code&gt; to the &lt;code&gt;main&lt;/code&gt; branch of our repo on GitHub and it should build our website (provided we have the GitHub pages set to use &lt;code&gt;gh-pages&lt;/code&gt;). To check whether this has worked, simply load up your GitHub Page. You can also have a look at the run through of the Action in the Actions tab in your repo home. This gives you the output of the Command Line of every step of your Action (although remember there are only two).&lt;/p&gt;
-&lt;h2 id=&#34;user-repos&#34;&gt;User repos&lt;/h2&gt;
-&lt;p&gt;User repos are named like &lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt; and can only be built from the &lt;code&gt;master&lt;/code&gt; branch. This is because User repos are expected to be self-contained and their GitHub Pages site can only be built from the &lt;code&gt;master&lt;/code&gt; branch. This means that you are expected to have an &lt;code&gt;index.html&lt;/code&gt; file in your home directory. However, this can limit the ways in which your site can be built. To fix this, we can use the workflow as above, but instead of pushing the subdirectory to the &lt;code&gt;gh-pages&lt;/code&gt; branch, we push it to the &lt;code&gt;master&lt;/code&gt; branch, whilst still using our &lt;code&gt;main&lt;/code&gt; branch as our default. The only change we need to do, is to replace the &lt;code&gt;BRANCH: gh-pages&lt;/code&gt; line in the YAML file with &lt;code&gt;BRANCH: master&lt;/code&gt; (make sure you keep the whitespace before it).&lt;/p&gt;
-&lt;p&gt;If you are using a Custom Domain, there is one last thing that you&amp;rsquo;ll need to consider. When you add a Custom Domain, GitHub stores this as the &lt;code&gt;CNAME&lt;/code&gt; file in your home directory. The Action above destroys the &lt;code&gt;master&lt;/code&gt; branch before rebuilding it from scratch. This includes deleting that &lt;code&gt;CNAME&lt;/code&gt; file and, since it isn&amp;rsquo;t in the subdirectory of your &lt;code&gt;main&lt;/code&gt; branch, it doesn&amp;rsquo;t get put back in. The solution? Just put it in there yourself. This simply means adding a file to your &lt;code&gt;docs&lt;/code&gt; directory called &lt;code&gt;CNAME&lt;/code&gt; (no file extension) and have it&amp;rsquo;s only contents be your url. Since new files without extensions can, again, be tricky. At Command Line:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;echo -n [YOUR_URL_HERE] &amp;gt; docs/CNAME
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;(The use of &lt;code&gt;-n&lt;/code&gt; here means that a newline isn&amp;rsquo;t added to the end of the line)&lt;/p&gt;
-</description>
-    </item>
-    
-  </channel>
-</rss>
+deploy:
+name: Push docs to gh-pages
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@main
+- name: Deploy
+uses: s0/git-publish-subdir-action@develop
+env:
+REPO: self
+BRANCH: gh-pages
+FOLDER: docs
+GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+&lt;/code>&lt;/pre>
+&lt;p>Feel free to copy the above directly. If you&amp;rsquo;re using RStudio to manage your repo, you can create a New Text File, save it with the extension &lt;code>.yaml&lt;/code> and RStudio will conveniently colour code the file. Otherwise, you can do it in notepad (just make sure the extension sticks).&lt;/p>
+&lt;p>What does this file do? I don&amp;rsquo;t think it&amp;rsquo;s too important to go into great details here, there is plenty of
+&lt;a href="https://docs.github.com/en/actions" target="_blank" rel="noopener">reading to be done&lt;/a> on GitHub Actions. So, just a quick look at the important bits, in case you want to change something. Apart from the &lt;code>name:&lt;/code> line, it&amp;rsquo;s split into two parts, the &lt;code>on:&lt;/code> and the &lt;code>jobs:&lt;/code> parts. Note that in YAML files, whitespace is important, and gives structure: &lt;code>push:&lt;/code> is a child of &lt;code>on:&lt;/code> and &lt;code>jobs:&lt;/code> is the parent of &lt;code>deploy:&lt;/code>, but &lt;code>on:&lt;/code> and &lt;code>jobs:&lt;/code> are siblings.&lt;/p>
+&lt;h3 id="the-triggers">The Triggers&lt;/h3>
+&lt;p>The &lt;code>on:&lt;/code> part contains information on what events will trigger the event. Here, we&amp;rsquo;re telling GitHub that we want this Action to run when we push our repo to the &lt;code>main&lt;/code> branch, only if something has changed in the &lt;code>docs&lt;/code> folder (or path). This means that any pushes that happen to other branches will be ignored, and any pushes that don&amp;rsquo;t change our &lt;code>docs&lt;/code> folder will also be ignored. The syntax for &lt;code>paths:&lt;/code> actually allows you to check for changes to anything that matches this string, so by using &lt;code>'docs/**'&lt;/code>, we match anything that starts with &lt;code>'docs/'&lt;/code>, i.e. anything within the &lt;code>docs&lt;/code> folder. This is useful because we&amp;rsquo;re building our &lt;code>gh-pages&lt;/code> branch based solely on what&amp;rsquo;s in &lt;code>docs&lt;/code>. If something changes elsewhere in the repo, it doesn&amp;rsquo;t matter (even if you are accessing data in your repo, but outside of your site because those changes will still be pushed to your repo, just don&amp;rsquo;t need to trigger a site rebuild). It also doesn&amp;rsquo;t matter what happens on other branches (such as a &lt;code>development&lt;/code> branch) because we&amp;rsquo;re not wanting to build our GitHub pages from them.&lt;/p>
+&lt;h3 id="the-actions">The Actions&lt;/h3>
+&lt;p>The &lt;code>jobs:&lt;/code> part contains the actual actions that occurs. You can have many Actions and jobs within he same file, but here we only have one job, which consists of two tasks. &lt;code>deploy:&lt;/code> is just the formal name for the job that we&amp;rsquo;re running. If we want more jobs to run, we can give them different names and place them at the same hierarchical starting point as &lt;code>deploy:&lt;/code> (i.e. with two spaces in front). Different jobs will run in parallel, each individual job will run in order.&lt;/p>
+&lt;p>We then give a bit of information about the job, first it&amp;rsquo;s name &lt;code>Push docs to gh-pages&lt;/code> (more like a title), followed by what operating system we want GitHub Actions to use to implement it. Finally, we have the &lt;code>steps:&lt;/code>, which is where we put the list of tasks that need to be run (in order).&lt;/p>
+&lt;p>This Action only has two steps and they are both &lt;code>uses:&lt;/code> steps, which basically means we&amp;rsquo;re going to be using Actions that are properly defined elsewhere. We could write an action directly here in quotes and supply the name of what application we want it to be run in (at a Command Line level), but we don&amp;rsquo;t have to since these Actions are defined for us. Each task starts with a &lt;code>-&lt;/code> followed by the information for that task.&lt;/p>
+&lt;h4 id="checkout">Checkout&lt;/h4>
+&lt;p>The first task is simple &lt;code>- uses: actions/checkout@master&lt;/code>. You may recognise the format of this as it comes up a lot within GitHub, it is &lt;code>&amp;lt;user&amp;gt;/&amp;lt;repo&amp;gt;@&amp;lt;branch&amp;gt;&lt;/code>. This is because all Actions created by other users, are actually repos. So what we&amp;rsquo;re doing here is saying we want to &lt;code>use&lt;/code> the Action defined within the &lt;code>main&lt;/code> branch of the &lt;code>checkout&lt;/code> repo made by the user &lt;code>actions&lt;/code> and we can actually view that repo
+&lt;a href="https://github.com/actions/checkout" target="_blank" rel="noopener">here&lt;/a>, or since it is an Action, we can view it on the Actions Marketplace
+&lt;a href="https://github.com/marketplace/actions/checkout" target="_blank" rel="noopener">here&lt;/a>.&lt;/p>
+&lt;p>This Action essentially runs a &lt;code>git checkout&lt;/code> command on your repo so that it&amp;rsquo;s files can be accessed by your workflow. Actions that change your repo in some way will typically start with this. They will usually also end with something that &lt;code>commits&lt;/code> and &lt;code>pushes&lt;/code> the results back onto your repo. We don&amp;rsquo;t need to do this part because it is covered by the second task&lt;/p>
+&lt;h4 id="deploy">Deploy&lt;/h4>
+&lt;p>Task number two is where the magic happens. There&amp;rsquo;s a lot more here than in the first task&lt;/p>
+&lt;pre>&lt;code>- name: Deploy
+uses: s0/git-publish-subdir-action@develop
+env:
+REPO: self
+BRANCH: gh-pages
+FOLDER: docs
+GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+&lt;/code>&lt;/pre>
+&lt;p>We have three children within this task, &lt;code>name:&lt;/code>, &lt;code>uses:&lt;/code> and &lt;code>env:&lt;/code> and &lt;code>env:&lt;/code> even has some children of it&amp;rsquo;s own. Firstly, we&amp;rsquo;re giving this task a name, &lt;code>Deploy&lt;/code>; this isn&amp;rsquo;t necessary, but it looks a little neater and makes it clearer what this task is doing (useful if you&amp;rsquo;re running a lot of tasks in a single job).&lt;/p>
+&lt;p>The next child is the same as previously, &lt;code>uses: s0/git-publish-subdir-action@develop&lt;/code>. We&amp;rsquo;re going to run the action on the &lt;code>develop&lt;/code> branch of the &lt;code>git-publish-subdir-action&lt;/code> repo by the user &lt;code>s0&lt;/code>. Once again, you can view this repo
+&lt;a href="https://github.com/s0/git-publish-subdir-action" target="_blank" rel="noopener">here&lt;/a> or as an Action on the Marketplace
+&lt;a href="https://github.com/marketplace/actions/push-git-subdirectory-as-branch" target="_blank" rel="noopener">here&lt;/a>. This is main part of what we&amp;rsquo;re doing. This Action does the actual copying of the subdirectory and pushes it to a new branch.&lt;/p>
+&lt;p>The last child is &lt;code>env:&lt;/code> and this is where you might have to change things depending on your use-case. This has four children, which are actually variables. Just like in most programming, we work within an environment that contains variables, well here we&amp;rsquo;re going to define some for the &lt;code>git-publish-subdir-action&lt;/code> to use.&lt;/p>
+&lt;p>You don&amp;rsquo;t need to worry about &lt;code>REPO&lt;/code> and &lt;code>GITHUB_TOKEN&lt;/code>, these just mean that the action is going to run on the current repo (&lt;code>REPO: self&lt;/code>) and provides authentication that it&amp;rsquo;s really us doing the changes (by generating a &lt;code>GITHUB_TOKEN&lt;/code> to use as an auth token). The other two variables are important, it&amp;rsquo;s telling the Action what directory we want to copy, which by default (if you&amp;rsquo;re been running your GitHub Pages using the &lt;code>master/docs&lt;/code> form) is currently set to be &lt;code>docs&lt;/code>, but this can be any other folder (or sub-folder) in your repo, e.g &lt;code>public/home&lt;/code>, &lt;code>my-gh-pages-site&lt;/code> or &lt;code>&amp;quot;My Homepage&amp;quot;&lt;/code> (don&amp;rsquo;t forget the quotes). Then finally, the name of the branch we want to put it on. If you&amp;rsquo;re looking here with the intention of using a GitHub Page, then this will have to be &lt;code>gh-pages&lt;/code> (unless using a
+&lt;a href="#User-repos">User account&lt;/a>), but can be any name you want your new branch to be.&lt;/p>
+&lt;h2 id="check-it-works">Check it works&lt;/h2>
+&lt;p>Finally, once we&amp;rsquo;ve done all this, we can &lt;code>git push&lt;/code> to the &lt;code>main&lt;/code> branch of our repo on GitHub and it should build our website (provided we have the GitHub pages set to use &lt;code>gh-pages&lt;/code>). To check whether this has worked, simply load up your GitHub Page. You can also have a look at the run through of the Action in the Actions tab in your repo home. This gives you the output of the Command Line of every step of your Action (although remember there are only two).&lt;/p>
+&lt;h2 id="user-repos">User repos&lt;/h2>
+&lt;p>User repos are named like &lt;code>&amp;lt;username&amp;gt;.github.io&lt;/code> and can only be built from the &lt;code>master&lt;/code> branch. This is because User repos are expected to be self-contained and their GitHub Pages site can only be built from the &lt;code>master&lt;/code> branch. This means that you are expected to have an &lt;code>index.html&lt;/code> file in your home directory. However, this can limit the ways in which your site can be built. To fix this, we can use the workflow as above, but instead of pushing the subdirectory to the &lt;code>gh-pages&lt;/code> branch, we push it to the &lt;code>master&lt;/code> branch, whilst still using our &lt;code>main&lt;/code> branch as our default. The only change we need to do, is to replace the &lt;code>BRANCH: gh-pages&lt;/code> line in the YAML file with &lt;code>BRANCH: master&lt;/code> (make sure you keep the whitespace before it).&lt;/p>
+&lt;p>If you are using a Custom Domain, there is one last thing that you&amp;rsquo;ll need to consider. When you add a Custom Domain, GitHub stores this as the &lt;code>CNAME&lt;/code> file in your home directory. The Action above destroys the &lt;code>master&lt;/code> branch before rebuilding it from scratch. This includes deleting that &lt;code>CNAME&lt;/code> file and, since it isn&amp;rsquo;t in the subdirectory of your &lt;code>main&lt;/code> branch, it doesn&amp;rsquo;t get put back in. The solution? Just put it in there yourself. This simply means adding a file to your &lt;code>docs&lt;/code> directory called &lt;code>CNAME&lt;/code> (no file extension) and have it&amp;rsquo;s only contents be your url. Since new files without extensions can, again, be tricky. At Command Line:&lt;/p>
+&lt;pre>&lt;code>echo -n [YOUR_URL_HERE] &amp;gt; docs/CNAME
+&lt;/code>&lt;/pre>
+&lt;p>(The use of &lt;code>-n&lt;/code> here means that a newline isn&amp;rsquo;t added to the end of the line)&lt;/p></description></item></channel></rss>

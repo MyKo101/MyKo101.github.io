@@ -1,16 +1,1 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Tags | MyKo101</title>
-    <link>https://michaelbarrowman.co.uk/tags/</link>
-      <atom:link href="https://michaelbarrowman.co.uk/tags/index.xml" rel="self" type="application/rss+xml" />
-    <description>Tags</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2022</copyright><lastBuildDate>Mon, 18 Jan 2021 00:00:00 +0000</lastBuildDate>
-    <image>
-      <url>https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_3.png</url>
-      <title>Tags</title>
-      <link>https://michaelbarrowman.co.uk/tags/</link>
-    </image>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tags | MyKo101</title><link>https://michaelbarrowman.co.uk/tags/</link><atom:link href="https://michaelbarrowman.co.uk/tags/index.xml" rel="self" type="application/rss+xml"/><description>Tags</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>Michael Barrowman © 2023</copyright><lastBuildDate>Mon, 18 Jan 2021 00:00:00 +0000</lastBuildDate><image><url>https://michaelbarrowman.co.uk/images/icon_hufb6089c2dae8ab059339a50c00192ccd_27937_512x512_fill_lanczos_center_3.png</url><title>Tags</title><link>https://michaelbarrowman.co.uk/tags/</link></image></channel></rss>
