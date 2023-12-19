@@ -1,7 +1,7 @@
 ---
 authors:
   - admin
-bio: I am a Data Scientist, PhD candidate and R Developer.
+bio: I am a Data Scientist, and Python and R Developer.
 education:
   courses:
     - course: PhD in Medicine
@@ -12,15 +12,13 @@ education:
       year: 2013
 email: "myko101ab@gmail.com"
 interests:
-  - HIPAA Privacy Rules
   - Data Science
   - Financial Risk Modelling
   - Clinical Prediction Modelling
   - Multi-State Models
 organizations:
-  - name: The Very Group
-    url: "https://www.theverygroup.com/"
-role: Compliance Manager
+  - name: Evolution Software
+role: Data Scientist
 social:
   - icon: twitter
     icon_pack: fab
