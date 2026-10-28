@@ -19,11 +19,27 @@ date_format = "Jan 2006"
 #   Begin/end multi-line descriptions with 3 quotes `"""`.
 
 [[experience]]
+  title = "Model Risk Lead"
+  company = "Nationwide"
+  location = "Remote"
+  date_start = "2026-04-01"
+  date_end = ""
+  desription = "Transitioned from Virgin Money during the company merger and continued to validate models for use within the Virgin Money fraud detection ecosystem"
+
+[[experience]]
+  title = "Model Validation Manager"
+  company = "Virgin Money"
+  location = "Remote"
+  date_start = "2025-09-22"
+  date_end = "2026-03-31"
+  desription = "Validated models for use within the Virgin Money fraud detection ecosystem as well as leading a validation team and developing validation standards"
+
+[[experience]]
   title = "Data Analyst & Scientist"
   company = "EvoSoft"
   location = "Manchester, Greater Manchester, UK"
   date_start = "2022-11-25"
-  date_end = ""
+  date_end = "2025-09-19"
   description = "Analysing customer and transactional data to build dashboards, interact with stake holder APIs and develop business driven models to improve performance of our softwares and ease the customer journey"
 
 
