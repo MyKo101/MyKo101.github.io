@@ -29,7 +29,7 @@ date_format = "Jan 2006"
   title = "Data Analyst & Scientist"
   company = "EvoSoft"
   location = "Manchester, Greater Manchester, UK"
-  date_start = "2022-11-25"
+  date_start = "2022-11-28"
   date_end = "2025-09-19"
   description = "Analysing customer and transactional data to build dashboards, interact with stake holder APIs and develop business driven models to improve performance of our softwares and ease the customer journey"
 

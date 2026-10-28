@@ -38,7 +38,7 @@ date_format = "Jan 2006"
   title = "Data Analyst & Scientist"
   company = "EvoSoft"
   location = "Manchester, Greater Manchester, UK"
-  date_start = "2022-11-25"
+  date_start = "2022-11-28"
   date_end = "2025-09-19"
   description = "Analysing customer and transactional data to build dashboards, interact with stake holder APIs and develop business driven models to improve performance of our softwares and ease the customer journey"
 
@@ -57,7 +57,7 @@ date_format = "Jan 2006"
   company_url = "https://www.herc.ac.uk/"
   location = "Manchester, UK"
   date_start = "2016-10-01"
-  date_end = ""
+  date_end = "2022-04-06"
   description = "The goal of this PhD was to improve the academic knowledge surrounding Multi-State Clinical Prediction Models (MSCPMs). To accomplish this, I wrote articles to solve methodological issues that were yet to be addressed and applied these novel techniques (along with the literature) to develop and validate an MSCPM to predict outcomes for Chronic Kidney Disease patients."
 
 [[experience]]
