@@ -20,11 +20,11 @@ date_format = "Jan 2006"
 
 [[experience]]
   title = "Model Risk Lead"
-  company = "Nationwide"
+  company = "Nationwide Building Society"
   location = "Remote"
   date_start = "2026-04-01"
   date_end = ""
-  desription = "Transitioned from Virgin Money during the company merger and continued to validate models for use within the Virgin Money fraud detection ecosystem"
+  description = "Transitioned from Virgin Money during the company merger and continued to validate models for use within the Virgin Money fraud detection ecosystem"
 
 [[experience]]
   title = "Model Validation Manager"
@@ -32,7 +32,7 @@ date_format = "Jan 2006"
   location = "Remote"
   date_start = "2025-09-22"
   date_end = "2026-03-31"
-  desription = "Validated models for use within the Virgin Money fraud detection ecosystem as well as leading a validation team and developing validation standards"
+  description = "Validated models for use within the Virgin Money fraud detection ecosystem as well as leading a validation team and developing validation standards"
 
 [[experience]]
   title = "Data Analyst & Scientist"
